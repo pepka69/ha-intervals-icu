@@ -54,8 +54,9 @@ class IntervalsICUConfigFlow(
 
                     athlete = await client.get_athlete()
 
-            except IntervalsICUAuthenticationError:
+            except IntervalsICUAuthenticationError as err:
                 errors["base"] = "invalid_auth"
+                print(err)
 
             except IntervalsICUConnectionError:
                 errors["base"] = "cannot_connect"
