@@ -92,7 +92,8 @@ class IntervalsICUSensor(
         """Initialize sensor."""
 
         super().__init__(
-            coordinator
+            coordinator,
+            description.key,
         )
 
         self.entity_description = description
