@@ -6,13 +6,14 @@ import aiohttp
 import voluptuous as vol
 
 from homeassistant import config_entries
-from homeassistant.const import CONF_API_KEY
 
 from .api import (
     IntervalsICUAuthenticationError,
     IntervalsICUClient,
+    IntervalsICUConnectionError,
 )
 from .const import (
+    CONF_API_KEY,
     CONF_ATHLETE_ID,
     DOMAIN,
 )
@@ -36,27 +37,41 @@ class IntervalsICUConfigFlow(
 
         if user_input is not None:
 
+            athlete_id = user_input[
+                CONF_ATHLETE_ID
+            ]
+
             try:
                 async with aiohttp.ClientSession() as session:
 
                     client = IntervalsICUClient(
-                        athlete_id=user_input[CONF_ATHLETE_ID],
-                        api_key=user_input[CONF_API_KEY],
+                        athlete_id=athlete_id,
+                        api_key=user_input[
+                            CONF_API_KEY
+                        ],
                         session=session,
                     )
 
-                    await client.get_athlete()
+                    athlete = await client.get_athlete()
 
             except IntervalsICUAuthenticationError:
                 errors["base"] = "invalid_auth"
 
-            except Exception:
+            except IntervalsICUConnectionError:
                 errors["base"] = "cannot_connect"
 
             else:
+                await self.async_set_unique_id(
+                    athlete_id
+                )
+
+                self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
-                    title="ha-intervals-icu",
+                    title=athlete.get(
+                        "name",
+                        athlete_id,
+                    ),
                     data=user_input,
                 )
 
