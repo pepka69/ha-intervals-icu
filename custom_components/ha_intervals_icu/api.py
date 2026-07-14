@@ -1,17 +1,16 @@
-"""API client for ha-intervals-icu."""
+"""API client for Intervals.icu."""
 
 from __future__ import annotations
 
+from datetime import datetime
+
 import aiohttp
 
-from .const import API_BASE_URL
+
+BASE_URL = "https://intervals.icu/api/v1"
 
 
-class IntervalsICUApiError(Exception):
-    """Base exception for Intervals.icu API errors."""
-
-
-class IntervalsICUAuthenticationError(IntervalsICUApiError):
+class IntervalsICUAuthenticationError(Exception):
     """Authentication error."""
 
 
@@ -24,55 +23,61 @@ class IntervalsICUClient:
         api_key: str,
         session: aiohttp.ClientSession,
     ) -> None:
-        """Initialize the API client."""
+        """Initialize client."""
+
         self.athlete_id = athlete_id
         self.api_key = api_key
         self.session = session
 
-    async def _request(self, endpoint: str) -> dict:
-        """Make a request to Intervals.icu API."""
+    async def _request(
+        self,
+        endpoint: str,
+    ):
+        """Make API request."""
 
-        url = f"{API_BASE_URL}{endpoint}"
-
-        auth = aiohttp.BasicAuth(
-            self.athlete_id,
-            self.api_key,
+        url = (
+            f"{BASE_URL}"
+            f"/{endpoint}"
         )
 
         async with self.session.get(
             url,
-            auth=auth,
+            auth=aiohttp.BasicAuth(
+                self.api_key,
+                "",
+            ),
         ) as response:
 
             if response.status == 401:
-                raise IntervalsICUAuthenticationError(
-                    "Invalid Athlete ID or API Key"
-                )
+                raise IntervalsICUAuthenticationError
 
-            if response.status != 200:
-                raise IntervalsICUApiError(
-                    f"API error: {response.status}"
-                )
+            response.raise_for_status()
 
             return await response.json()
 
-    async def get_athlete(self) -> dict:
-        """Get athlete information."""
+    async def get_athlete(
+        self,
+    ):
+        """Get athlete profile."""
 
         return await self._request(
-            f"/athlete/{self.athlete_id}"
+            f"athlete/{self.athlete_id}"
         )
 
-    async def get_wellness(self) -> list:
-        """Get athlete wellness data."""
+    async def get_wellness(
+        self,
+    ):
+        """Get wellness data."""
 
         return await self._request(
-            f"/athlete/{self.athlete_id}/wellness"
+            f"athlete/{self.athlete_id}/wellness"
         )
 
-    async def get_activities(self) -> list:
-        """Get recent activities."""
+    async def get_activities(
+        self,
+    ):
+        """Get activities."""
 
         return await self._request(
-            f"/athlete/{self.athlete_id}/activities"
+            f"athlete/{self.athlete_id}/activities"
         )
