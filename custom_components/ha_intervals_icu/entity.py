@@ -6,7 +6,7 @@ from homeassistant.helpers.update_coordinator import (
     CoordinatorEntity,
 )
 
-from .const import ATTRIBUTION
+from .const import ATTRIBUTION, DOMAIN
 from .coordinator import IntervalsICUCoordinator
 from .device import get_device_info
 
@@ -21,14 +21,13 @@ class IntervalsICUEntity(
     def __init__(
         self,
         coordinator: IntervalsICUCoordinator,
+        entity_key: str,
     ) -> None:
         """Initialize entity."""
 
         super().__init__(
             coordinator
         )
-
-        self._attr_attribution = ATTRIBUTION
 
         athlete = coordinator.data.get(
             "athlete",
@@ -42,9 +41,16 @@ class IntervalsICUEntity(
 
         athlete_name = athlete.get(
             "name",
+            "Intervals.icu Athlete",
         )
 
         self._attr_device_info = get_device_info(
             athlete_id,
             athlete_name,
+        )
+
+        self._attr_attribution = ATTRIBUTION
+
+        self._attr_unique_id = (
+            f"{DOMAIN}_{athlete_id}_{entity_key}"
         )
