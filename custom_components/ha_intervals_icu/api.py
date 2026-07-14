@@ -28,7 +28,7 @@ class IntervalsICUClient:
         api_key: str,
         session: aiohttp.ClientSession,
     ) -> None:
-        """Initialize API client."""
+        """Initialize client."""
 
         self.athlete_id = athlete_id
         self.api_key = api_key
@@ -39,63 +39,48 @@ class IntervalsICUClient:
         endpoint: str,
         params: dict[str, Any] | None = None,
     ) -> Any:
-        """Execute API request."""
+        """Make API request."""
 
         url = f"{BASE_URL}/{endpoint}"
 
-        try:
-            async with self.session.get(
-                url,
-                params=params,
-                auth=aiohttp.BasicAuth(
-                    "API_KEY",
-                    self.api_key,
-                ),
-                timeout=aiohttp.ClientTimeout(
-                    total=20,
-                ),
-            ) as response:
+        async with self.session.get(
+            url,
+            params=params,
+            auth=aiohttp.BasicAuth(
+                "API_KEY",
+                self.api_key,
+            ),
+            timeout=aiohttp.ClientTimeout(
+                total=20,
+            ),
+        ) as response:
 
-                response_text = await response.text()
+            if response.status == 401:
+                raise IntervalsICUAuthenticationError(
+                    "Invalid API key"
+                )
 
-                if response.status in (401, 403):
-                    raise IntervalsICUAuthenticationError(
-                        f"HTTP {response.status}: {response_text}"
-                    )
+            response.raise_for_status()
 
-                response.raise_for_status()
-
-                return await response.json()
-
-        except IntervalsICUAuthenticationError:
-            raise
-
-        except aiohttp.ClientError as err:
-            raise IntervalsICUConnectionError(
-                str(err)
-            ) from err
+            return await response.json()
 
     async def get_athlete(
         self,
     ) -> dict[str, Any]:
-        """Get athlete information."""
+        """Get athlete profile."""
 
-        # Endpoint de validation de clé API
-        # recommandé par Intervals.icu
         return await self._request(
-            "athlete/0"
+            f"athlete/{self.athlete_id}"
         )
 
     async def get_wellness(
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get wellness data."""
+        """Get wellness."""
 
         end = date.today()
-        start = end - timedelta(
-            days=days
-        )
+        start = end - timedelta(days=days)
 
         return await self._request(
             f"athlete/{self.athlete_id}/wellness",
@@ -109,12 +94,10 @@ class IntervalsICUClient:
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get recent activities."""
+        """Get activities."""
 
         end = date.today()
-        start = end - timedelta(
-            days=days
-        )
+        start = end - timedelta(days=days)
 
         return await self._request(
             f"athlete/{self.athlete_id}/activities",
