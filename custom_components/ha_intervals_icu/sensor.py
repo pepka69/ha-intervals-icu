@@ -2,11 +2,42 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+
 from homeassistant.components.sensor import (
     SensorEntity,
+    SensorEntityDescription,
 )
 
 from .entity import IntervalsICUEntity
+
+
+@dataclass(frozen=True, kw_only=True)
+class IntervalsICUSensorDescription(
+    SensorEntityDescription,
+):
+    """Describe an Intervals.icu sensor."""
+
+    value_key: str
+
+
+SENSORS = (
+    IntervalsICUSensorDescription(
+        key="fitness",
+        translation_key="fitness",
+        value_key="ctl",
+    ),
+    IntervalsICUSensorDescription(
+        key="fatigue",
+        translation_key="fatigue",
+        value_key="atl",
+    ),
+    IntervalsICUSensorDescription(
+        key="form",
+        translation_key="form",
+        value_key="tsb",
+    ),
+)
 
 
 async def async_setup_entry(
@@ -21,126 +52,49 @@ async def async_setup_entry(
     ]["coordinator"]
 
     async_add_entities(
-        [
-            AthleteSensor(coordinator),
-            FitnessSensor(coordinator),
-            FatigueSensor(coordinator),
-            FormSensor(coordinator),
-            ActivitiesSensor(coordinator),
-        ]
+        IntervalsICUSensor(
+            coordinator,
+            description,
+        )
+        for description in SENSORS
     )
 
 
-class AthleteSensor(
+class IntervalsICUSensor(
     IntervalsICUEntity,
     SensorEntity,
 ):
-    """Athlete name sensor."""
+    """Intervals.icu sensor."""
 
-    _attr_translation_key = "athlete"
+    entity_description: IntervalsICUSensorDescription
 
-    @property
-    def native_value(self):
-        """Return athlete name."""
+    def __init__(
+        self,
+        coordinator,
+        description,
+    ):
+        """Initialize sensor."""
 
-        return self.coordinator.data.get(
-            "athlete",
-            {},
-        ).get(
-            "name"
+        super().__init__(
+            coordinator,
         )
 
-
-class FitnessSensor(
-    IntervalsICUEntity,
-    SensorEntity,
-):
-    """Fitness sensor."""
-
-    _attr_translation_key = "fitness"
+        self.entity_description = description
 
     @property
     def native_value(self):
-        """Return fitness value."""
+        """Return sensor value."""
 
         wellness = self.coordinator.data.get(
             "wellness",
             [],
         )
 
-        if wellness:
-            return wellness[-1].get(
-                "ctl"
-            )
+        if not wellness:
+            return None
 
-        return None
+        latest = wellness[-1]
 
-
-class FatigueSensor(
-    IntervalsICUEntity,
-    SensorEntity,
-):
-    """Fatigue sensor."""
-
-    _attr_translation_key = "fatigue"
-
-    @property
-    def native_value(self):
-        """Return fatigue value."""
-
-        wellness = self.coordinator.data.get(
-            "wellness",
-            [],
-        )
-
-        if wellness:
-            return wellness[-1].get(
-                "atl"
-            )
-
-        return None
-
-
-class FormSensor(
-    IntervalsICUEntity,
-    SensorEntity,
-):
-    """Form sensor."""
-
-    _attr_translation_key = "form"
-
-    @property
-    def native_value(self):
-        """Return form value."""
-
-        wellness = self.coordinator.data.get(
-            "wellness",
-            [],
-        )
-
-        if wellness:
-            return wellness[-1].get(
-                "tsb"
-            )
-
-        return None
-
-
-class ActivitiesSensor(
-    IntervalsICUEntity,
-    SensorEntity,
-):
-    """Activities count sensor."""
-
-    _attr_translation_key = "activities"
-
-    @property
-    def native_value(self):
-        """Return number of activities."""
-
-        return len(
-            self.coordinator.data.get(
-                "activities",
-                [],
-            )
+        return latest.get(
+            self.entity_description.value_key
         )
