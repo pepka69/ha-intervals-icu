@@ -4,14 +4,11 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 from typing import Any
-import logging
 
 import aiohttp
 
 
 BASE_URL = "https://intervals.icu/api/v1"
-
-_LOGGER = logging.getLogger(__name__)
 
 
 class IntervalsICUAuthenticationError(Exception):
@@ -37,12 +34,6 @@ class IntervalsICUClient:
         self.api_key = api_key
         self.session = session
 
-        _LOGGER.warning(
-            "Intervals DEBUG init - athlete=%s key_length=%s",
-            athlete_id,
-            len(api_key),
-        )
-
     async def _request(
         self,
         endpoint: str,
@@ -52,15 +43,18 @@ class IntervalsICUClient:
 
         url = f"{BASE_URL}/{endpoint}"
 
-        _LOGGER.warning(
-            "Intervals DEBUG request URL=%s",
-            url,
-        )
+        headers = {
+            "User-Agent": (
+                "Mozilla/5.0 HomeAssistant "
+                "ha-intervals-icu"
+            )
+        }
 
         try:
             async with self.session.get(
                 url,
                 params=params,
+                headers=headers,
                 auth=aiohttp.BasicAuth(
                     "API_KEY",
                     self.api_key,
@@ -68,40 +62,24 @@ class IntervalsICUClient:
                 timeout=aiohttp.ClientTimeout(
                     total=20,
                 ),
-                headers={
-                    "User-Agent": "HomeAssistant-ha-intervals-icu",
-                },
             ) as response:
 
-                text = await response.text()
-
-                _LOGGER.warning(
-                    "Intervals DEBUG status=%s response=%s",
-                    response.status,
-                    text[:200],
-                )
-
-                if response.status in (401, 403):
-                    raise IntervalsICUAuthenticationError(
-                        f"HTTP {response.status}: {text}"
-                    )
+                if response.status == 401:
+                    raise IntervalsICUAuthenticationError
 
                 response.raise_for_status()
 
                 return await response.json()
 
-        except IntervalsICUAuthenticationError:
-            raise
-
         except aiohttp.ClientError as err:
             raise IntervalsICUConnectionError(
-                str(err)
+                err
             ) from err
 
     async def get_athlete(
         self,
     ) -> dict[str, Any]:
-        """Get athlete profile."""
+        """Return athlete profile."""
 
         return await self._request(
             f"athlete/{self.athlete_id}"
@@ -111,11 +89,12 @@ class IntervalsICUClient:
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get wellness data."""
+        """Return wellness history."""
 
         end = date.today()
+
         start = end - timedelta(
-            days=days
+            days=days,
         )
 
         return await self._request(
@@ -130,11 +109,12 @@ class IntervalsICUClient:
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get activities."""
+        """Return recent activities."""
 
         end = date.today()
+
         start = end - timedelta(
-            days=days
+            days=days,
         )
 
         return await self._request(
@@ -144,3 +124,85 @@ class IntervalsICUClient:
                 "newest": end.isoformat(),
             },
         )
+
+    async def get_dashboard(
+        self,
+    ) -> dict[str, Any]:
+        """Return processed dashboard data."""
+
+        athlete = await self.get_athlete()
+        wellness = await self.get_wellness()
+        activities = await self.get_activities()
+
+        latest = wellness[-1] if wellness else {}
+
+        ctl = latest.get("ctl")
+        atl = latest.get("atl")
+
+        form = None
+
+        if ctl is not None and atl is not None:
+            form = round(
+                ctl - atl,
+                1,
+            )
+
+        ftp = None
+
+        sport_settings = athlete.get(
+            "sportSettings",
+            [],
+        )
+
+        if sport_settings:
+            ftp = sport_settings[0].get(
+                "ftp",
+            )
+
+        return {
+            "athlete": athlete,
+            "wellness": latest,
+            "fitness": round(
+                ctl,
+                1,
+            )
+            if ctl is not None
+            else None,
+            "fatigue": round(
+                atl,
+                1,
+            )
+            if atl is not None
+            else None,
+            "form": form,
+            "activities": len(
+                activities,
+            ),
+            "last_activity": (
+                activities[-1]
+                if activities
+                else None
+            ),
+            "ftp": ftp,
+            "resting_hr": latest.get(
+                "restingHR",
+            ),
+            "weight": latest.get(
+                "weight",
+            ),
+            "sleep": latest.get(
+                "sleepSecs",
+            ),
+            "mood": latest.get(
+                "mood",
+            ),
+            "energy": latest.get(
+                "energy",
+            ),
+            "soreness": latest.get(
+                "soreness",
+            ),
+            "stress": latest.get(
+                "stress",
+            ),
+        }
