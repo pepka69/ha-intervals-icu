@@ -2,55 +2,31 @@
 
 from __future__ import annotations
 
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-)
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import ATTRIBUTION, DOMAIN
-from .coordinator import IntervalsICUCoordinator
+from .const import ATTRIBUTION
 from .device import get_device_info
 
 
-class IntervalsICUEntity(
-    CoordinatorEntity[IntervalsICUCoordinator],
-):
-    """Base entity for ha-intervals-icu."""
+class IntervalsICUEntity(CoordinatorEntity):
+    """Base Intervals.icu entity."""
 
     _attr_has_entity_name = True
+    _attr_attribution = ATTRIBUTION
 
     def __init__(
         self,
-        coordinator: IntervalsICUCoordinator,
-        entity_key: str,
+        coordinator,
+        athlete_id: str,
+        athlete_name: str | None = None,
     ) -> None:
         """Initialize entity."""
 
-        super().__init__(
-            coordinator
-        )
+        super().__init__(coordinator)
 
-        athlete = coordinator.data.get(
-            "athlete",
-            {},
-        )
-
-        athlete_id = athlete.get(
-            "id",
-            "unknown",
-        )
-
-        athlete_name = athlete.get(
-            "name",
-            "Intervals.icu Athlete",
-        )
+        self._athlete_id = athlete_id
 
         self._attr_device_info = get_device_info(
             athlete_id,
             athlete_name,
-        )
-
-        self._attr_attribution = ATTRIBUTION
-
-        self._attr_unique_id = (
-            f"{DOMAIN}_{athlete_id}_{entity_key}"
         )
