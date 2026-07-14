@@ -4,15 +4,16 @@ from __future__ import annotations
 
 from typing import Any
 
+from homeassistant.components.diagnostics import async_redact_data
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.components.diagnostics import async_redact_data
 
 from .const import (
     CONF_API_KEY,
     CONF_ATHLETE_ID,
     DOMAIN,
 )
+
 
 TO_REDACT = {
     CONF_API_KEY,
@@ -26,7 +27,7 @@ async def async_get_config_entry_diagnostics(
 ) -> dict[str, Any]:
     """Return diagnostics for a config entry."""
 
-    data = hass.data.get(
+    integration_data = hass.data.get(
         DOMAIN,
         {},
     ).get(
@@ -34,7 +35,30 @@ async def async_get_config_entry_diagnostics(
         {},
     )
 
+    coordinator = integration_data.get(
+        "coordinator"
+    )
+
+    diagnostics = {
+        "config_entry": {
+            "title": entry.title,
+            "data": entry.data,
+        },
+        "coordinator": {
+            "available": (
+                coordinator.last_update_success
+                if coordinator
+                else False
+            ),
+            "data": (
+                coordinator.data
+                if coordinator
+                else None
+            ),
+        },
+    }
+
     return async_redact_data(
-        data,
+        diagnostics,
         TO_REDACT,
     )
