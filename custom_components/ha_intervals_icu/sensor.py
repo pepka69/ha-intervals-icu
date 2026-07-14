@@ -2,134 +2,112 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from typing import Any
 
 from homeassistant.components.sensor import (
-    SensorDeviceClass,
     SensorEntity,
-    SensorEntityDescription,
 )
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
-    UnitOfMass,
     UnitOfTime,
 )
-
-from .entity import IntervalsICUEntity
-
-
-@dataclass(frozen=True, kw_only=True)
-class IntervalsICUSensorDescription(
-    SensorEntityDescription,
-):
-    """Describe an Intervals.icu sensor."""
-
-    attribute: str
-    source: str = "wellness"
-
-
-SENSORS = (
-    IntervalsICUSensorDescription(
-        key="fitness",
-        translation_key="fitness",
-        attribute="ctl",
-    ),
-    IntervalsICUSensorDescription(
-        key="fatigue",
-        translation_key="fatigue",
-        attribute="atl",
-    ),
-    IntervalsICUSensorDescription(
-        key="form",
-        translation_key="form",
-        attribute="tsb",
-    ),
-    IntervalsICUSensorDescription(
-        key="hrv",
-        translation_key="hrv",
-        attribute="hrv",
-        source="wellness",
-        native_unit_of_measurement=UnitOfTime.MS,
-    ),
-    IntervalsICUSensorDescription(
-        key="weight",
-        translation_key="weight",
-        attribute="weight",
-        source="wellness",
-        device_class=SensorDeviceClass.WEIGHT,
-        native_unit_of_measurement=UnitOfMass.KILOGRAMS,
-    ),
-    IntervalsICUSensorDescription(
-        key="activity_count",
-        translation_key="activity_count",
-        attribute="count",
-        source="activities",
-    ),
-    IntervalsICUSensorDescription(
-        key="last_activity",
-        translation_key="last_activity",
-        attribute="name",
-        source="activities",
-    ),
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import (
+    AddEntitiesCallback,
 )
+from homeassistant.helpers.update_coordinator import (
+    CoordinatorEntity,
+)
+
+from .const import DOMAIN
+from .device import get_device_info
 
 
 async def async_setup_entry(
-    hass,
-    entry,
-    async_add_entities,
-):
+    hass: HomeAssistant,
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
     """Set up sensors."""
 
-    coordinator = hass.data["ha_intervals_icu"][
-        entry.entry_id
-    ]["coordinator"]
+    data = hass.data[DOMAIN][entry.entry_id]
+
+    coordinator = data["coordinator"]
+
+    athlete_id = entry.data["athlete_id"]
 
     async_add_entities(
-        IntervalsICUSensor(
-            coordinator,
-            description,
-        )
-        for description in SENSORS
+        [
+            IntervalsICUSensor(
+                coordinator,
+                athlete_id,
+                "fitness",
+                "Fitness",
+            ),
+            IntervalsICUSensor(
+                coordinator,
+                athlete_id,
+                "fatigue",
+                "Fatigue",
+            ),
+            IntervalsICUSensor(
+                coordinator,
+                athlete_id,
+                "form",
+                "Form",
+            ),
+            IntervalsICUSensor(
+                coordinator,
+                athlete_id,
+                "activities",
+                "Activities",
+            ),
+        ]
     )
 
 
 class IntervalsICUSensor(
-    IntervalsICUEntity,
+    CoordinatorEntity,
     SensorEntity,
 ):
-    """Intervals.icu sensor."""
-
-    entity_description: IntervalsICUSensorDescription
+    """Representation of an Intervals.icu sensor."""
 
     def __init__(
         self,
         coordinator,
-        description: IntervalsICUSensorDescription,
+        athlete_id: str,
+        key: str,
+        name: str,
     ) -> None:
         """Initialize sensor."""
 
         super().__init__(
-            coordinator,
-            description.key,
+            coordinator
         )
 
-        self.entity_description = description
+        self._key = key
+
+        self._attr_name = (
+            f"Intervals.icu {name}"
+        )
+
+        self._attr_unique_id = (
+            f"{DOMAIN}_{athlete_id}_{key}"
+        )
+
+        self._attr_device_info = get_device_info(
+            athlete_id
+        )
 
     @property
-    def native_value(self):
+    def native_value(
+        self,
+    ) -> Any:
         """Return sensor value."""
 
-        data = self.coordinator.data.get(
-            self.entity_description.source,
-            [],
-        )
-
-        if not data:
+        if not self.coordinator.data:
             return None
 
-        if self.entity_description.key == "activity_count":
-            return len(data)
-
-        return data[-1].get(
-            self.entity_description.attribute
+        return self.coordinator.data.get(
+            self._key
         )
