@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "ha-intervals-icu",
-        "description": "Set up your Intervals.icu connection",
+        "description": "Connect your Intervals.icu account",
         "data": {
           "athlete_id": "Athlete ID",
           "api_key": "API Key"
@@ -11,8 +11,8 @@
       }
     },
     "error": {
-      "invalid_auth": "Invalid Athlete ID or API Key",
-      "cannot_connect": "Unable to connect to Intervals.icu"
+      "invalid_auth": "Invalid authentication",
+      "cannot_connect": "Cannot connect to Intervals.icu"
     }
   },
   "entity": {
@@ -31,6 +31,12 @@
       },
       "activities": {
         "name": "Activities"
+      },
+      "hrv": {
+        "name": "HRV"
+      },
+      "weight": {
+        "name": "Weight"
       }
     }
   }
