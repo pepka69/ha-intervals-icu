@@ -7,10 +7,19 @@ from homeassistant.core import HomeAssistant, ServiceCall
 from .const import DOMAIN
 
 
+SERVICE_REFRESH = "refresh"
+
+
 async def async_setup_services(
     hass: HomeAssistant,
 ) -> None:
     """Set up integration services."""
+
+    if hass.services.has_service(
+        DOMAIN,
+        SERVICE_REFRESH,
+    ):
+        return
 
     async def handle_refresh(
         call: ServiceCall,
@@ -31,6 +40,6 @@ async def async_setup_services(
 
     hass.services.async_register(
         DOMAIN,
-        "refresh",
+        SERVICE_REFRESH,
         handle_refresh,
     )
