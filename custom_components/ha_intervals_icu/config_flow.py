@@ -6,14 +6,13 @@ import aiohttp
 import voluptuous as vol
 
 from homeassistant import config_entries
+from homeassistant.const import CONF_API_KEY
 
 from .api import (
     IntervalsICUAuthenticationError,
     IntervalsICUClient,
-    IntervalsICUConnectionError,
 )
 from .const import (
-    CONF_API_KEY,
     CONF_ATHLETE_ID,
     DOMAIN,
 )
@@ -37,42 +36,37 @@ class IntervalsICUConfigFlow(
 
         if user_input is not None:
 
-            athlete_id = user_input[
-                CONF_ATHLETE_ID
-            ]
-
             try:
                 async with aiohttp.ClientSession() as session:
 
                     client = IntervalsICUClient(
-                        athlete_id=athlete_id,
-                        api_key=user_input[
-                            CONF_API_KEY
-                        ],
+                        athlete_id=user_input[CONF_ATHLETE_ID],
+                        api_key=user_input[CONF_API_KEY],
                         session=session,
                     )
 
-                    athlete = await client.get_athlete()
+                    await client.get_athlete()
 
             except IntervalsICUAuthenticationError as err:
                 errors["base"] = "invalid_auth"
-                print(err)
+                errors["details"] = str(err)
 
-            except IntervalsICUConnectionError:
-                errors["base"] = "cannot_connect"
-
-            else:
-                await self.async_set_unique_id(
-                    athlete_id
+                print(
+                    "INTERVALS AUTH ERROR:",
+                    err,
                 )
 
-                self._abort_if_unique_id_configured()
+            except Exception as err:
+                errors["base"] = "cannot_connect"
 
+                print(
+                    "INTERVALS CONNECTION ERROR:",
+                    err,
+                )
+
+            else:
                 return self.async_create_entry(
-                    title=athlete.get(
-                        "name",
-                        athlete_id,
-                    ),
+                    title="ha-intervals-icu",
                     data=user_input,
                 )
 
