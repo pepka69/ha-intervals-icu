@@ -60,8 +60,7 @@ class IntervalsICUClient:
 
                 if response.status in (401, 403):
                     raise IntervalsICUAuthenticationError(
-                        f"Authentication failed: "
-                        f"{response.status} - {response_text}"
+                        f"HTTP {response.status}: {response_text}"
                     )
 
                 response.raise_for_status()
@@ -81,8 +80,10 @@ class IntervalsICUClient:
     ) -> dict[str, Any]:
         """Get athlete information."""
 
+        # Endpoint de validation de clé API
+        # recommandé par Intervals.icu
         return await self._request(
-            f"athlete/{self.athlete_id}"
+            "athlete/0"
         )
 
     async def get_wellness(
