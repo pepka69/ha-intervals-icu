@@ -8,15 +8,21 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.const import CONF_API_KEY
 
-from .api import IntervalsICUClient
-from .const import CONF_ATHLETE_ID, DOMAIN
+from .api import (
+    IntervalsICUClient,
+    IntervalsICUAuthenticationError,
+)
+from .const import (
+    CONF_ATHLETE_ID,
+    DOMAIN,
+)
 
 
 class IntervalsICUConfigFlow(
     config_entries.ConfigFlow,
     domain=DOMAIN,
 ):
-    """Handle config flow."""
+    """Handle a config flow for ha-intervals-icu."""
 
     VERSION = 1
 
@@ -24,11 +30,11 @@ class IntervalsICUConfigFlow(
         self,
         user_input=None,
     ):
-        """Handle setup."""
+        """Handle the initial setup."""
 
         errors = {}
 
-        if user_input:
+        if user_input is not None:
 
             try:
                 async with aiohttp.ClientSession() as session:
@@ -39,22 +45,16 @@ class IntervalsICUConfigFlow(
                         session=session,
                     )
 
-                    result = await client.get_athlete()
+                    await client.get_athlete()
 
-                    if not result:
-                        raise Exception(
-                            "Empty response"
-                        )
-
-            except Exception as err:
+            except IntervalsICUAuthenticationError:
                 errors["base"] = "invalid_auth"
 
-                print(
-                    "INTERVALS TEST ERROR:",
-                    repr(err),
-                )
+            except Exception:
+                errors["base"] = "cannot_connect"
 
             else:
+
                 return self.async_create_entry(
                     title="ha-intervals-icu",
                     data=user_input,
