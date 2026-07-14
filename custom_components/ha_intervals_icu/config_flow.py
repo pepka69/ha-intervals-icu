@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 import aiohttp
 import voluptuous as vol
 
@@ -16,6 +18,8 @@ from .const import (
     CONF_ATHLETE_ID,
     DOMAIN,
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class IntervalsICUConfigFlow(
@@ -48,21 +52,17 @@ class IntervalsICUConfigFlow(
                     await client.get_athlete()
 
             except IntervalsICUAuthenticationError as err:
-                errors["base"] = "invalid_auth"
-                errors["details"] = str(err)
-
-                print(
-                    "INTERVALS AUTH ERROR:",
+                _LOGGER.error(
+                    "Intervals.icu authentication failed: %s",
                     err,
                 )
+                errors["base"] = "invalid_auth"
 
             except Exception as err:
-                errors["base"] = "cannot_connect"
-
-                print(
-                    "INTERVALS CONNECTION ERROR:",
-                    err,
+                _LOGGER.exception(
+                    "Intervals.icu connection error"
                 )
+                errors["base"] = "cannot_connect"
 
             else:
                 return self.async_create_entry(
