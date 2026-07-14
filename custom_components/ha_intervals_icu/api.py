@@ -1,8 +1,9 @@
-"""API client for Intervals.icu."""
+"""API client for ha-intervals-icu."""
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import date, timedelta
+from typing import Any
 
 import aiohttp
 
@@ -12,6 +13,10 @@ BASE_URL = "https://intervals.icu/api/v1"
 
 class IntervalsICUAuthenticationError(Exception):
     """Authentication error."""
+
+
+class IntervalsICUConnectionError(Exception):
+    """Connection error."""
 
 
 class IntervalsICUClient:
@@ -32,32 +37,40 @@ class IntervalsICUClient:
     async def _request(
         self,
         endpoint: str,
-    ):
+        params: dict[str, Any] | None = None,
+    ) -> Any:
         """Make API request."""
 
-        url = (
-            f"{BASE_URL}"
-            f"/{endpoint}"
-        )
+        url = f"{BASE_URL}/{endpoint}"
 
-        async with self.session.get(
-            url,
-            auth=aiohttp.BasicAuth(
-                self.api_key,
-                "",
-            ),
-        ) as response:
+        try:
+            async with self.session.get(
+                url,
+                params=params,
+                auth=aiohttp.BasicAuth(
+                    self.api_key,
+                    "",
+                ),
+                timeout=aiohttp.ClientTimeout(
+                    total=20,
+                ),
+            ) as response:
 
-            if response.status == 401:
-                raise IntervalsICUAuthenticationError
+                if response.status == 401:
+                    raise IntervalsICUAuthenticationError
 
-            response.raise_for_status()
+                response.raise_for_status()
 
-            return await response.json()
+                return await response.json()
+
+        except aiohttp.ClientError as err:
+            raise IntervalsICUConnectionError(
+                err
+            ) from err
 
     async def get_athlete(
         self,
-    ):
+    ) -> dict[str, Any]:
         """Get athlete profile."""
 
         return await self._request(
@@ -66,18 +79,38 @@ class IntervalsICUClient:
 
     async def get_wellness(
         self,
-    ):
+        days: int = 30,
+    ) -> list[dict[str, Any]]:
         """Get wellness data."""
 
+        end = date.today()
+        start = end - timedelta(
+            days=days
+        )
+
         return await self._request(
-            f"athlete/{self.athlete_id}/wellness"
+            f"athlete/{self.athlete_id}/wellness",
+            params={
+                "oldest": start.isoformat(),
+                "newest": end.isoformat(),
+            },
         )
 
     async def get_activities(
         self,
-    ):
-        """Get activities."""
+        days: int = 30,
+    ) -> list[dict[str, Any]]:
+        """Get recent activities."""
+
+        end = date.today()
+        start = end - timedelta(
+            days=days
+        )
 
         return await self._request(
-            f"athlete/{self.athlete_id}/activities"
+            f"athlete/{self.athlete_id}/activities",
+            params={
+                "oldest": start.isoformat(),
+                "newest": end.isoformat(),
+            },
         )
