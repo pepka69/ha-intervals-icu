@@ -22,9 +22,10 @@ from .entity import IntervalsICUEntity
 class IntervalsICUSensorDescription(
     SensorEntityDescription,
 ):
-    """Describe Intervals.icu sensor."""
+    """Describe an Intervals.icu sensor."""
 
     attribute: str
+    source: str = "wellness"
 
 
 SENSORS = (
@@ -32,26 +33,22 @@ SENSORS = (
         key="fitness",
         translation_key="fitness",
         attribute="ctl",
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="fatigue",
         translation_key="fatigue",
         attribute="atl",
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="form",
         translation_key="form",
         attribute="tsb",
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="hrv",
         translation_key="hrv",
         attribute="hrv",
         native_unit_of_measurement=UnitOfTime.MS,
-        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="weight",
@@ -59,7 +56,18 @@ SENSORS = (
         attribute="weight",
         device_class=SensorDeviceClass.WEIGHT,
         native_unit_of_measurement=UnitOfMass.KILOGRAMS,
-        state_class=SensorStateClass.MEASUREMENT,
+    ),
+    IntervalsICUSensorDescription(
+        key="activity_count",
+        translation_key="activity_count",
+        attribute="count",
+        source="activities",
+    ),
+    IntervalsICUSensorDescription(
+        key="last_activity",
+        translation_key="last_activity",
+        attribute="name",
+        source="activities",
     ),
 )
 
@@ -108,16 +116,21 @@ class IntervalsICUSensor(
 
     @property
     def native_value(self):
-        """Return value."""
+        """Return sensor value."""
 
-        wellness = self.coordinator.data.get(
-            "wellness",
+        data = self.coordinator.data.get(
+            self.entity_description.source,
             [],
         )
 
-        if not wellness:
+        if not data:
             return None
 
-        return wellness[-1].get(
+        if self.entity_description.key == "activity_count":
+            return len(data)
+
+        latest = data[-1]
+
+        return latest.get(
             self.entity_description.attribute
         )
