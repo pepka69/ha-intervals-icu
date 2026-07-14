@@ -5,8 +5,14 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from homeassistant.components.sensor import (
+    SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
+    SensorStateClass,
+)
+from homeassistant.const import (
+    UnitOfMass,
+    UnitOfTime,
 )
 
 from .entity import IntervalsICUEntity
@@ -18,7 +24,6 @@ class IntervalsICUSensorDescription(
 ):
     """Describe Intervals.icu sensor."""
 
-    data_path: str
     attribute: str
 
 
@@ -26,32 +31,35 @@ SENSORS = (
     IntervalsICUSensorDescription(
         key="fitness",
         translation_key="fitness",
-        data_path="wellness",
         attribute="ctl",
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="fatigue",
         translation_key="fatigue",
-        data_path="wellness",
         attribute="atl",
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="form",
         translation_key="form",
-        data_path="wellness",
         attribute="tsb",
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="hrv",
         translation_key="hrv",
-        data_path="wellness",
         attribute="hrv",
+        native_unit_of_measurement=UnitOfTime.MS,
+        state_class=SensorStateClass.MEASUREMENT,
     ),
     IntervalsICUSensorDescription(
         key="weight",
         translation_key="weight",
-        data_path="wellness",
         attribute="weight",
+        device_class=SensorDeviceClass.WEIGHT,
+        native_unit_of_measurement=UnitOfMass.KILOGRAMS,
+        state_class=SensorStateClass.MEASUREMENT,
     ),
 )
 
@@ -102,16 +110,14 @@ class IntervalsICUSensor(
     def native_value(self):
         """Return value."""
 
-        data = self.coordinator.data.get(
-            self.entity_description.data_path,
+        wellness = self.coordinator.data.get(
+            "wellness",
             [],
         )
 
-        if not data:
+        if not wellness:
             return None
 
-        latest = data[-1]
-
-        return latest.get(
+        return wellness[-1].get(
             self.entity_description.attribute
         )
