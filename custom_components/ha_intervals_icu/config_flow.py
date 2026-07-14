@@ -2,31 +2,21 @@
 
 from __future__ import annotations
 
-import logging
-
 import aiohttp
 import voluptuous as vol
 
 from homeassistant import config_entries
 from homeassistant.const import CONF_API_KEY
 
-from .api import (
-    IntervalsICUAuthenticationError,
-    IntervalsICUClient,
-)
-from .const import (
-    CONF_ATHLETE_ID,
-    DOMAIN,
-)
-
-_LOGGER = logging.getLogger(__name__)
+from .api import IntervalsICUClient
+from .const import CONF_ATHLETE_ID, DOMAIN
 
 
 class IntervalsICUConfigFlow(
     config_entries.ConfigFlow,
     domain=DOMAIN,
 ):
-    """Handle a config flow for ha-intervals-icu."""
+    """Handle config flow."""
 
     VERSION = 1
 
@@ -34,11 +24,11 @@ class IntervalsICUConfigFlow(
         self,
         user_input=None,
     ):
-        """Handle the initial setup."""
+        """Handle setup."""
 
         errors = {}
 
-        if user_input is not None:
+        if user_input:
 
             try:
                 async with aiohttp.ClientSession() as session:
@@ -49,20 +39,20 @@ class IntervalsICUConfigFlow(
                         session=session,
                     )
 
-                    await client.get_athlete()
+                    result = await client.get_athlete()
 
-            except IntervalsICUAuthenticationError as err:
-                _LOGGER.error(
-                    "Intervals.icu authentication failed: %s",
-                    err,
-                )
-                errors["base"] = "invalid_auth"
+                    if not result:
+                        raise Exception(
+                            "Empty response"
+                        )
 
             except Exception as err:
-                _LOGGER.exception(
-                    "Intervals.icu connection error"
+                errors["base"] = "invalid_auth"
+
+                print(
+                    "INTERVALS TEST ERROR:",
+                    repr(err),
                 )
-                errors["base"] = "cannot_connect"
 
             else:
                 return self.async_create_entry(
