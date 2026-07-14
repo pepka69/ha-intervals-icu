@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "ha-intervals-icu",
-        "description": "Configurer la connexion à Intervals.icu",
+        "description": "Configurer votre connexion Intervals.icu",
         "data": {
           "athlete_id": "Identifiant athlète",
           "api_key": "Clé API"
@@ -13,6 +13,25 @@
     "error": {
       "invalid_auth": "Identifiant ou clé API incorrecte",
       "cannot_connect": "Impossible de se connecter à Intervals.icu"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "athlete": {
+        "name": "Athlète"
+      },
+      "fitness": {
+        "name": "Fitness"
+      },
+      "fatigue": {
+        "name": "Fatigue"
+      },
+      "form": {
+        "name": "Forme"
+      },
+      "activities": {
+        "name": "Activités"
+      }
     }
   }
 }
