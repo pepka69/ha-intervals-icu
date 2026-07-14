@@ -14,5 +14,24 @@
       "invalid_auth": "Invalid Athlete ID or API Key",
       "cannot_connect": "Unable to connect to Intervals.icu"
     }
+  },
+  "entity": {
+    "sensor": {
+      "athlete": {
+        "name": "Athlete"
+      },
+      "fitness": {
+        "name": "Fitness"
+      },
+      "fatigue": {
+        "name": "Fatigue"
+      },
+      "form": {
+        "name": "Form"
+      },
+      "activities": {
+        "name": "Activities"
+      }
+    }
   }
 }
