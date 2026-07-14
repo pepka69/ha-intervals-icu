@@ -1,35 +1,89 @@
 # ha-intervals-icu
 
-Home Assistant custom integration for Intervals.icu.
+![ha-intervals-icu](custom_components/ha_intervals_icu/brand/logo.png)
+
+Home Assistant integration for **Intervals.icu**.
+
+Connect your Intervals.icu account to Home Assistant and monitor your training data, recovery and performance metrics.
 
 ## Features
 
-- Athlete authentication using Athlete ID and API Key
-- Fitness / Fatigue / Form tracking
-- Training load monitoring
-- Activity information
-- Home Assistant sensors
-- Config Flow setup
-- HACS compatible
+* Config Flow setup
+* Athlete ID + API Key authentication
+* Automatic updates
+* HACS compatible
+* Diagnostics support
+
+## Sensors
+
+### Training load
+
+| Sensor  | Description                   |
+| ------- | ----------------------------- |
+| Fitness | Chronic Training Load (CTL)   |
+| Fatigue | Acute Training Load (ATL)     |
+| Form    | Training Stress Balance (TSB) |
+
+### Athlete
+
+| Sensor | Description            |
+| ------ | ---------------------- |
+| HRV    | Heart Rate Variability |
+| Weight | Athlete weight         |
+
+### Activities
+
+| Sensor         | Description          |
+| -------------- | -------------------- |
+| Activity count | Number of activities |
+| Last activity  | Latest activity name |
 
 ## Installation
 
-Install through HACS:
+### HACS
 
 1. Open HACS
-2. Add this repository as a custom repository
-3. Select Integration
-4. Install ha-intervals-icu
+2. Select Integrations
+3. Search for:
+
+```
+ha-intervals-icu
+```
+
+4. Install
+5. Restart Home Assistant
 
 ## Configuration
 
-The integration requires:
+Go to:
 
-- Intervals.icu Athlete ID
-- Intervals.icu API Key
+```
+Settings → Devices & Services → Add Integration
+```
+
+Search:
+
+```
+ha-intervals-icu
+```
+
+Enter:
+
+* Athlete ID
+* API Key from Intervals.icu
+
+## Requirements
+
+* Home Assistant 2026.1+
+* Intervals.icu account
+* Intervals.icu API Key
 
 ## Support
 
-GitHub issues:
+GitHub:
 
 https://github.com/pepka69/ha-intervals-icu/issues
+
+## License
+
+MIT License
