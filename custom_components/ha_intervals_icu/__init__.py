@@ -20,6 +20,7 @@ from .services import async_setup_services
 
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
+    Platform.BINARY_SENSOR,
 ]
 
 
