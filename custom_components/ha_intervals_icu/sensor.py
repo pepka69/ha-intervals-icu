@@ -16,26 +16,42 @@ from .entity import IntervalsICUEntity
 class IntervalsICUSensorDescription(
     SensorEntityDescription,
 ):
-    """Describe an Intervals.icu sensor."""
+    """Describe Intervals.icu sensor."""
 
-    value_key: str
+    data_path: str
+    attribute: str
 
 
 SENSORS = (
     IntervalsICUSensorDescription(
         key="fitness",
         translation_key="fitness",
-        value_key="ctl",
+        data_path="wellness",
+        attribute="ctl",
     ),
     IntervalsICUSensorDescription(
         key="fatigue",
         translation_key="fatigue",
-        value_key="atl",
+        data_path="wellness",
+        attribute="atl",
     ),
     IntervalsICUSensorDescription(
         key="form",
         translation_key="form",
-        value_key="tsb",
+        data_path="wellness",
+        attribute="tsb",
+    ),
+    IntervalsICUSensorDescription(
+        key="hrv",
+        translation_key="hrv",
+        data_path="wellness",
+        attribute="hrv",
+    ),
+    IntervalsICUSensorDescription(
+        key="weight",
+        translation_key="weight",
+        data_path="wellness",
+        attribute="weight",
     ),
 )
 
@@ -76,25 +92,25 @@ class IntervalsICUSensor(
         """Initialize sensor."""
 
         super().__init__(
-            coordinator,
+            coordinator
         )
 
         self.entity_description = description
 
     @property
     def native_value(self):
-        """Return sensor value."""
+        """Return value."""
 
-        wellness = self.coordinator.data.get(
-            "wellness",
+        data = self.coordinator.data.get(
+            self.entity_description.data_path,
             [],
         )
 
-        if not wellness:
+        if not data:
             return None
 
-        latest = wellness[-1]
+        latest = data[-1]
 
         return latest.get(
-            self.entity_description.value_key
+            self.entity_description.attribute
         )
