@@ -28,7 +28,7 @@ class IntervalsICUClient:
         api_key: str,
         session: aiohttp.ClientSession,
     ) -> None:
-        """Initialize client."""
+        """Initialize API client."""
 
         self.athlete_id = athlete_id
         self.api_key = api_key
@@ -39,7 +39,7 @@ class IntervalsICUClient:
         endpoint: str,
         params: dict[str, Any] | None = None,
     ) -> Any:
-        """Make API request."""
+        """Execute API request."""
 
         url = f"{BASE_URL}/{endpoint}"
 
@@ -56,22 +56,25 @@ class IntervalsICUClient:
                 ),
             ) as response:
 
-                if response.status == 401:
+                if response.status in (401, 403):
                     raise IntervalsICUAuthenticationError
 
                 response.raise_for_status()
 
                 return await response.json()
 
+        except IntervalsICUAuthenticationError:
+            raise
+
         except aiohttp.ClientError as err:
             raise IntervalsICUConnectionError(
-                err
+                str(err)
             ) from err
 
     async def get_athlete(
         self,
     ) -> dict[str, Any]:
-        """Get athlete profile."""
+        """Get athlete information."""
 
         return await self._request(
             f"athlete/{self.athlete_id}"
@@ -100,7 +103,7 @@ class IntervalsICUClient:
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get recent activities."""
+        """Get activities."""
 
         end = date.today()
         start = end - timedelta(
