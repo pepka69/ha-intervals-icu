@@ -14,6 +14,7 @@ from .const import (
     DOMAIN,
 )
 from .coordinator import IntervalsICUCoordinator
+from .services import async_setup_services
 
 
 async def async_setup_entry(
@@ -37,12 +38,19 @@ async def async_setup_entry(
 
     await coordinator.async_config_entry_first_refresh()
 
-    hass.data.setdefault(DOMAIN, {})
+    hass.data.setdefault(
+        DOMAIN,
+        {},
+    )
 
     hass.data[DOMAIN][entry.entry_id] = {
         "coordinator": coordinator,
         "session": session,
     }
+
+    await async_setup_services(
+        hass,
+    )
 
     return True
 
@@ -54,7 +62,7 @@ async def async_unload_entry(
     """Unload a config entry."""
 
     data = hass.data[DOMAIN].pop(
-        entry.entry_id
+        entry.entry_id,
     )
 
     await data["session"].close()
