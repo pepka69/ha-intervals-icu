@@ -19,14 +19,13 @@ from .api import (
 from .const import (
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
-    LOGGER_NAME,
 )
 
-LOGGER = logging.getLogger(LOGGER_NAME)
+LOGGER = logging.getLogger(__name__)
 
 
 class IntervalsICUCoordinator(
-    DataUpdateCoordinator,
+    DataUpdateCoordinator[dict],
 ):
     """Coordinator for Intervals.icu data."""
 
@@ -44,7 +43,7 @@ class IntervalsICUCoordinator(
             LOGGER,
             name=DOMAIN,
             update_interval=timedelta(
-                seconds=DEFAULT_SCAN_INTERVAL
+                seconds=DEFAULT_SCAN_INTERVAL,
             ),
         )
 
@@ -54,15 +53,19 @@ class IntervalsICUCoordinator(
         """Fetch data from Intervals.icu."""
 
         try:
+            athlete = await self.client.get_athlete()
+            wellness = await self.client.get_wellness()
+            activities = await self.client.get_activities()
+
             return {
-                "athlete": await self.client.get_athlete(),
-                "wellness": await self.client.get_wellness(),
-                "activities": await self.client.get_activities(),
+                "athlete": athlete,
+                "wellness": wellness,
+                "activities": activities,
             }
 
         except IntervalsICUAuthenticationError as err:
             raise UpdateFailed(
-                "Invalid Intervals.icu credentials"
+                "Invalid Intervals.icu authentication"
             ) from err
 
         except IntervalsICUConnectionError as err:
@@ -72,7 +75,7 @@ class IntervalsICUCoordinator(
 
         except Exception as err:
             LOGGER.exception(
-                "Unexpected error updating Intervals.icu"
+                "Unexpected error while updating Intervals.icu"
             )
 
             raise UpdateFailed(
