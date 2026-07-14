@@ -48,8 +48,8 @@ class IntervalsICUClient:
                 url,
                 params=params,
                 auth=aiohttp.BasicAuth(
+                    "API_KEY",
                     self.api_key,
-                    "",
                 ),
                 timeout=aiohttp.ClientTimeout(
                     total=20,
@@ -103,7 +103,7 @@ class IntervalsICUClient:
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get activities."""
+        """Get recent activities."""
 
         end = date.today()
         start = end - timedelta(
