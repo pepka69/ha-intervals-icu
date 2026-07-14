@@ -2,10 +2,18 @@
 
 from __future__ import annotations
 
+import aiohttp
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from .const import DOMAIN
+from .api import IntervalsICUClient
+from .const import (
+    CONF_API_KEY,
+    CONF_ATHLETE_ID,
+    DOMAIN,
+)
+from .coordinator import IntervalsICUCoordinator
 
 
 async def async_setup_entry(
@@ -14,9 +22,27 @@ async def async_setup_entry(
 ) -> bool:
     """Set up ha-intervals-icu from a config entry."""
 
+    session = aiohttp.ClientSession()
+
+    client = IntervalsICUClient(
+        athlete_id=entry.data[CONF_ATHLETE_ID],
+        api_key=entry.data[CONF_API_KEY],
+        session=session,
+    )
+
+    coordinator = IntervalsICUCoordinator(
+        hass,
+        client,
+    )
+
+    await coordinator.async_config_entry_first_refresh()
+
     hass.data.setdefault(DOMAIN, {})
 
-    hass.data[DOMAIN][entry.entry_id] = entry.data
+    hass.data[DOMAIN][entry.entry_id] = {
+        "coordinator": coordinator,
+        "session": session,
+    }
 
     return True
 
@@ -27,9 +53,10 @@ async def async_unload_entry(
 ) -> bool:
     """Unload a config entry."""
 
-    hass.data[DOMAIN].pop(
-        entry.entry_id,
-        None,
+    data = hass.data[DOMAIN].pop(
+        entry.entry_id
     )
+
+    await data["session"].close()
 
     return True
