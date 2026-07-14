@@ -17,9 +17,6 @@
   },
   "entity": {
     "sensor": {
-      "athlete": {
-        "name": "Athlète"
-      },
       "fitness": {
         "name": "Fitness"
       },
@@ -29,14 +26,17 @@
       "form": {
         "name": "Forme"
       },
-      "activities": {
-        "name": "Activités"
-      },
       "hrv": {
         "name": "VFC (HRV)"
       },
       "weight": {
         "name": "Poids"
+      },
+      "activity_count": {
+        "name": "Nombre d'activités"
+      },
+      "last_activity": {
+        "name": "Dernière activité"
       }
     }
   }
