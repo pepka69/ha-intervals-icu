@@ -26,4 +26,5 @@ def get_device_info(
         ),
         manufacturer="Intervals.icu",
         model="Athlete Profile",
+        sw_version="ha-intervals-icu",
     )
