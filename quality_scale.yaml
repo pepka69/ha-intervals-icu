@@ -1,0 +1,21 @@
+rules:
+  action-setup: done
+  appropriate-polling: done
+  brands: todo
+  config-entry-unloading: done
+  config-flow-test-coverage: todo
+  dependency-transparency: done
+  diagnostics: done
+  discovery-update-info: todo
+  docs-high-level-description: todo
+  docs-installation-instructions: todo
+  entity-event-setup: done
+  entity-unique-id: done
+  entity-translations: done
+  exception-translations: todo
+  icon-translations: todo
+  reauthentication-flow: todo
+  repair-issues: todo
+  runtime-data: done
+  strict-typing: todo
+  test-coverage: todo
