@@ -1,0 +1,18 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ha-intervals-icu",
+        "description": "Configurer la connexion à Intervals.icu",
+        "data": {
+          "athlete_id": "Identifiant athlète",
+          "api_key": "Clé API"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Identifiant ou clé API incorrecte",
+      "cannot_connect": "Impossible de se connecter à Intervals.icu"
+    }
+  }
+}
