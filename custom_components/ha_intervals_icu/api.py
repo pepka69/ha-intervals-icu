@@ -56,8 +56,13 @@ class IntervalsICUClient:
                 ),
             ) as response:
 
+                response_text = await response.text()
+
                 if response.status in (401, 403):
-                    raise IntervalsICUAuthenticationError
+                    raise IntervalsICUAuthenticationError(
+                        f"Authentication failed: "
+                        f"{response.status} - {response_text}"
+                    )
 
                 response.raise_for_status()
 
