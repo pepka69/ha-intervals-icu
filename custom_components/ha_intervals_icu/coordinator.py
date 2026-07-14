@@ -27,7 +27,7 @@ LOGGER = logging.getLogger(__name__)
 class IntervalsICUCoordinator(
     DataUpdateCoordinator[dict],
 ):
-    """Coordinator for Intervals.icu data."""
+    """Coordinator for Intervals.icu."""
 
     def __init__(
         self,
@@ -50,18 +50,10 @@ class IntervalsICUCoordinator(
     async def _async_update_data(
         self,
     ) -> dict:
-        """Fetch data from Intervals.icu."""
+        """Fetch Intervals.icu dashboard."""
 
         try:
-            athlete = await self.client.get_athlete()
-            wellness = await self.client.get_wellness()
-            activities = await self.client.get_activities()
-
-            return {
-                "athlete": athlete,
-                "wellness": wellness,
-                "activities": activities,
-            }
+            return await self.client.get_dashboard()
 
         except IntervalsICUAuthenticationError as err:
             raise UpdateFailed(
