@@ -17,9 +17,6 @@
   },
   "entity": {
     "sensor": {
-      "athlete": {
-        "name": "Athlete"
-      },
       "fitness": {
         "name": "Fitness"
       },
@@ -29,8 +26,22 @@
       "form": {
         "name": "Form"
       },
-      "activities": {
-        "name": "Activities"
+      "hrv": {
+        "name": "HRV"
+      },
+      "weight": {
+        "name": "Weight"
+      },
+      "activity_count": {
+        "name": "Activity count"
+      },
+      "last_activity": {
+        "name": "Last activity"
+      }
+    },
+    "binary_sensor": {
+      "connection": {
+        "name": "Connection"
       }
     }
   }
