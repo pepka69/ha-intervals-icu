@@ -4,11 +4,14 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 from typing import Any
+import logging
 
 import aiohttp
 
 
 BASE_URL = "https://intervals.icu/api/v1"
+
+_LOGGER = logging.getLogger(__name__)
 
 
 class IntervalsICUAuthenticationError(Exception):
@@ -34,6 +37,12 @@ class IntervalsICUClient:
         self.api_key = api_key
         self.session = session
 
+        _LOGGER.warning(
+            "Intervals DEBUG init - athlete=%s key_length=%s",
+            athlete_id,
+            len(api_key),
+        )
+
     async def _request(
         self,
         endpoint: str,
@@ -43,26 +52,51 @@ class IntervalsICUClient:
 
         url = f"{BASE_URL}/{endpoint}"
 
-        async with self.session.get(
+        _LOGGER.warning(
+            "Intervals DEBUG request URL=%s",
             url,
-            params=params,
-            auth=aiohttp.BasicAuth(
-                "API_KEY",
-                self.api_key,
-            ),
-            timeout=aiohttp.ClientTimeout(
-                total=20,
-            ),
-        ) as response:
+        )
 
-            if response.status == 401:
-                raise IntervalsICUAuthenticationError(
-                    "Invalid API key"
+        try:
+            async with self.session.get(
+                url,
+                params=params,
+                auth=aiohttp.BasicAuth(
+                    "API_KEY",
+                    self.api_key,
+                ),
+                timeout=aiohttp.ClientTimeout(
+                    total=20,
+                ),
+                headers={
+                    "User-Agent": "HomeAssistant-ha-intervals-icu",
+                },
+            ) as response:
+
+                text = await response.text()
+
+                _LOGGER.warning(
+                    "Intervals DEBUG status=%s response=%s",
+                    response.status,
+                    text[:200],
                 )
 
-            response.raise_for_status()
+                if response.status in (401, 403):
+                    raise IntervalsICUAuthenticationError(
+                        f"HTTP {response.status}: {text}"
+                    )
 
-            return await response.json()
+                response.raise_for_status()
+
+                return await response.json()
+
+        except IntervalsICUAuthenticationError:
+            raise
+
+        except aiohttp.ClientError as err:
+            raise IntervalsICUConnectionError(
+                str(err)
+            ) from err
 
     async def get_athlete(
         self,
@@ -77,10 +111,12 @@ class IntervalsICUClient:
         self,
         days: int = 30,
     ) -> list[dict[str, Any]]:
-        """Get wellness."""
+        """Get wellness data."""
 
         end = date.today()
-        start = end - timedelta(days=days)
+        start = end - timedelta(
+            days=days
+        )
 
         return await self._request(
             f"athlete/{self.athlete_id}/wellness",
@@ -97,7 +133,9 @@ class IntervalsICUClient:
         """Get activities."""
 
         end = date.today()
-        start = end - timedelta(days=days)
+        start = end - timedelta(
+            days=days
+        )
 
         return await self._request(
             f"athlete/{self.athlete_id}/activities",
