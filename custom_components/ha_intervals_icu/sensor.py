@@ -8,7 +8,6 @@ from homeassistant.components.sensor import (
     SensorDeviceClass,
     SensorEntity,
     SensorEntityDescription,
-    SensorStateClass,
 )
 from homeassistant.const import (
     UnitOfMass,
@@ -48,12 +47,14 @@ SENSORS = (
         key="hrv",
         translation_key="hrv",
         attribute="hrv",
+        source="wellness",
         native_unit_of_measurement=UnitOfTime.MS,
     ),
     IntervalsICUSensorDescription(
         key="weight",
         translation_key="weight",
         attribute="weight",
+        source="wellness",
         device_class=SensorDeviceClass.WEIGHT,
         native_unit_of_measurement=UnitOfMass.KILOGRAMS,
     ),
@@ -103,8 +104,8 @@ class IntervalsICUSensor(
     def __init__(
         self,
         coordinator,
-        description,
-    ):
+        description: IntervalsICUSensorDescription,
+    ) -> None:
         """Initialize sensor."""
 
         super().__init__(
@@ -129,8 +130,6 @@ class IntervalsICUSensor(
         if self.entity_description.key == "activity_count":
             return len(data)
 
-        latest = data[-1]
-
-        return latest.get(
+        return data[-1].get(
             self.entity_description.attribute
         )
