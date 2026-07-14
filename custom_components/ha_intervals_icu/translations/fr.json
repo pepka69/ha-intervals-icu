@@ -38,6 +38,11 @@
       "last_activity": {
         "name": "Dernière activité"
       }
+    },
+    "binary_sensor": {
+      "connection": {
+        "name": "Connexion"
+      }
     }
   }
 }
