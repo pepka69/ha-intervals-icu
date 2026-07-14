@@ -1,7 +1,7 @@
 {
   "domain": "ha_intervals_icu",
   "name": "ha-intervals-icu",
-  "version": "0.1.0",
+  "version": "0.1.0-test",
   "documentation": "https://github.com/pepka69/ha-intervals-icu",
   "issue_tracker": "https://github.com/pepka69/ha-intervals-icu/issues",
   "requirements": [],
