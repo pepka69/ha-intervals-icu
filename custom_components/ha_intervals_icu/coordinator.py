@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-
-import aiohttp
+import logging
 
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import (
@@ -12,14 +11,16 @@ from homeassistant.helpers.update_coordinator import (
     UpdateFailed,
 )
 
-from .api import IntervalsICUClient
+from .api import (
+    IntervalsICUAuthenticationError,
+    IntervalsICUClient,
+    IntervalsICUConnectionError,
+)
 from .const import (
     DEFAULT_SCAN_INTERVAL,
     DOMAIN,
     LOGGER_NAME,
 )
-
-import logging
 
 LOGGER = logging.getLogger(LOGGER_NAME)
 
@@ -47,23 +48,33 @@ class IntervalsICUCoordinator(
             ),
         )
 
-    async def _async_update_data(self) -> dict:
-        """Fetch data from API."""
+    async def _async_update_data(
+        self,
+    ) -> dict:
+        """Fetch data from Intervals.icu."""
 
         try:
-            athlete = await self.client.get_athlete()
-
-            wellness = await self.client.get_wellness()
-
-            activities = await self.client.get_activities()
-
             return {
-                "athlete": athlete,
-                "wellness": wellness,
-                "activities": activities,
+                "athlete": await self.client.get_athlete(),
+                "wellness": await self.client.get_wellness(),
+                "activities": await self.client.get_activities(),
             }
 
-        except Exception as err:
+        except IntervalsICUAuthenticationError as err:
             raise UpdateFailed(
-                f"Unable to fetch Intervals.icu data: {err}"
+                "Invalid Intervals.icu credentials"
+            ) from err
+
+        except IntervalsICUConnectionError as err:
+            raise UpdateFailed(
+                "Unable to connect to Intervals.icu"
+            ) from err
+
+        except Exception as err:
+            LOGGER.exception(
+                "Unexpected error updating Intervals.icu"
+            )
+
+            raise UpdateFailed(
+                f"Unexpected error: {err}"
             ) from err
