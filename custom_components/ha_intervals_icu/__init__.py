@@ -5,6 +5,7 @@ from __future__ import annotations
 import aiohttp
 
 from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
 
 from .api import IntervalsICUClient
@@ -15,6 +16,11 @@ from .const import (
 )
 from .coordinator import IntervalsICUCoordinator
 from .services import async_setup_services
+
+
+PLATFORMS: list[Platform] = [
+    Platform.SENSOR,
+]
 
 
 async def async_setup_entry(
@@ -52,6 +58,11 @@ async def async_setup_entry(
         hass,
     )
 
+    await hass.config_entries.async_forward_entry_setups(
+        entry,
+        PLATFORMS,
+    )
+
     return True
 
 
@@ -61,10 +72,16 @@ async def async_unload_entry(
 ) -> bool:
     """Unload a config entry."""
 
-    data = hass.data[DOMAIN].pop(
-        entry.entry_id,
+    unload_ok = await hass.config_entries.async_unload_platforms(
+        entry,
+        PLATFORMS,
     )
 
-    await data["session"].close()
+    if unload_ok:
+        data = hass.data[DOMAIN].pop(
+            entry.entry_id,
+        )
 
-    return True
+        await data["session"].close()
+
+    return unload_ok
