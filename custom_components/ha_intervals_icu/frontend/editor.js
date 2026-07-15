@@ -1,5 +1,5 @@
-import { DEFAULT_KEYS, findEntity } from "./utils.js";
 import { styles } from "./styles.js";
+import { DEFAULT_KEYS, escapeHtml, matchingSensorEntities } from "./utils.js";
 
 const ENTITY_FIELDS = [
   ["fitness_entity", "Fitness", DEFAULT_KEYS.fitness],
@@ -25,6 +25,21 @@ class IntervalsIcuCardEditor extends HTMLElement {
     this._render();
   }
 
+  _entitySelect(field, label, key) {
+    const entities = matchingSensorEntities(this._hass, key);
+    const configured = this._config[field] ?? "";
+    const options = [
+      `<option value="">Détection automatique</option>`,
+      ...entities.map((entityId) => {
+        const state = this._hass.states[entityId];
+        const name = state?.attributes?.friendly_name || entityId;
+        const selected = configured === entityId ? " selected" : "";
+        return `<option value="${escapeHtml(entityId)}"${selected}>${escapeHtml(name)} — ${escapeHtml(entityId)}</option>`;
+      }),
+    ].join("");
+    return `<div class="editor-row"><label for="${field}">${escapeHtml(label)}</label><select id="${field}" data-field="${field}">${options}</select></div>`;
+  }
+
   _render() {
     if (!this._config || !this._hass) return;
     this.innerHTML = `
@@ -32,14 +47,13 @@ class IntervalsIcuCardEditor extends HTMLElement {
       <div class="editor">
         <div class="editor-row">
           <label for="title">Titre</label>
-          <input id="title" data-field="title" value="${this._config.title || "Intervals.icu"}">
+          <input id="title" data-field="title" value="${escapeHtml(this._config.title || "Intervals.icu")}">
         </div>
-        ${ENTITY_FIELDS.map(([field, label, key]) => {
-          const detected = findEntity(this._hass, this._config[field], key) || "";
-          return `<div class="editor-row"><label for="${field}">${label}</label><input id="${field}" data-field="${field}" value="${detected}"></div>`;
-        }).join("")}
+        ${ENTITY_FIELDS.map(([field, label, key]) => this._entitySelect(field, label, key)).join("")}
         <label class="checkbox"><input type="checkbox" data-field="show_records" ${this._config.show_records !== false ? "checked" : ""}>Afficher les records</label>
         <label class="checkbox"><input type="checkbox" data-field="show_history" ${this._config.show_history !== false ? "checked" : ""}>Afficher l’historique</label>
+        <label class="checkbox"><input type="checkbox" data-field="show_workout" ${this._config.show_workout !== false ? "checked" : ""}>Afficher la séance du jour</label>
+        <label class="checkbox"><input type="checkbox" data-field="show_last_activity" ${this._config.show_last_activity !== false ? "checked" : ""}>Afficher la dernière activité</label>
       </div>`;
 
     this.querySelectorAll("[data-field]").forEach((element) => {
@@ -50,7 +64,9 @@ class IntervalsIcuCardEditor extends HTMLElement {
   _changed(event) {
     const field = event.target.dataset.field;
     const config = { ...this._config };
-    config[field] = event.target.type === "checkbox" ? event.target.checked : event.target.value.trim();
+    const value = event.target.type === "checkbox" ? event.target.checked : event.target.value.trim();
+    if (value === "") delete config[field];
+    else config[field] = value;
     this._config = config;
     this.dispatchEvent(new CustomEvent("config-changed", { detail: { config }, bubbles: true, composed: true }));
   }

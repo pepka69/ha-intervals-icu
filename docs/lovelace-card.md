@@ -1,28 +1,34 @@
 # Intervals.icu Lovelace Card
 
-## Resource
+## Ajouter la ressource
 
-Add the following JavaScript module in **Settings → Dashboards → Resources**:
+Dans Home Assistant :
+
+1. **Paramètres → Tableaux de bord**.
+2. Ouvrir le menu **⋮ → Ressources**.
+3. Ajouter cette URL :
 
 ```text
-/ha_intervals_icu/ha-intervals-icu-card.js?v=1.1.0-beta1
+/ha_intervals_icu/ha-intervals-icu-card.js?v=1.1.0-beta2
 ```
 
-Resource type: **JavaScript module**.
+Type : **Module JavaScript**.
 
-Restart Home Assistant after installing or updating the integration, then refresh the browser cache.
+Redémarrer Home Assistant après installation ou mise à jour de l’intégration, puis actualiser complètement le navigateur.
 
-## Add the card
+## Ajouter la carte
 
-The card is available from the dashboard card picker as **Intervals.icu Card**.
+La carte apparaît dans le sélecteur sous le nom **Intervals.icu Card**.
 
-Minimal YAML configuration:
+Configuration YAML minimale :
 
 ```yaml
 type: custom:ha-intervals-icu-card
 title: Intervals.icu
 show_records: true
 show_history: true
+show_workout: true
+show_last_activity: true
 ```
 
-The card automatically detects the first Intervals.icu sensor for every supported value. For multiple athletes, use the visual editor to explicitly select the fitness, fatigue, form, FTP, weekly load and weekly activity entities.
+La carte détecte automatiquement les entités Intervals.icu. Avec plusieurs athlètes, utiliser l’éditeur visuel pour sélectionner explicitement les entités Fitness, Fatigue, Forme, FTP, Charge 7 jours et Activités 7 jours.

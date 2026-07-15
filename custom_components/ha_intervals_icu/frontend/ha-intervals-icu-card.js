@@ -1,14 +1,16 @@
 import "./editor.js";
-import { sparkline } from "./graph.js";
+import { historyGraph } from "./graph.js";
 import { styles } from "./styles.js";
 import {
+  athleteName,
   CARD_VERSION,
   DEFAULT_KEYS,
   escapeHtml,
   formatDuration,
   formatState,
   getState,
-  historyValues,
+  historyPoints,
+  isAvailable,
   numericValue,
   statusFor,
 } from "./utils.js";
@@ -19,11 +21,23 @@ class HaIntervalsIcuCard extends HTMLElement {
   }
 
   static getStubConfig() {
-    return { title: "Intervals.icu", show_records: true, show_history: true };
+    return {
+      title: "Intervals.icu",
+      show_records: true,
+      show_history: true,
+      show_workout: true,
+      show_last_activity: true,
+    };
   }
 
   setConfig(config) {
-    this._config = { show_records: true, show_history: true, ...config };
+    this._config = {
+      show_records: true,
+      show_history: true,
+      show_workout: true,
+      show_last_activity: true,
+      ...config,
+    };
     this._render();
   }
 
@@ -46,7 +60,9 @@ class HaIntervalsIcuCard extends HTMLElement {
 
   _metric(label, metric, state) {
     const value = numericValue(state);
-    return `<div class="metric"><div class="metric-head"><span class="metric-label">${label}</span><span class="dot ${statusFor(metric, value)}"></span></div><div class="metric-value">${formatState(this._hass, state)}</div></div>`;
+    const change = state?.attributes?.change_7_days;
+    const changeText = Number.isFinite(Number(change)) ? `${Number(change) > 0 ? "+" : ""}${change} sur 7 j` : "Évolution indisponible";
+    return `<div class="metric"><div class="metric-head"><span class="metric-label">${label}</span><span class="dot ${statusFor(metric, value)}"></span></div><div class="metric-value">${formatState(this._hass, state)}</div><div class="metric-change">${escapeHtml(changeText)}</div></div>`;
   }
 
   _render() {
@@ -67,26 +83,31 @@ class HaIntervalsIcuCard extends HTMLElement {
     const recordElevation = this._state("record_elevation_entity", DEFAULT_KEYS.recordElevation);
     const recordPower = this._state("record_max_power_entity", DEFAULT_KEYS.recordMaxPower);
 
-    const history = historyValues(fitness);
-    const athlete = fitness?.attributes?.device_class || fitness?.attributes?.friendly_name || "Données d’entraînement";
-    const workoutDetails = [formatDuration(plannedDuration?.state), plannedLoad ? `Charge ${formatState(this._hass, plannedLoad)}` : null].filter(Boolean).join(" • ");
+    const history = {
+      fitness: historyPoints(fitness),
+      fatigue: historyPoints(fatigue),
+      form: historyPoints(form),
+    };
+    const workoutDetails = [
+      formatDuration(plannedDuration?.state),
+      isAvailable(plannedLoad) ? `Charge ${formatState(this._hass, plannedLoad)}` : null,
+    ].filter(Boolean).join(" • ");
 
     this.innerHTML = `
       <style>${styles}</style>
       <ha-card>
         <div class="card">
-          <div class="header"><div class="title-wrap"><div class="logo"><ha-icon icon="mdi:bike-fast"></ha-icon></div><div><h2>${escapeHtml(this._config.title || "Intervals.icu")}</h2><div class="subtitle">${escapeHtml(athlete)}</div></div></div></div>
+          <div class="header"><div class="title-wrap"><div class="logo"><ha-icon icon="mdi:bike-fast"></ha-icon></div><div><h2>${escapeHtml(this._config.title || "Intervals.icu")}</h2><div class="subtitle">${escapeHtml(athleteName(fitness, fatigue, form))}</div></div></div></div>
           <div class="metrics">${this._metric("Fitness", "fitness", fitness)}${this._metric("Fatigue", "fatigue", fatigue)}${this._metric("Forme", "form", form)}</div>
           <div class="summary">
             <div class="summary-item"><div class="summary-label">FTP</div><div class="summary-value">${formatState(this._hass, ftp)}</div></div>
             <div class="summary-item"><div class="summary-label">Charge 7 j</div><div class="summary-value">${formatState(this._hass, weeklyLoad)}</div></div>
             <div class="summary-item"><div class="summary-label">Activités 7 j</div><div class="summary-value">${formatState(this._hass, weeklyActivities)}</div></div>
-            <div class="summary-item"><div class="summary-label">Tendance fitness</div><div class="summary-value">${fitness?.attributes?.change_7_days ?? "—"}</div></div>
           </div>
-          <div class="section"><div class="section-title"><ha-icon icon="mdi:calendar-today"></ha-icon>Aujourd’hui</div><div class="workout"><div class="main-line">${escapeHtml(plannedName?.state && plannedName.state !== "unknown" ? plannedName.state : "Aucun entraînement planifié")}</div>${workoutDetails ? `<div class="detail-line">${escapeHtml(workoutDetails)}</div>` : ""}</div></div>
-          <div class="section"><div class="section-title"><ha-icon icon="mdi:history"></ha-icon>Dernière activité</div><div class="activity"><div class="main-line">${escapeHtml(lastName?.state && lastName.state !== "unknown" ? lastName.state : "Indisponible")}</div><div class="detail-line">${formatState(this._hass, lastDistance)}</div></div></div>
+          ${this._config.show_workout !== false ? `<div class="section"><div class="section-title"><ha-icon icon="mdi:calendar-today"></ha-icon>Aujourd’hui</div><div class="workout"><div class="main-line">${escapeHtml(isAvailable(plannedName) ? plannedName.state : "Aucun entraînement planifié")}</div>${workoutDetails ? `<div class="detail-line">${escapeHtml(workoutDetails)}</div>` : ""}</div></div>` : ""}
+          ${this._config.show_last_activity !== false ? `<div class="section"><div class="section-title"><ha-icon icon="mdi:history"></ha-icon>Dernière activité</div><div class="activity"><div class="main-line">${escapeHtml(isAvailable(lastName) ? lastName.state : "Indisponible")}</div><div class="detail-line">${formatState(this._hass, lastDistance)}</div></div></div>` : ""}
           ${this._config.show_records !== false ? `<div class="section"><div class="section-title"><ha-icon icon="mdi:trophy-outline"></ha-icon>Records personnels</div><div class="records"><div class="record"><div class="record-label">Distance</div><div class="record-value">${formatState(this._hass, recordDistance)}</div></div><div class="record"><div class="record-label">Dénivelé</div><div class="record-value">${formatState(this._hass, recordElevation)}</div></div><div class="record"><div class="record-label">Puissance max.</div><div class="record-value">${formatState(this._hass, recordPower)}</div></div></div></div>` : ""}
-          ${this._config.show_history !== false ? `<div class="section"><div class="section-title"><ha-icon icon="mdi:chart-line"></ha-icon>Historique fitness</div><div class="graph-wrap">${sparkline(history)}</div></div>` : ""}
+          ${this._config.show_history !== false ? `<div class="section"><div class="section-title"><ha-icon icon="mdi:chart-line"></ha-icon>Historique Fitness / Fatigue / Forme</div><div class="graph-wrap">${historyGraph(history)}</div></div>` : ""}
           <div class="footer">Carte ${CARD_VERSION}</div>
         </div>
       </ha-card>`;
@@ -102,7 +123,7 @@ if (!window.customCards.some((card) => card.type === "ha-intervals-icu-card")) {
   window.customCards.push({
     type: "ha-intervals-icu-card",
     name: "Intervals.icu Card",
-    description: "Fitness, fatigue, forme, entraînements et records Intervals.icu.",
+    description: "Fitness, fatigue, forme, entraînements, historique et records Intervals.icu.",
     preview: true,
     documentationURL: "https://github.com/pepka69/ha-intervals-icu/blob/main/docs/lovelace-card.md",
   });

@@ -1,4 +1,4 @@
-export const CARD_VERSION = "1.1.0-beta1";
+export const CARD_VERSION = "1.1.0-beta2";
 
 export const DEFAULT_KEYS = {
   fitness: "fitness",
@@ -17,12 +17,25 @@ export const DEFAULT_KEYS = {
   recordMaxPower: "record_max_power",
 };
 
-export function findEntity(hass, configuredEntity, key) {
-  if (configuredEntity && hass.states[configuredEntity]) return configuredEntity;
+export function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+export function matchingSensorEntities(hass, key) {
   const suffix = `_${key}`;
-  return Object.keys(hass.states).find(
-    (entityId) => entityId.startsWith("sensor.") && entityId.endsWith(suffix),
-  );
+  return Object.keys(hass?.states ?? {})
+    .filter((entityId) => entityId.startsWith("sensor.") && entityId.endsWith(suffix))
+    .sort();
+}
+
+export function findEntity(hass, configuredEntity, key) {
+  if (configuredEntity && hass?.states?.[configuredEntity]) return configuredEntity;
+  return matchingSensorEntities(hass, key)[0];
 }
 
 export function getState(hass, configuredEntity, key) {
@@ -30,14 +43,18 @@ export function getState(hass, configuredEntity, key) {
   return entityId ? hass.states[entityId] : undefined;
 }
 
+export function isAvailable(state) {
+  return Boolean(state && !["unknown", "unavailable", "none", ""].includes(state.state));
+}
+
 export function numericValue(state) {
-  if (!state || ["unknown", "unavailable", "none"].includes(state.state)) return null;
+  if (!isAvailable(state)) return null;
   const value = Number(state.state);
   return Number.isFinite(value) ? value : null;
 }
 
 export function formatState(hass, state, fallback = "—") {
-  if (!state || ["unknown", "unavailable", "none"].includes(state.state)) return fallback;
+  if (!isAvailable(state)) return fallback;
   try {
     return hass.formatEntityState(state);
   } catch (_error) {
@@ -56,21 +73,19 @@ export function formatDuration(seconds) {
   return `${minutes} min`;
 }
 
-export function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-export function historyValues(state) {
+export function historyPoints(state) {
   const history = state?.attributes?.history;
   if (!Array.isArray(history)) return [];
   return history
-    .map((item) => Number(typeof item === "object" ? item.value : item))
-    .filter(Number.isFinite);
+    .map((item, index) => {
+      const value = Number(typeof item === "object" ? item.value : item);
+      if (!Number.isFinite(value)) return null;
+      return {
+        date: typeof item === "object" ? item.date ?? String(index) : String(index),
+        value,
+      };
+    })
+    .filter(Boolean);
 }
 
 export function statusFor(metric, value) {
@@ -86,4 +101,12 @@ export function statusFor(metric, value) {
     if (value >= 60) return "warning";
   }
   return "good";
+}
+
+export function athleteName(...states) {
+  for (const state of states) {
+    const name = state?.attributes?.athlete_name;
+    if (name) return String(name);
+  }
+  return "Données d’entraînement";
 }
