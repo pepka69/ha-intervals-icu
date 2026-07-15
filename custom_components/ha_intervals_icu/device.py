@@ -11,7 +11,7 @@ def get_device_info(
     athlete_id: str,
     athlete_name: str | None = None,
 ) -> DeviceInfo:
-    """Return device information."""
+    """Return Intervals.icu athlete device information."""
 
     return DeviceInfo(
         identifiers={
@@ -20,11 +20,10 @@ def get_device_info(
                 athlete_id,
             )
         },
-        name=(
-            athlete_name
-            or "Intervals.icu Athlete"
-        ),
+        name=athlete_name or "Intervals.icu Athlete",
         manufacturer="Intervals.icu",
         model="Athlete Profile",
-        sw_version="ha-intervals-icu",
+        configuration_url=(
+            f"https://intervals.icu/athlete/{athlete_id}"
+        ),
     )
