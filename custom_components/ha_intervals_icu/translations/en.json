@@ -11,8 +11,8 @@
       }
     },
     "error": {
-      "invalid_auth": "Invalid authentication",
-      "cannot_connect": "Cannot connect to Intervals.icu"
+      "invalid_auth": "Invalid Athlete ID or API Key",
+      "cannot_connect": "Unable to connect to Intervals.icu"
     }
   },
   "entity": {
@@ -26,22 +26,79 @@
       "form": {
         "name": "Form"
       },
-      "hrv": {
-        "name": "HRV"
+      "activities": {
+        "name": "Activities"
+      },
+      "ftp": {
+        "name": "FTP"
+      },
+      "resting_hr": {
+        "name": "Resting Heart Rate"
       },
       "weight": {
         "name": "Weight"
       },
-      "activity_count": {
-        "name": "Activity count"
+      "sleep": {
+        "name": "Sleep"
       },
-      "last_activity": {
-        "name": "Last activity"
+      "mood": {
+        "name": "Mood"
+      },
+      "energy": {
+        "name": "Energy"
+      },
+      "stress": {
+        "name": "Stress"
+      },
+      "soreness": {
+        "name": "Soreness"
+      },
+      "last_activity_name": {
+        "name": "Last Activity"
+      },
+      "last_activity_type": {
+        "name": "Last Activity Type"
+      },
+      "last_activity_date": {
+        "name": "Last Activity Date"
+      },
+      "last_activity_distance": {
+        "name": "Last Activity Distance"
+      },
+      "last_activity_duration": {
+        "name": "Last Activity Duration"
+      },
+      "last_activity_load": {
+        "name": "Last Activity Load"
+      },
+      "last_activity_calories": {
+        "name": "Last Activity Calories"
+      },
+      "last_activity_elevation_gain": {
+        "name": "Last Activity Elevation Gain"
+      },
+      "last_activity_avg_hr": {
+        "name": "Last Activity Average Heart Rate"
+      },
+      "last_activity_max_hr": {
+        "name": "Last Activity Maximum Heart Rate"
+      },
+      "last_activity_avg_power": {
+        "name": "Last Activity Average Power"
+      },
+      "last_activity_max_power": {
+        "name": "Last Activity Maximum Power"
+      },
+      "last_activity_avg_speed": {
+        "name": "Last Activity Average Speed"
       }
     },
     "binary_sensor": {
-      "connection": {
-        "name": "Connection"
+      "positive_form": {
+        "name": "Positive Form"
+      },
+      "high_fatigue": {
+        "name": "High Fatigue"
       }
     }
   }
