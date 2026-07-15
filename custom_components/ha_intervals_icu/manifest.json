@@ -11,5 +11,6 @@
   ],
   "config_flow": true,
   "diagnostics": true,
+  "system_health": true,
   "iot_class": "cloud_polling"
 }
