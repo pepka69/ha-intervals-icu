@@ -1,6 +1,9 @@
 {
   "domain": "ha_intervals_icu",
   "name": "ha-intervals-icu",
+  "after_dependencies": [
+    "http"
+  ],
   "codeowners": [
     "@pepka69"
   ],
