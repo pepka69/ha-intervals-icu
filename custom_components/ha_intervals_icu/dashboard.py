@@ -20,13 +20,11 @@ def build_dashboard(
     ctl = latest.get("ctl")
     atl = latest.get("atl")
 
-    form = None
-
-    if ctl is not None and atl is not None:
-        form = round(
-            ctl - atl,
-            1,
-        )
+    form = (
+        round(float(ctl) - float(atl), 1)
+        if ctl is not None and atl is not None
+        else None
+    )
 
     ftp = None
 
@@ -35,56 +33,42 @@ def build_dashboard(
         [],
     )
 
-    if sport_settings:
-        ftp = sport_settings[0].get(
-            "ftp"
-        )
+    for sport_setting in sport_settings:
+        candidate_ftp = sport_setting.get("ftp")
 
-    dashboard = {
+        if candidate_ftp is not None:
+            ftp = candidate_ftp
+            break
+
+    dashboard: dict[str, Any] = {
         "athlete": athlete,
         "wellness": latest,
         "fitness": (
-            round(ctl, 1)
+            round(float(ctl), 1)
             if ctl is not None
             else None
         ),
         "fatigue": (
-            round(atl, 1)
+            round(float(atl), 1)
             if atl is not None
             else None
         ),
         "form": form,
-        "activities": len(
-            activities
-        ),
+        "activities": len(activities),
         "ftp": ftp,
         "resting_hr": (
             latest.get("restingHR")
-            or athlete.get(
-                "icu_resting_hr"
-            )
+            or athlete.get("icu_resting_hr")
         ),
         "weight": (
             latest.get("weight")
-            or athlete.get(
-                "icu_weight"
-            )
+            or athlete.get("icu_weight")
         ),
-        "sleep": latest.get(
-            "sleepSecs"
-        ),
-        "mood": latest.get(
-            "mood"
-        ),
-        "energy": latest.get(
-            "energy"
-        ),
-        "stress": latest.get(
-            "stress"
-        ),
-        "soreness": latest.get(
-            "soreness"
-        ),
+        "sleep": latest.get("sleepSecs"),
+        "mood": latest.get("mood"),
+        "energy": latest.get("energy"),
+        "stress": latest.get("stress"),
+        "soreness": latest.get("soreness"),
     }
 
     dashboard.update(
