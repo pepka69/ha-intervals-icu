@@ -92,10 +92,7 @@ class IntervalsICUClient:
         """Return wellness history."""
 
         end = date.today()
-
-        start = end - timedelta(
-            days=days,
-        )
+        start = end - timedelta(days=days)
 
         return await self._request(
             f"athlete/{self.athlete_id}/wellness",
@@ -112,10 +109,7 @@ class IntervalsICUClient:
         """Return recent activities."""
 
         end = date.today()
-
-        start = end - timedelta(
-            days=days,
-        )
+        start = end - timedelta(days=days)
 
         return await self._request(
             f"athlete/{self.athlete_id}/activities",
@@ -139,13 +133,11 @@ class IntervalsICUClient:
         ctl = latest.get("ctl")
         atl = latest.get("atl")
 
-        form = None
-
-        if ctl is not None and atl is not None:
-            form = round(
-                ctl - atl,
-                1,
-            )
+        form = (
+            round(ctl - atl, 1)
+            if ctl is not None and atl is not None
+            else None
+        )
 
         ftp = None
 
@@ -155,54 +147,62 @@ class IntervalsICUClient:
         )
 
         if sport_settings:
-            ftp = sport_settings[0].get(
-                "ftp",
-            )
+            ftp = sport_settings[0].get("ftp")
+
+        last_activity = (
+            activities[-1]
+            if activities
+            else {}
+        )
 
         return {
             "athlete": athlete,
             "wellness": latest,
-            "fitness": round(
-                ctl,
-                1,
-            )
+
+            "fitness": round(ctl, 1)
             if ctl is not None
             else None,
-            "fatigue": round(
-                atl,
-                1,
-            )
+
+            "fatigue": round(atl, 1)
             if atl is not None
             else None,
+
             "form": form,
-            "activities": len(
-                activities,
-            ),
-            "last_activity": (
-                activities[-1]
-                if activities
-                else None
-            ),
+
+            "activities": len(activities),
+
             "ftp": ftp,
-            "resting_hr": latest.get(
-                "restingHR",
+
+            "resting_hr": (
+                latest.get("restingHR")
+                or athlete.get("icu_resting_hr")
             ),
-            "weight": latest.get(
-                "weight",
+
+            "weight": (
+                latest.get("weight")
+                or athlete.get("icu_weight")
             ),
-            "sleep": latest.get(
-                "sleepSecs",
-            ),
-            "mood": latest.get(
-                "mood",
-            ),
-            "energy": latest.get(
-                "energy",
-            ),
-            "soreness": latest.get(
-                "soreness",
-            ),
-            "stress": latest.get(
-                "stress",
-            ),
+
+            "sleep": latest.get("sleepSecs"),
+
+            "mood": latest.get("mood"),
+            "energy": latest.get("energy"),
+            "soreness": latest.get("soreness"),
+            "stress": latest.get("stress"),
+
+            "last_activity": last_activity,
+
+            "last_activity_name": last_activity.get("name"),
+            "last_activity_type": last_activity.get("type"),
+            "last_activity_date": last_activity.get("start_date_local"),
+            "last_activity_distance": last_activity.get("distance"),
+            "last_activity_duration": last_activity.get("moving_time"),
+            "last_activity_load": last_activity.get("icu_training_load"),
+            "last_activity_calories": last_activity.get("calories"),
+            "last_activity_elevation_gain": last_activity.get("total_elevation_gain"),
+            "last_activity_avg_hr": last_activity.get("average_heartrate"),
+            "last_activity_max_hr": last_activity.get("max_heartrate"),
+            "last_activity_avg_power": last_activity.get("average_watts"),
+            "last_activity_max_power": last_activity.get("max_watts"),
+            "last_activity_avg_speed": last_activity.get("average_speed"),
         }
