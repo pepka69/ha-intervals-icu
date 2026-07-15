@@ -2,33 +2,33 @@
 
 ## Ajouter la ressource
 
-Dans Home Assistant :
+Dans Home Assistant : **Paramètres → Tableaux de bord → Ressources**.
 
-1. **Paramètres → Tableaux de bord**.
-2. Ouvrir le menu **⋮ → Ressources**.
-3. Ajouter cette URL :
+- URL : `/ha_intervals_icu/ha-intervals-icu-card.js?v=1.1.0-beta1`
+- Type : **Module JavaScript**
 
-```text
-/ha_intervals_icu/ha-intervals-icu-card.js?v=1.1.0-beta2
-```
-
-Type : **Module JavaScript**.
-
-Redémarrer Home Assistant après installation ou mise à jour de l’intégration, puis actualiser complètement le navigateur.
+Redémarrez Home Assistant après l'installation ou la mise à jour de l'intégration, puis rechargez le navigateur.
 
 ## Ajouter la carte
 
-La carte apparaît dans le sélecteur sous le nom **Intervals.icu Card**.
+Dans l'éditeur d'un tableau de bord, choisissez **Ajouter une carte**, puis **Intervals.icu Card**.
 
 Configuration YAML minimale :
 
 ```yaml
 type: custom:ha-intervals-icu-card
 title: Intervals.icu
-show_records: true
-show_history: true
-show_workout: true
-show_last_activity: true
 ```
 
-La carte détecte automatiquement les entités Intervals.icu. Avec plusieurs athlètes, utiliser l’éditeur visuel pour sélectionner explicitement les entités Fitness, Fatigue, Forme, FTP, Charge 7 jours et Activités 7 jours.
+La carte détecte automatiquement les entités de l'intégration. L'éditeur visuel permet de sélectionner manuellement les capteurs et d'afficher ou masquer l'historique, les records, l'entraînement du jour et la dernière activité.
+
+## Développement du frontend
+
+```bash
+cd frontend
+npm ci
+npm run check
+npm run build
+```
+
+Le build TypeScript/Vite génère le fichier distribué dans `custom_components/ha_intervals_icu/frontend/ha-intervals-icu-card.js`.
