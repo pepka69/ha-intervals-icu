@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from pathlib import Path
+
+from homeassistant.components.http import StaticPathConfig
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant
@@ -16,6 +19,9 @@ from .const import (
 from .coordinator import IntervalsICUCoordinator
 from .services import async_setup_services
 
+FRONTEND_URL = "/ha_intervals_icu"
+FRONTEND_PATH = Path(__file__).parent / "frontend"
+
 PLATFORMS: list[Platform] = [
     Platform.SENSOR,
     Platform.BINARY_SENSOR,
@@ -27,6 +33,18 @@ async def async_setup_entry(
     entry: ConfigEntry,
 ) -> bool:
     """Set up ha-intervals-icu from a config entry."""
+
+    if not hass.data.get(f"{DOMAIN}_frontend_registered"):
+        await hass.http.async_register_static_paths(
+            [
+                StaticPathConfig(
+                    FRONTEND_URL,
+                    str(FRONTEND_PATH),
+                    True,
+                )
+            ]
+        )
+        hass.data[f"{DOMAIN}_frontend_registered"] = True
 
     session = async_get_clientsession(hass)
 
