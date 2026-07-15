@@ -3,22 +3,22 @@
     "step": {
       "user": {
         "title": "ha-intervals-icu",
-        "description": "Configurer la connexion à Intervals.icu",
+        "description": "Connectez votre compte Intervals.icu",
         "data": {
-          "athlete_id": "Identifiant athlète",
+          "athlete_id": "ID Athlète",
           "api_key": "Clé API"
         }
       }
     },
     "error": {
-      "invalid_auth": "Authentification incorrecte",
+      "invalid_auth": "ID Athlète ou clé API invalide",
       "cannot_connect": "Impossible de se connecter à Intervals.icu"
     }
   },
   "entity": {
     "sensor": {
       "fitness": {
-        "name": "Fitness"
+        "name": "Condition physique"
       },
       "fatigue": {
         "name": "Fatigue"
@@ -26,22 +26,79 @@
       "form": {
         "name": "Forme"
       },
-      "hrv": {
-        "name": "VFC (HRV)"
+      "activities": {
+        "name": "Activités"
+      },
+      "ftp": {
+        "name": "FTP"
+      },
+      "resting_hr": {
+        "name": "Fréquence cardiaque au repos"
       },
       "weight": {
         "name": "Poids"
       },
-      "activity_count": {
-        "name": "Nombre d'activités"
+      "sleep": {
+        "name": "Sommeil"
       },
-      "last_activity": {
+      "mood": {
+        "name": "Humeur"
+      },
+      "energy": {
+        "name": "Énergie"
+      },
+      "stress": {
+        "name": "Stress"
+      },
+      "soreness": {
+        "name": "Courbatures"
+      },
+      "last_activity_name": {
         "name": "Dernière activité"
+      },
+      "last_activity_type": {
+        "name": "Type de la dernière activité"
+      },
+      "last_activity_date": {
+        "name": "Date de la dernière activité"
+      },
+      "last_activity_distance": {
+        "name": "Distance de la dernière activité"
+      },
+      "last_activity_duration": {
+        "name": "Durée de la dernière activité"
+      },
+      "last_activity_load": {
+        "name": "Charge de la dernière activité"
+      },
+      "last_activity_calories": {
+        "name": "Calories de la dernière activité"
+      },
+      "last_activity_elevation_gain": {
+        "name": "Dénivelé positif"
+      },
+      "last_activity_avg_hr": {
+        "name": "FC moyenne"
+      },
+      "last_activity_max_hr": {
+        "name": "FC maximale"
+      },
+      "last_activity_avg_power": {
+        "name": "Puissance moyenne"
+      },
+      "last_activity_max_power": {
+        "name": "Puissance maximale"
+      },
+      "last_activity_avg_speed": {
+        "name": "Vitesse moyenne"
       }
     },
     "binary_sensor": {
-      "connection": {
-        "name": "Connexion"
+      "positive_form": {
+        "name": "Forme positive"
+      },
+      "high_fatigue": {
+        "name": "Fatigue élevée"
       }
     }
   }
