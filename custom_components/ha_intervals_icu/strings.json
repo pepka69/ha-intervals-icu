@@ -212,6 +212,39 @@
       },
       "planned_tomorrow_description": {
         "name": "Planned Workout Description Tomorrow"
+      },
+      "record_distance": {
+        "name": "Record distance (365 days)"
+      },
+      "record_duration": {
+        "name": "Record duration (365 days)"
+      },
+      "record_elevation": {
+        "name": "Record elevation gain (365 days)"
+      },
+      "record_load": {
+        "name": "Record training load (365 days)"
+      },
+      "record_calories": {
+        "name": "Record calories (365 days)"
+      },
+      "record_max_power": {
+        "name": "Record maximum power (365 days)"
+      },
+      "record_average_power": {
+        "name": "Record average power (365 days)"
+      },
+      "record_max_hr": {
+        "name": "Record maximum heart rate (365 days)"
+      },
+      "record_average_speed": {
+        "name": "Record average speed (365 days)"
+      },
+      "record_ftp": {
+        "name": "Record FTP (365 days)"
+      },
+      "record_eftp": {
+        "name": "Record eFTP (365 days)"
       }
     },
     "binary_sensor": {

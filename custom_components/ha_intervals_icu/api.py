@@ -8,6 +8,7 @@ from typing import Any
 import aiohttp
 
 from .dashboard import build_dashboard
+from .records import calculate_personal_records
 from .workouts import planned_workouts
 
 BASE_URL = "https://intervals.icu/api/v1"
@@ -146,11 +147,19 @@ class IntervalsICUClient:
         wellness = await self.get_wellness()
         activities = await self.get_activities()
         workouts = await self.get_workouts()
+        record_activities = await self.get_activities(days=365)
 
         dashboard = build_dashboard(
             athlete,
             wellness,
             activities,
+        )
+
+        dashboard.update(
+            calculate_personal_records(
+                athlete,
+                record_activities,
+            )
         )
 
         dashboard.update(

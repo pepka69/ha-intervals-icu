@@ -545,6 +545,112 @@ SENSORS: tuple[IntervalsICUSensorDescription, ...] = (
         value_fn=_round_value("monthly_elevation", 0),
     ),
     IntervalsICUSensorDescription(
+        key="record_distance",
+        translation_key="record_distance",
+        icon="mdi:map-marker-distance",
+        device_class=SensorDeviceClass.DISTANCE,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=2,
+        value_fn=_meters_to_kilometers("record_distance"),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_duration",
+        translation_key="record_duration",
+        icon="mdi:timer-star-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.HOURS,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=2,
+        value_fn=_seconds_to_hours("record_duration"),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_elevation",
+        translation_key="record_elevation",
+        icon="mdi:elevation-rise",
+        device_class=SensorDeviceClass.DISTANCE,
+        native_unit_of_measurement=UnitOfLength.METERS,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_elevation", 0),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_load",
+        translation_key="record_load",
+        icon="mdi:weight-lifter",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("record_load"),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_calories",
+        translation_key="record_calories",
+        icon="mdi:fire",
+        native_unit_of_measurement="kcal",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_calories", 0),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_max_power",
+        translation_key="record_max_power",
+        icon="mdi:flash-outline",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_max_power", 0),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_average_power",
+        translation_key="record_average_power",
+        icon="mdi:flash",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_average_power", 0),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_max_hr",
+        translation_key="record_max_hr",
+        icon="mdi:heart-flash",
+        native_unit_of_measurement="bpm",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_max_hr", 0),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_average_speed",
+        translation_key="record_average_speed",
+        icon="mdi:speedometer",
+        device_class=SensorDeviceClass.SPEED,
+        native_unit_of_measurement=UnitOfSpeed.KILOMETERS_PER_HOUR,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_meters_per_second_to_kmh("record_average_speed"),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_ftp",
+        translation_key="record_ftp",
+        icon="mdi:lightning-bolt-circle",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_ftp", 0),
+    ),
+    IntervalsICUSensorDescription(
+        key="record_eftp",
+        translation_key="record_eftp",
+        icon="mdi:chart-bell-curve-cumulative",
+        device_class=SensorDeviceClass.POWER,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
+        value_fn=_round_value("record_eftp", 0),
+    ),
+    IntervalsICUSensorDescription(
         key="planned_today_name",
         translation_key="planned_today_name",
         icon="mdi:calendar-today",
@@ -702,6 +808,19 @@ class IntervalsICUSensor(
                 "change_7_days": self.coordinator.data.get(f"{key}_change_7_days"),
                 "change_30_days": self.coordinator.data.get(f"{key}_change_30_days"),
             }
+
+        if key.startswith("record_"):
+            activity = self.coordinator.data.get(f"{key}_activity")
+
+            attributes: dict[str, Any] = {
+                "period_days": self.coordinator.data.get("records_period_days"),
+                "activity_count": self.coordinator.data.get("records_activity_count"),
+            }
+
+            if isinstance(activity, dict):
+                attributes["activity"] = activity
+
+            return attributes
 
         if key != "last_activity_name":
             return None
