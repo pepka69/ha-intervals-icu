@@ -3,16 +3,29 @@
     "step": {
       "user": {
         "title": "ha-intervals-icu",
-        "description": "Connect your Intervals.icu account",
+        "description": "Connect your Intervals.icu account.",
         "data": {
           "athlete_id": "Athlete ID",
+          "api_key": "API Key"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect Intervals.icu",
+        "description": "Enter a new Intervals.icu API key for this athlete.",
+        "data": {
           "api_key": "API Key"
         }
       }
     },
     "error": {
       "invalid_auth": "Invalid Athlete ID or API Key",
-      "cannot_connect": "Unable to connect to Intervals.icu"
+      "cannot_connect": "Unable to connect to Intervals.icu",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This athlete is already configured",
+      "reauth_successful": "Authentication was updated successfully",
+      "reauth_entry_missing": "The configuration entry no longer exists"
     }
   },
   "entity": {
