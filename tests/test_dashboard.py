@@ -25,3 +25,4 @@ def test_build_dashboard(
     assert result["sleep"] == 28800
     assert result["activities"] == 1
     assert result["last_activity_name"] == "Morning Ride"
+    assert result["fitness_history"] == [{"date": "2026-07-14", "value": 40.0}]

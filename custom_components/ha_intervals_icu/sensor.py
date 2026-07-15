@@ -158,6 +158,102 @@ SENSORS: tuple[IntervalsICUSensorDescription, ...] = (
         value_fn=_round_value("form"),
     ),
     IntervalsICUSensorDescription(
+        key="fitness_7_days_ago",
+        translation_key="fitness_7_days_ago",
+        icon="mdi:history",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fitness_7_days_ago"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fitness_30_days_ago",
+        translation_key="fitness_30_days_ago",
+        icon="mdi:history",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fitness_30_days_ago"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fitness_change_7_days",
+        translation_key="fitness_change_7_days",
+        icon="mdi:trending-up",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fitness_change_7_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fitness_change_30_days",
+        translation_key="fitness_change_30_days",
+        icon="mdi:chart-line",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fitness_change_30_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fatigue_7_days_ago",
+        translation_key="fatigue_7_days_ago",
+        icon="mdi:history",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fatigue_7_days_ago"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fatigue_30_days_ago",
+        translation_key="fatigue_30_days_ago",
+        icon="mdi:history",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fatigue_30_days_ago"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fatigue_change_7_days",
+        translation_key="fatigue_change_7_days",
+        icon="mdi:trending-up",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fatigue_change_7_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="fatigue_change_30_days",
+        translation_key="fatigue_change_30_days",
+        icon="mdi:chart-line",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("fatigue_change_30_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="form_7_days_ago",
+        translation_key="form_7_days_ago",
+        icon="mdi:history",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("form_7_days_ago"),
+    ),
+    IntervalsICUSensorDescription(
+        key="form_30_days_ago",
+        translation_key="form_30_days_ago",
+        icon="mdi:history",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("form_30_days_ago"),
+    ),
+    IntervalsICUSensorDescription(
+        key="form_change_7_days",
+        translation_key="form_change_7_days",
+        icon="mdi:trending-up",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("form_change_7_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="form_change_30_days",
+        translation_key="form_change_30_days",
+        icon="mdi:chart-line",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("form_change_30_days"),
+    ),
+    IntervalsICUSensorDescription(
         key="activities",
         translation_key="activities",
         icon="mdi:counter",
@@ -448,6 +544,90 @@ SENSORS: tuple[IntervalsICUSensorDescription, ...] = (
         suggested_display_precision=0,
         value_fn=_round_value("monthly_elevation", 0),
     ),
+    IntervalsICUSensorDescription(
+        key="planned_today_name",
+        translation_key="planned_today_name",
+        icon="mdi:calendar-today",
+        value_fn=_value("planned_today_name"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_today_sport",
+        translation_key="planned_today_sport",
+        icon="mdi:bike",
+        value_fn=_value("planned_today_sport"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_today_start",
+        translation_key="planned_today_start",
+        icon="mdi:clock-outline",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        value_fn=_timestamp("planned_today_start"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_today_duration",
+        translation_key="planned_today_duration",
+        icon="mdi:timer-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_value("planned_today_duration"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_today_load",
+        translation_key="planned_today_load",
+        icon="mdi:weight-lifter",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("planned_today_load"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_today_description",
+        translation_key="planned_today_description",
+        icon="mdi:text-box-outline",
+        value_fn=_value("planned_today_description"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_tomorrow_name",
+        translation_key="planned_tomorrow_name",
+        icon="mdi:calendar-arrow-right",
+        value_fn=_value("planned_tomorrow_name"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_tomorrow_sport",
+        translation_key="planned_tomorrow_sport",
+        icon="mdi:bike",
+        value_fn=_value("planned_tomorrow_sport"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_tomorrow_start",
+        translation_key="planned_tomorrow_start",
+        icon="mdi:clock-outline",
+        device_class=SensorDeviceClass.TIMESTAMP,
+        value_fn=_timestamp("planned_tomorrow_start"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_tomorrow_duration",
+        translation_key="planned_tomorrow_duration",
+        icon="mdi:timer-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_value("planned_tomorrow_duration"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_tomorrow_load",
+        translation_key="planned_tomorrow_load",
+        icon="mdi:weight-lifter",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("planned_tomorrow_load"),
+    ),
+    IntervalsICUSensorDescription(
+        key="planned_tomorrow_description",
+        translation_key="planned_tomorrow_description",
+        icon="mdi:text-box-outline",
+        value_fn=_value("planned_tomorrow_description"),
+    ),
 )
 
 
@@ -510,9 +690,20 @@ class IntervalsICUSensor(
     def extra_state_attributes(
         self,
     ) -> dict[str, Any] | None:
-        """Return selected activity details."""
+        """Return useful details for selected sensors."""
 
-        if self.entity_description.key != "last_activity_name":
+        key = self.entity_description.key
+
+        if key in {"fitness", "fatigue", "form"}:
+            return {
+                "history": self.coordinator.data.get(f"{key}_history", []),
+                "value_7_days_ago": self.coordinator.data.get(f"{key}_7_days_ago"),
+                "value_30_days_ago": self.coordinator.data.get(f"{key}_30_days_ago"),
+                "change_7_days": self.coordinator.data.get(f"{key}_change_7_days"),
+                "change_30_days": self.coordinator.data.get(f"{key}_change_30_days"),
+            }
+
+        if key != "last_activity_name":
             return None
 
         activity = self.coordinator.data.get("last_activity")
@@ -521,8 +712,8 @@ class IntervalsICUSensor(
             return None
 
         return {
-            key: activity.get(key)
-            for key in (
+            attribute: activity.get(attribute)
+            for attribute in (
                 "id",
                 "type",
                 "start_date_local",
@@ -531,5 +722,5 @@ class IntervalsICUSensor(
                 "icu_training_load",
                 "calories",
             )
-            if activity.get(key) is not None
+            if activity.get(attribute) is not None
         }

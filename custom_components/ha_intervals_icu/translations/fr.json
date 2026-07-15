@@ -39,6 +39,42 @@
       "form": {
         "name": "Forme"
       },
+      "fitness_7_days_ago": {
+        "name": "Condition physique il y a 7 jours"
+      },
+      "fitness_30_days_ago": {
+        "name": "Condition physique il y a 30 jours"
+      },
+      "fitness_change_7_days": {
+        "name": "Évolution de la condition physique sur 7 jours"
+      },
+      "fitness_change_30_days": {
+        "name": "Évolution de la condition physique sur 30 jours"
+      },
+      "fatigue_7_days_ago": {
+        "name": "Fatigue il y a 7 jours"
+      },
+      "fatigue_30_days_ago": {
+        "name": "Fatigue il y a 30 jours"
+      },
+      "fatigue_change_7_days": {
+        "name": "Évolution de la fatigue sur 7 jours"
+      },
+      "fatigue_change_30_days": {
+        "name": "Évolution de la fatigue sur 30 jours"
+      },
+      "form_7_days_ago": {
+        "name": "Forme il y a 7 jours"
+      },
+      "form_30_days_ago": {
+        "name": "Forme il y a 30 jours"
+      },
+      "form_change_7_days": {
+        "name": "Évolution de la forme sur 7 jours"
+      },
+      "form_change_30_days": {
+        "name": "Évolution de la forme sur 30 jours"
+      },
       "activities": {
         "name": "Activités"
       },

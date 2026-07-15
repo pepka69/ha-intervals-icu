@@ -39,6 +39,42 @@
       "form": {
         "name": "Form"
       },
+      "fitness_7_days_ago": {
+        "name": "Fitness 7 days ago"
+      },
+      "fitness_30_days_ago": {
+        "name": "Fitness 30 days ago"
+      },
+      "fitness_change_7_days": {
+        "name": "Fitness change over 7 days"
+      },
+      "fitness_change_30_days": {
+        "name": "Fitness change over 30 days"
+      },
+      "fatigue_7_days_ago": {
+        "name": "Fatigue 7 days ago"
+      },
+      "fatigue_30_days_ago": {
+        "name": "Fatigue 30 days ago"
+      },
+      "fatigue_change_7_days": {
+        "name": "Fatigue change over 7 days"
+      },
+      "fatigue_change_30_days": {
+        "name": "Fatigue change over 30 days"
+      },
+      "form_7_days_ago": {
+        "name": "Form 7 days ago"
+      },
+      "form_30_days_ago": {
+        "name": "Form 30 days ago"
+      },
+      "form_change_7_days": {
+        "name": "Form change over 7 days"
+      },
+      "form_change_30_days": {
+        "name": "Form change over 30 days"
+      },
       "activities": {
         "name": "Activities"
       },
