@@ -1,7 +1,7 @@
 import { LitElement, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { cardStyles } from "./styles";
-import { DEFAULT_KEYS, formatState, getState, historyValues, numericValue, relativeTime } from "./entities";
+import { DEFAULT_KEYS, deviceName, formatState, getState, historyValues, numericValue, relativeTime } from "./entities";
 import { gauge, historyChart } from "./graph";
 import type { CardConfig, HassEntity, HomeAssistant } from "./types";
 import "./editor";
@@ -44,7 +44,7 @@ export class HaIntervalsIcuCard extends LitElement {
   public getGridOptions() { return { columns: 12, min_columns: 6, rows: 9, min_rows: 5 }; }
 
   private state(field: keyof CardConfig, key: string): HassEntity | undefined {
-    return this.hass ? getState(this.hass, this.config?.[field] as string | undefined, key) : undefined;
+    return this.hass ? getState(this.hass, this.config?.[field] as string | undefined, key, this.config?.device_id) : undefined;
   }
 
   private status(metric: "fitness" | "fatigue" | "form", state?: HassEntity): "good" | "warning" | "danger" | "neutral" {
@@ -84,17 +84,21 @@ export class HaIntervalsIcuCard extends LitElement {
     const weeklyLoad = this.state("weekly_load_entity", DEFAULT_KEYS.weeklyLoad);
     const weeklyActivities = this.state("weekly_activities_entity", DEFAULT_KEYS.weeklyActivities);
 
-    const workout = getState(hass, undefined, DEFAULT_KEYS.plannedTodayName);
-    const workoutSport = getState(hass, undefined, DEFAULT_KEYS.plannedTodaySport);
-    const workoutDuration = getState(hass, undefined, DEFAULT_KEYS.plannedTodayDuration);
-    const workoutLoad = getState(hass, undefined, DEFAULT_KEYS.plannedTodayLoad);
+    const deviceId = this.config.device_id;
+    const selectedDevice = deviceId ? hass.devices?.[deviceId] : undefined;
+    const athleteLabel = this.config.athlete_name || deviceName(selectedDevice);
 
-    const last = getState(hass, undefined, DEFAULT_KEYS.lastActivityName);
-    const lastType = getState(hass, undefined, DEFAULT_KEYS.lastActivityType);
-    const lastDate = getState(hass, undefined, DEFAULT_KEYS.lastActivityDate);
-    const lastDuration = getState(hass, undefined, DEFAULT_KEYS.lastActivityDuration);
-    const lastLoad = getState(hass, undefined, DEFAULT_KEYS.lastActivityLoad);
-    const lastCalories = getState(hass, undefined, DEFAULT_KEYS.lastActivityCalories);
+    const workout = getState(hass, undefined, DEFAULT_KEYS.plannedTodayName, deviceId);
+    const workoutSport = getState(hass, undefined, DEFAULT_KEYS.plannedTodaySport, deviceId);
+    const workoutDuration = getState(hass, undefined, DEFAULT_KEYS.plannedTodayDuration, deviceId);
+    const workoutLoad = getState(hass, undefined, DEFAULT_KEYS.plannedTodayLoad, deviceId);
+
+    const last = getState(hass, undefined, DEFAULT_KEYS.lastActivityName, deviceId);
+    const lastType = getState(hass, undefined, DEFAULT_KEYS.lastActivityType, deviceId);
+    const lastDate = getState(hass, undefined, DEFAULT_KEYS.lastActivityDate, deviceId);
+    const lastDuration = getState(hass, undefined, DEFAULT_KEYS.lastActivityDuration, deviceId);
+    const lastLoad = getState(hass, undefined, DEFAULT_KEYS.lastActivityLoad, deviceId);
+    const lastCalories = getState(hass, undefined, DEFAULT_KEYS.lastActivityCalories, deviceId);
 
     const sync = relativeTime(fitness?.last_updated ?? fitness?.last_changed);
 
@@ -103,7 +107,7 @@ export class HaIntervalsIcuCard extends LitElement {
         <header class="header">
           <div class="identity">
             <div class="logo"><ha-icon icon="mdi:chart-timeline-variant-shimmer"></ha-icon></div>
-            <div><h2>${this.config.title ?? "Intervals.icu"}</h2>${this.config.athlete_name ? html`<div class="athlete">${this.config.athlete_name}</div>` : nothing}</div>
+            <div><h2>${this.config.title ?? "Intervals.icu"}</h2>${athleteLabel ? html`<div class="athlete">${athleteLabel}</div>` : nothing}</div>
           </div>
           ${this.config.show_sync_status !== false ? html`<div class="sync"><span class="dot ${sync.level}"></span>${sync.label}</div>` : nothing}
         </header>
@@ -139,10 +143,10 @@ export class HaIntervalsIcuCard extends LitElement {
 
           ${this.config.show_records !== false ? html`<article class="feature records-card">
             <div class="section-title"><ha-icon icon="mdi:trophy-outline"></ha-icon><span>Records</span></div>
-            ${this.infoRow("mdi:bike-fast", "FTP", getState(hass, undefined, DEFAULT_KEYS.recordFtp))}
-            ${this.infoRow("mdi:map-marker-distance", "Distance", getState(hass, undefined, DEFAULT_KEYS.recordDistance))}
-            ${this.infoRow("mdi:image-filter-hdr", "Dénivelé", getState(hass, undefined, DEFAULT_KEYS.recordElevation))}
-            ${this.infoRow("mdi:flash", "Puissance max", getState(hass, undefined, DEFAULT_KEYS.recordMaxPower))}
+            ${this.infoRow("mdi:bike-fast", "FTP", getState(hass, undefined, DEFAULT_KEYS.recordFtp, deviceId))}
+            ${this.infoRow("mdi:map-marker-distance", "Distance", getState(hass, undefined, DEFAULT_KEYS.recordDistance, deviceId))}
+            ${this.infoRow("mdi:image-filter-hdr", "Dénivelé", getState(hass, undefined, DEFAULT_KEYS.recordElevation, deviceId))}
+            ${this.infoRow("mdi:flash", "Puissance max", getState(hass, undefined, DEFAULT_KEYS.recordMaxPower, deviceId))}
           </article>` : nothing}
 
           ${this.config.show_last_activity !== false ? html`<article class="feature last-activity">

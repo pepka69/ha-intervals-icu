@@ -1,4 +1,6 @@
-import type { HassEntity, HomeAssistant } from "./types";
+import type { HassDevice, HassEntity, HomeAssistant } from "./types";
+
+export const INTEGRATION_DOMAIN = "ha_intervals_icu";
 
 export const DEFAULT_KEYS = {
   fitness: "fitness",
@@ -24,14 +26,51 @@ export const DEFAULT_KEYS = {
   recordEftp: "record_eftp"
 } as const;
 
-export function findEntity(hass: HomeAssistant, configured: string | undefined, key: string): string | undefined {
-  if (configured && hass.states[configured]) return configured;
-  const suffix = `_${key}`;
-  return Object.keys(hass.states).find((id) => id.startsWith("sensor.") && id.endsWith(suffix));
+function belongsToDevice(hass: HomeAssistant, entityId: string, deviceId?: string): boolean {
+  if (!deviceId) return true;
+  return hass.entities?.[entityId]?.device_id === deviceId;
 }
 
-export function getState(hass: HomeAssistant, configured: string | undefined, key: string): HassEntity | undefined {
-  const id = findEntity(hass, configured, key);
+export function integrationDevices(hass: HomeAssistant): HassDevice[] {
+  const deviceIds = new Set(
+    Object.values(hass.entities ?? {})
+      .filter((entry) => entry.platform === INTEGRATION_DOMAIN && entry.device_id)
+      .map((entry) => entry.device_id as string)
+  );
+
+  return [...deviceIds]
+    .map((deviceId) => hass.devices?.[deviceId])
+    .filter((device): device is HassDevice => Boolean(device))
+    .sort((a, b) => deviceName(a).localeCompare(deviceName(b)));
+}
+
+export function deviceName(device?: HassDevice): string {
+  return device?.name_by_user ?? device?.name ?? "Athlète Intervals.icu";
+}
+
+export function findEntity(
+  hass: HomeAssistant,
+  configured: string | undefined,
+  key: string,
+  deviceId?: string
+): string | undefined {
+  if (configured && hass.states[configured] && belongsToDevice(hass, configured, deviceId)) {
+    return configured;
+  }
+
+  const suffix = `_${key}`;
+  return Object.keys(hass.states).find(
+    (id) => id.startsWith("sensor.") && id.endsWith(suffix) && belongsToDevice(hass, id, deviceId)
+  );
+}
+
+export function getState(
+  hass: HomeAssistant,
+  configured: string | undefined,
+  key: string,
+  deviceId?: string
+): HassEntity | undefined {
+  const id = findEntity(hass, configured, key, deviceId);
   return id ? hass.states[id] : undefined;
 }
 

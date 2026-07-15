@@ -1,7 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { cardStyles } from "./styles";
-import { DEFAULT_KEYS, findEntity } from "./entities";
+import { DEFAULT_KEYS, deviceName, findEntity, integrationDevices } from "./entities";
 import type { CardConfig, HomeAssistant } from "./types";
 
 const fields: Array<[keyof CardConfig, string, string]> = [
@@ -12,6 +12,8 @@ const fields: Array<[keyof CardConfig, string, string]> = [
   ["weekly_load_entity", "Charge 7 jours", DEFAULT_KEYS.weeklyLoad],
   ["weekly_activities_entity", "Activités 7 jours", DEFAULT_KEYS.weeklyActivities]
 ];
+
+const entityOverrideFields: Array<keyof CardConfig> = fields.map(([field]) => field);
 
 const toggles: Array<[keyof CardConfig, string]> = [
   ["show_workout", "Afficher l’entraînement du jour"],
@@ -29,18 +31,45 @@ export class IntervalsIcuCardEditor extends LitElement {
 
   public setConfig(config: CardConfig): void { this.config = { ...config }; }
 
+  private emitConfig(config: CardConfig): void {
+    this.config = config;
+    this.dispatchEvent(new CustomEvent("config-changed", {
+      detail: { config },
+      bubbles: true,
+      composed: true
+    }));
+  }
+
   private change(field: keyof CardConfig, value: string | boolean): void {
-    this.config = { ...this.config!, [field]: value };
-    this.dispatchEvent(new CustomEvent("config-changed", { detail: { config: this.config }, bubbles: true, composed: true }));
+    this.emitConfig({ ...this.config!, [field]: value });
+  }
+
+  private changeDevice(deviceId: string): void {
+    const config = { ...this.config!, device_id: deviceId || undefined };
+    for (const field of entityOverrideFields) delete config[field];
+    this.emitConfig(config);
   }
 
   protected render() {
     if (!this.config || !this.hass) return html``;
-    const sensorIds = Object.keys(this.hass.states).filter((id) => id.startsWith("sensor.")).sort();
+
+    const devices = integrationDevices(this.hass);
+    const selectedDeviceId = this.config.device_id ?? (devices.length === 1 ? devices[0].id : "");
+    const sensorIds = Object.keys(this.hass.states)
+      .filter((id) => id.startsWith("sensor.") && (!selectedDeviceId || this.hass!.entities?.[id]?.device_id === selectedDeviceId))
+      .sort();
+
     return html`<div class="editor">
+      <label>Athlète / appareil
+        <select .value=${selectedDeviceId} @change=${(event: Event) => this.changeDevice((event.target as HTMLSelectElement).value)}>
+          <option value="">Sélectionner un athlète</option>
+          ${devices.map((device) => html`<option value=${device.id}>${deviceName(device)}</option>`)}
+        </select>
+      </label>
+      ${devices.length === 0 ? html`<p>Aucun appareil Intervals.icu détecté. Recharge Home Assistant après avoir configuré l’intégration.</p>` : ""}
       <label>Titre<input .value=${this.config.title ?? "Intervals.icu"} @change=${(event: Event) => this.change("title", (event.target as HTMLInputElement).value)}></label>
-      <label>Nom de l’athlète<input .value=${this.config.athlete_name ?? ""} placeholder="Facultatif" @change=${(event: Event) => this.change("athlete_name", (event.target as HTMLInputElement).value)}></label>
-      ${fields.map(([field, label, key]) => html`<label>${label}<select .value=${String(this.config![field] ?? findEntity(this.hass!, undefined, key) ?? "")} @change=${(event: Event) => this.change(field, (event.target as HTMLSelectElement).value)}><option value="">Détection automatique</option>${sensorIds.map((id) => html`<option value=${id}>${this.hass!.states[id].attributes.friendly_name ?? id}</option>`)}</select></label>`)}
+      <label>Nom affiché<input .value=${this.config.athlete_name ?? ""} placeholder="Nom de l’appareil par défaut" @change=${(event: Event) => this.change("athlete_name", (event.target as HTMLInputElement).value)}></label>
+      ${fields.map(([field, label, key]) => html`<label>${label}<select .value=${String(this.config![field] ?? findEntity(this.hass!, undefined, key, selectedDeviceId) ?? "")} @change=${(event: Event) => this.change(field, (event.target as HTMLSelectElement).value)}><option value="">Détection automatique pour cet athlète</option>${sensorIds.map((id) => html`<option value=${id}>${this.hass!.states[id].attributes.friendly_name ?? id}</option>`)}</select></label>`)}
       ${toggles.map(([field, label]) => html`<label class="check"><input type="checkbox" .checked=${this.config![field] !== false} @change=${(event: Event) => this.change(field, (event.target as HTMLInputElement).checked)}>${label}</label>`)}
     </div>`;
   }
