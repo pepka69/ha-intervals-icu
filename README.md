@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="brand/banner.png" alt="ha-intervals-icu">
+  <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/main/custom_components/ha_intervals_icu/brand/banner.png" alt="ha-intervals-icu">
 </p>
 
 <h1 align="center">ha-intervals-icu</h1>
