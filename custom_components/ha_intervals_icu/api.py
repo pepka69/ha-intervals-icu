@@ -10,7 +10,6 @@ import aiohttp
 from .dashboard import build_dashboard
 from .workouts import planned_workouts
 
-
 BASE_URL = "https://intervals.icu/api/v1"
 
 
@@ -46,12 +45,7 @@ class IntervalsICUClient:
 
         url = f"{BASE_URL}/{endpoint}"
 
-        headers = {
-            "User-Agent": (
-                "Mozilla/5.0 HomeAssistant "
-                "ha-intervals-icu"
-            )
-        }
+        headers = {"User-Agent": ("Mozilla/5.0 HomeAssistant ha-intervals-icu")}
 
         try:
             async with self.session.get(
@@ -77,18 +71,14 @@ class IntervalsICUClient:
             raise
 
         except aiohttp.ClientError as err:
-            raise IntervalsICUConnectionError(
-                str(err)
-            ) from err
+            raise IntervalsICUConnectionError(str(err)) from err
 
     async def get_athlete(
         self,
     ) -> dict[str, Any]:
         """Return athlete profile."""
 
-        return await self._request(
-            f"athlete/{self.athlete_id}"
-        )
+        return await self._request(f"athlete/{self.athlete_id}")
 
     async def get_wellness(
         self,

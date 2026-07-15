@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
 import logging
+from datetime import timedelta
 from typing import Any
 
 from homeassistant.config_entries import ConfigEntryAuthFailed
@@ -51,19 +51,11 @@ class IntervalsICUCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             return await self.client.get_dashboard()
 
         except IntervalsICUAuthenticationError as err:
-            raise ConfigEntryAuthFailed(
-                "Intervals.icu authentication failed"
-            ) from err
+            raise ConfigEntryAuthFailed("Intervals.icu authentication failed") from err
 
         except IntervalsICUConnectionError as err:
-            raise UpdateFailed(
-                "Unable to connect to Intervals.icu"
-            ) from err
+            raise UpdateFailed("Unable to connect to Intervals.icu") from err
 
         except Exception as err:
-            LOGGER.exception(
-                "Unexpected error while updating Intervals.icu"
-            )
-            raise UpdateFailed(
-                f"Unexpected Intervals.icu error: {err}"
-            ) from err
+            LOGGER.exception("Unexpected error while updating Intervals.icu")
+            raise UpdateFailed(f"Unexpected Intervals.icu error: {err}") from err

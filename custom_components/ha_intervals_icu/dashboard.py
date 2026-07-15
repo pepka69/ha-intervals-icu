@@ -43,27 +43,13 @@ def build_dashboard(
     dashboard: dict[str, Any] = {
         "athlete": athlete,
         "wellness": latest,
-        "fitness": (
-            round(float(ctl), 1)
-            if ctl is not None
-            else None
-        ),
-        "fatigue": (
-            round(float(atl), 1)
-            if atl is not None
-            else None
-        ),
+        "fitness": (round(float(ctl), 1) if ctl is not None else None),
+        "fatigue": (round(float(atl), 1) if atl is not None else None),
         "form": form,
         "activities": len(activities),
         "ftp": ftp,
-        "resting_hr": (
-            latest.get("restingHR")
-            or athlete.get("icu_resting_hr")
-        ),
-        "weight": (
-            latest.get("weight")
-            or athlete.get("icu_weight")
-        ),
+        "resting_hr": (latest.get("restingHR") or athlete.get("icu_resting_hr")),
+        "weight": (latest.get("weight") or athlete.get("icu_weight")),
         "sleep": latest.get("sleepSecs"),
         "mood": latest.get("mood"),
         "energy": latest.get("energy"),

@@ -6,7 +6,6 @@ from homeassistant.core import HomeAssistant, ServiceCall
 
 from .const import DOMAIN
 
-
 SERVICE_REFRESH = "refresh"
 
 
@@ -30,10 +29,7 @@ async def async_setup_services(
             DOMAIN,
             {},
         ).values():
-
-            coordinator = entry_data.get(
-                "coordinator"
-            )
+            coordinator = entry_data.get("coordinator")
 
             if coordinator:
                 await coordinator.async_request_refresh()

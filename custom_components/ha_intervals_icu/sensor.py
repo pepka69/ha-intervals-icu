@@ -498,17 +498,13 @@ class IntervalsICUSensor(
         )
 
         self.entity_description = description
-        self._attr_unique_id = (
-            f"{DOMAIN}_{athlete_id}_{description.key}"
-        )
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_{description.key}"
 
     @property
     def native_value(self) -> Any:
         """Return the sensor value."""
 
-        return self.entity_description.value_fn(
-            self.coordinator.data
-        )
+        return self.entity_description.value_fn(self.coordinator.data)
 
     @property
     def extra_state_attributes(

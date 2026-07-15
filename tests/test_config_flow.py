@@ -3,7 +3,6 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
-
 from homeassistant import config_entries
 from homeassistant.core import HomeAssistant
 
@@ -28,7 +27,6 @@ async def test_config_flow_success(
             }
         ),
     ):
-
         result = await hass.config_entries.flow.async_init(
             DOMAIN,
             context={
@@ -59,7 +57,6 @@ async def test_config_flow_invalid_auth(
         "custom_components.ha_intervals_icu.config_flow.IntervalsICUClient.get_athlete",
         side_effect=IntervalsICUAuthenticationError,
     ):
-
         result = await hass.config_entries.flow.async_init(
             DOMAIN,
             context={

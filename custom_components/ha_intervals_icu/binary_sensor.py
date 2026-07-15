@@ -23,10 +23,7 @@ class IntervalsICUBinarySensorDescription(
     """Describe an Intervals.icu binary sensor."""
 
 
-BINARY_SENSORS: tuple[
-    IntervalsICUBinarySensorDescription,
-    ...
-] = (
+BINARY_SENSORS: tuple[IntervalsICUBinarySensorDescription, ...] = (
     IntervalsICUBinarySensorDescription(
         key="positive_form",
         translation_key="positive_form",
@@ -97,9 +94,7 @@ class IntervalsICUBinarySensor(
         )
 
         self.entity_description = description
-        self._attr_unique_id = (
-            f"{DOMAIN}_{athlete_id}_{description.key}"
-        )
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_{description.key}"
 
     @property
     def is_on(self) -> bool:
@@ -110,10 +105,7 @@ class IntervalsICUBinarySensor(
         if self.entity_description.key == "positive_form":
             form = data.get("form")
 
-            return (
-                form is not None
-                and float(form) >= 0
-            )
+            return form is not None and float(form) >= 0
 
         if self.entity_description.key == "high_fatigue":
             fatigue = data.get("fatigue")
@@ -126,13 +118,9 @@ class IntervalsICUBinarySensor(
             )
 
         if self.entity_description.key == "planned_today":
-            return bool(
-                data.get("planned_today")
-            )
+            return bool(data.get("planned_today"))
 
         if self.entity_description.key == "planned_tomorrow":
-            return bool(
-                data.get("planned_tomorrow")
-            )
+            return bool(data.get("planned_tomorrow"))
 
         return False

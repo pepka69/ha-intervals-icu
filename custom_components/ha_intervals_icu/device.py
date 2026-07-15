@@ -23,7 +23,5 @@ def get_device_info(
         name=athlete_name or "Intervals.icu Athlete",
         manufacturer="Intervals.icu",
         model="Athlete Profile",
-        configuration_url=(
-            f"https://intervals.icu/athlete/{athlete_id}"
-        ),
+        configuration_url=(f"https://intervals.icu/athlete/{athlete_id}"),
     )

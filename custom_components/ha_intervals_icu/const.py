@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import logging
 
-
 DOMAIN = "ha_intervals_icu"
 
 LOGGER_NAME = "custom_components.ha_intervals_icu"

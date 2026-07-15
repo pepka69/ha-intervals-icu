@@ -32,7 +32,6 @@ def planned_workouts(
     }
 
     for workout in workouts:
-
         raw = (
             workout.get("start_date_local")
             or workout.get("start_date")
@@ -43,14 +42,10 @@ def planned_workouts(
             continue
 
         try:
-            workout_day = datetime.fromisoformat(
-                str(raw).replace("Z", "+00:00")
-            ).date()
+            workout_day = datetime.fromisoformat(str(raw).replace("Z", "+00:00")).date()
         except Exception:
             try:
-                workout_day = date.fromisoformat(
-                    str(raw)[:10]
-                )
+                workout_day = date.fromisoformat(str(raw)[:10])
             except Exception:
                 continue
 
@@ -67,15 +62,9 @@ def planned_workouts(
 
         result[f"planned_{target}"] = True
 
-        result[f"planned_{target}_name"] = (
-            workout.get("name")
-            or workout.get("title")
-        )
+        result[f"planned_{target}_name"] = workout.get("name") or workout.get("title")
 
-        result[f"planned_{target}_sport"] = (
-            workout.get("type")
-            or workout.get("sport")
-        )
+        result[f"planned_{target}_sport"] = workout.get("type") or workout.get("sport")
 
         result[f"planned_{target}_start"] = raw
 
@@ -91,8 +80,6 @@ def planned_workouts(
             or workout.get("tss")
         )
 
-        result[f"planned_{target}_description"] = (
-            workout.get("description")
-        )
+        result[f"planned_{target}_description"] = workout.get("description")
 
     return result

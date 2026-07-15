@@ -11,18 +11,13 @@ def _activity_date(
 ) -> date | None:
     """Return the local date of an activity."""
 
-    raw_date = (
-        activity.get("start_date_local")
-        or activity.get("start_date")
-    )
+    raw_date = activity.get("start_date_local") or activity.get("start_date")
 
     if not raw_date:
         return None
 
     try:
-        return date.fromisoformat(
-            str(raw_date)[:10]
-        )
+        return date.fromisoformat(str(raw_date)[:10])
     except ValueError:
         return None
 
@@ -104,16 +99,12 @@ def calculate_training_statistics(
     monthly = _empty_statistics()
 
     for activity in activities:
-        activity_day = _activity_date(
-            activity
-        )
+        activity_day = _activity_date(activity)
 
         if activity_day is None:
             continue
 
-        age = (
-            today - activity_day
-        ).days
+        age = (today - activity_day).days
 
         if age < 0:
             continue
@@ -131,16 +122,12 @@ def calculate_training_statistics(
             )
 
     return {
-        "weekly_activities": int(
-            weekly["activities"]
-        ),
+        "weekly_activities": int(weekly["activities"]),
         "weekly_distance": round(
             float(weekly["distance"]) / 1000,
             2,
         ),
-        "weekly_duration": int(
-            weekly["duration"]
-        ),
+        "weekly_duration": int(weekly["duration"]),
         "weekly_load": round(
             float(weekly["load"]),
             1,
@@ -151,16 +138,12 @@ def calculate_training_statistics(
         "weekly_elevation": round(
             float(weekly["elevation"]),
         ),
-        "monthly_activities": int(
-            monthly["activities"]
-        ),
+        "monthly_activities": int(monthly["activities"]),
         "monthly_distance": round(
             float(monthly["distance"]) / 1000,
             2,
         ),
-        "monthly_duration": int(
-            monthly["duration"]
-        ),
+        "monthly_duration": int(monthly["duration"]),
         "monthly_load": round(
             float(monthly["load"]),
             1,

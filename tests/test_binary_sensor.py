@@ -33,26 +33,38 @@ def test_positive_form() -> None:
 def test_high_fatigue() -> None:
     """Test high fatigue binary sensor."""
 
-    assert _entity(
-        "high_fatigue",
-        {"fitness": 30, "fatigue": 41},
-    ).is_on is True
+    assert (
+        _entity(
+            "high_fatigue",
+            {"fitness": 30, "fatigue": 41},
+        ).is_on
+        is True
+    )
 
-    assert _entity(
-        "high_fatigue",
-        {"fitness": 30, "fatigue": 39},
-    ).is_on is False
+    assert (
+        _entity(
+            "high_fatigue",
+            {"fitness": 30, "fatigue": 39},
+        ).is_on
+        is False
+    )
 
 
 def test_planned_workout_flags() -> None:
     """Test planned workout binary sensors."""
 
-    assert _entity(
-        "planned_today",
-        {"planned_today": True},
-    ).is_on is True
+    assert (
+        _entity(
+            "planned_today",
+            {"planned_today": True},
+        ).is_on
+        is True
+    )
 
-    assert _entity(
-        "planned_tomorrow",
-        {"planned_tomorrow": False},
-    ).is_on is False
+    assert (
+        _entity(
+            "planned_tomorrow",
+            {"planned_tomorrow": False},
+        ).is_on
+        is False
+    )

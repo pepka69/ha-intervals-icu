@@ -5,7 +5,6 @@ from __future__ import annotations
 from typing import Any
 
 import voluptuous as vol
-
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigFlowResult
 from homeassistant.core import HomeAssistant
@@ -72,9 +71,7 @@ class IntervalsICUConfigFlow(
                 errors["base"] = "unknown"
 
             else:
-                await self.async_set_unique_id(
-                    user_input[CONF_ATHLETE_ID]
-                )
+                await self.async_set_unique_id(user_input[CONF_ATHLETE_ID])
                 self._abort_if_unique_id_configured()
 
                 return self.async_create_entry(
@@ -107,9 +104,7 @@ class IntervalsICUConfigFlow(
         )
 
         if self._reauth_entry is None:
-            return self.async_abort(
-                reason="reauth_entry_missing"
-            )
+            return self.async_abort(reason="reauth_entry_missing")
 
         return await self.async_step_reauth_confirm()
 
@@ -123,9 +118,7 @@ class IntervalsICUConfigFlow(
 
         if user_input is not None:
             new_data = {
-                CONF_ATHLETE_ID: self._reauth_entry.data[
-                    CONF_ATHLETE_ID
-                ],
+                CONF_ATHLETE_ID: self._reauth_entry.data[CONF_ATHLETE_ID],
                 CONF_API_KEY: user_input[CONF_API_KEY].strip(),
             }
 
@@ -153,12 +146,8 @@ class IntervalsICUConfigFlow(
                     ),
                     data=new_data,
                 )
-                await self.hass.config_entries.async_reload(
-                    self._reauth_entry.entry_id
-                )
-                return self.async_abort(
-                    reason="reauth_successful"
-                )
+                await self.hass.config_entries.async_reload(self._reauth_entry.entry_id)
+                return self.async_abort(reason="reauth_successful")
 
         return self.async_show_form(
             step_id="reauth_confirm",
