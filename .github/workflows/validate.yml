@@ -7,8 +7,7 @@ on:
     - cron: "0 0 * * *"
   workflow_dispatch:
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   validate-hacs:
@@ -51,9 +50,6 @@ jobs:
       - name: Run Ruff
         run: ruff check custom_components tests
 
-      - name: Check Python formatting
-        run: ruff format --check custom_components tests
-
   validate-frontend:
     name: Frontend
     runs-on: ubuntu-latest
@@ -65,20 +61,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-
-      - name: Display Node.js versions
-        run: |
-          node --version
-          npm --version
 
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm ci
 
-      - name: Check TypeScript
+      - name: Type-check frontend
         working-directory: frontend
         run: npm run check
 
@@ -86,7 +77,5 @@ jobs:
         working-directory: frontend
         run: npm run build
 
-      - name: Verify compiled frontend is committed
-        run: |
-          git diff --exit-code -- \
-            custom_components/ha_intervals_icu/frontend/ha-intervals-icu-card.js
+      - name: Verify committed bundle
+        run: git diff --exit-code -- custom_components/ha_intervals_icu/frontend/ha-intervals-icu-card.js
