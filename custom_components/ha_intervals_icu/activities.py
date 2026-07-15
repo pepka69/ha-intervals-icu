@@ -2,18 +2,37 @@
 
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any
+
+
+def _activity_timestamp(activity: dict[str, Any]) -> float:
+    """Return an activity timestamp for reliable sorting."""
+
+    raw_date = activity.get("start_date") or activity.get("start_date_local")
+
+    if not raw_date:
+        return 0.0
+
+    try:
+        normalized = str(raw_date).replace("Z", "+00:00")
+        return datetime.fromisoformat(normalized).timestamp()
+    except (TypeError, ValueError):
+        return 0.0
 
 
 def last_activity(
     activities: list[dict[str, Any]],
 ) -> dict[str, Any]:
-    """Return processed last activity."""
+    """Return the most recent processed activity."""
 
     if not activities:
         return {}
 
-    activity = activities[-1]
+    activity = max(
+        activities,
+        key=_activity_timestamp,
+    )
 
     return {
         "last_activity": activity,
