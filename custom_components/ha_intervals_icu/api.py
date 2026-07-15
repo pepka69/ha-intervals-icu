@@ -8,6 +8,7 @@ from typing import Any
 import aiohttp
 
 from .dashboard import build_dashboard
+from .workouts import planned_workouts
 
 
 BASE_URL = "https://intervals.icu/api/v1"
@@ -127,6 +128,25 @@ class IntervalsICUClient:
             },
         )
 
+    async def get_workouts(
+        self,
+        days: int = 7,
+    ) -> list[dict[str, Any]]:
+        """Return planned workouts."""
+
+        start = date.today()
+        end = start + timedelta(
+            days=days,
+        )
+
+        return await self._request(
+            f"athlete/{self.athlete_id}/events",
+            params={
+                "oldest": start.isoformat(),
+                "newest": end.isoformat(),
+            },
+        )
+
     async def get_dashboard(
         self,
     ) -> dict[str, Any]:
@@ -135,9 +155,18 @@ class IntervalsICUClient:
         athlete = await self.get_athlete()
         wellness = await self.get_wellness()
         activities = await self.get_activities()
+        workouts = await self.get_workouts()
 
-        return build_dashboard(
+        dashboard = build_dashboard(
             athlete,
             wellness,
             activities,
         )
+
+        dashboard.update(
+            planned_workouts(
+                workouts,
+            )
+        )
+
+        return dashboard
