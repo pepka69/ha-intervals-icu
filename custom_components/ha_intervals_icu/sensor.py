@@ -125,6 +125,132 @@ def _timestamp(
     return get_value
 
 
+def _compact_activity(activity: Any) -> dict[str, Any] | None:
+    """Return a compact activity payload suitable for entity attributes."""
+
+    if not isinstance(activity, dict):
+        return None
+
+    keys = (
+        "id",
+        "name",
+        "type",
+        "start_date_local",
+        "start_date",
+        "distance",
+        "moving_time",
+        "elapsed_time",
+        "icu_training_load",
+        "calories",
+        "total_elevation_gain",
+        "average_heartrate",
+        "max_heartrate",
+        "average_watts",
+        "max_watts",
+        "average_speed",
+    )
+
+    return {key: activity.get(key) for key in keys if activity.get(key) is not None}
+
+
+def build_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:
+    """Build the compact dashboard payload exposed to Lovelace."""
+
+    athlete = data.get("athlete")
+    athlete_name = athlete.get("name") if isinstance(athlete, dict) else None
+
+    records: dict[str, Any] = {}
+    for key in (
+        "record_distance",
+        "record_duration",
+        "record_elevation",
+        "record_load",
+        "record_calories",
+        "record_max_power",
+        "record_average_power",
+        "record_max_hr",
+        "record_average_speed",
+        "record_ftp",
+        "record_eftp",
+    ):
+        records[key.removeprefix("record_")] = {
+            "value": data.get(key),
+            "activity": data.get(f"{key}_activity"),
+        }
+
+    return {
+        "schema_version": 1,
+        "athlete_name": athlete_name,
+        "summary": {
+            "fitness": data.get("fitness"),
+            "fatigue": data.get("fatigue"),
+            "form": data.get("form"),
+            "ftp": data.get("ftp"),
+            "activities": data.get("activities"),
+        },
+        "history": {
+            "fitness": data.get("fitness_history", []),
+            "fatigue": data.get("fatigue_history", []),
+            "form": data.get("form_history", []),
+        },
+        "changes": {
+            "fitness_7_days": data.get("fitness_change_7_days"),
+            "fatigue_7_days": data.get("fatigue_change_7_days"),
+            "form_7_days": data.get("form_change_7_days"),
+            "fitness_30_days": data.get("fitness_change_30_days"),
+            "fatigue_30_days": data.get("fatigue_change_30_days"),
+            "form_30_days": data.get("form_change_30_days"),
+        },
+        "weekly": {
+            "activities": data.get("weekly_activities"),
+            "distance": data.get("weekly_distance"),
+            "duration": data.get("weekly_duration"),
+            "load": data.get("weekly_load"),
+            "calories": data.get("weekly_calories"),
+            "elevation": data.get("weekly_elevation"),
+        },
+        "monthly": {
+            "activities": data.get("monthly_activities"),
+            "distance": data.get("monthly_distance"),
+            "duration": data.get("monthly_duration"),
+            "load": data.get("monthly_load"),
+            "calories": data.get("monthly_calories"),
+            "elevation": data.get("monthly_elevation"),
+        },
+        "health": {
+            "resting_hr": data.get("resting_hr"),
+            "weight": data.get("weight"),
+            "sleep": data.get("sleep"),
+            "mood": data.get("mood"),
+            "energy": data.get("energy"),
+            "stress": data.get("stress"),
+            "soreness": data.get("soreness"),
+        },
+        "records_period_days": data.get("records_period_days"),
+        "records_activity_count": data.get("records_activity_count"),
+        "records": records,
+        "last_activity": _compact_activity(data.get("last_activity")),
+        "planned_today": {
+            "planned": data.get("planned_today"),
+            "name": data.get("planned_today_name"),
+            "sport": data.get("planned_today_sport"),
+            "start": data.get("planned_today_start"),
+            "duration": data.get("planned_today_duration"),
+            "load": data.get("planned_today_load"),
+            "description": data.get("planned_today_description"),
+        },
+        "planned_tomorrow": {
+            "planned": data.get("planned_tomorrow"),
+            "name": data.get("planned_tomorrow_name"),
+            "sport": data.get("planned_tomorrow_sport"),
+            "start": data.get("planned_tomorrow_start"),
+            "duration": data.get("planned_tomorrow_duration"),
+            "load": data.get("planned_tomorrow_load"),
+            "description": data.get("planned_tomorrow_description"),
+        },
+    }
+
+
 @dataclass(frozen=True, kw_only=True)
 class IntervalsICUSensorDescription(SensorEntityDescription):
     """Describe an Intervals.icu sensor."""
@@ -749,7 +875,7 @@ async def async_setup_entry(
     athlete = coordinator.data.get("athlete", {})
     athlete_name = athlete.get("name")
 
-    async_add_entities(
+    entities: list[SensorEntity] = [
         IntervalsICUSensor(
             coordinator=coordinator,
             athlete_id=entry.data["athlete_id"],
@@ -757,7 +883,16 @@ async def async_setup_entry(
             description=description,
         )
         for description in SENSORS
+    ]
+    entities.append(
+        IntervalsICUDashboardSensor(
+            coordinator=coordinator,
+            athlete_id=entry.data["athlete_id"],
+            athlete_name=athlete_name,
+        )
     )
+
+    async_add_entities(entities)
 
 
 class IntervalsICUSensor(
@@ -843,3 +978,36 @@ class IntervalsICUSensor(
             )
             if activity.get(attribute) is not None
         }
+
+
+class IntervalsICUDashboardSensor(
+    IntervalsICUEntity,
+    SensorEntity,
+):
+    """Compact dashboard entity for the Lovelace card."""
+
+    _attr_icon = "mdi:view-dashboard-outline"
+    _attr_name = "Dashboard"
+
+    def __init__(
+        self,
+        coordinator,
+        athlete_id: str,
+        athlete_name: str | None,
+    ) -> None:
+        """Initialize the dashboard sensor."""
+
+        super().__init__(coordinator, athlete_id, athlete_name)
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_dashboard"
+
+    @property
+    def native_value(self) -> str:
+        """Return dashboard availability state."""
+
+        return "ready" if self.coordinator.last_update_success else "error"
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return all data required by the Lovelace card."""
+
+        return build_dashboard_attributes(self.coordinator.data)
