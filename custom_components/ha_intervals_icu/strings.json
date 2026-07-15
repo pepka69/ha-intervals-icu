@@ -3,16 +3,29 @@
     "step": {
       "user": {
         "title": "ha-intervals-icu",
-        "description": "Connect your Intervals.icu account",
+        "description": "Connect your Intervals.icu account.",
         "data": {
           "athlete_id": "Athlete ID",
+          "api_key": "API Key"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect Intervals.icu",
+        "description": "Enter a new Intervals.icu API key for this athlete.",
+        "data": {
           "api_key": "API Key"
         }
       }
     },
     "error": {
       "invalid_auth": "Invalid Athlete ID or API Key",
-      "cannot_connect": "Unable to connect to Intervals.icu"
+      "cannot_connect": "Unable to connect to Intervals.icu",
+      "unknown": "Unexpected error"
+    },
+    "abort": {
+      "already_configured": "This athlete is already configured",
+      "reauth_successful": "Authentication was updated successfully",
+      "reauth_entry_missing": "The configuration entry no longer exists"
     }
   },
   "entity": {
@@ -26,22 +39,157 @@
       "form": {
         "name": "Form"
       },
-      "hrv": {
-        "name": "HRV"
+      "activities": {
+        "name": "Activities"
+      },
+      "ftp": {
+        "name": "FTP"
+      },
+      "resting_hr": {
+        "name": "Resting Heart Rate"
       },
       "weight": {
         "name": "Weight"
       },
-      "activity_count": {
-        "name": "Activity count"
+      "sleep": {
+        "name": "Sleep"
       },
-      "last_activity": {
-        "name": "Last activity"
+      "mood": {
+        "name": "Mood"
+      },
+      "energy": {
+        "name": "Energy"
+      },
+      "stress": {
+        "name": "Stress"
+      },
+      "soreness": {
+        "name": "Soreness"
+      },
+      "last_activity_name": {
+        "name": "Last Activity"
+      },
+      "last_activity_type": {
+        "name": "Last Activity Type"
+      },
+      "last_activity_date": {
+        "name": "Last Activity Date"
+      },
+      "last_activity_distance": {
+        "name": "Last Activity Distance"
+      },
+      "last_activity_duration": {
+        "name": "Last Activity Duration"
+      },
+      "last_activity_load": {
+        "name": "Last Activity Load"
+      },
+      "last_activity_calories": {
+        "name": "Last Activity Calories"
+      },
+      "last_activity_elevation_gain": {
+        "name": "Last Activity Elevation Gain"
+      },
+      "last_activity_avg_hr": {
+        "name": "Last Activity Average Heart Rate"
+      },
+      "last_activity_max_hr": {
+        "name": "Last Activity Maximum Heart Rate"
+      },
+      "last_activity_avg_power": {
+        "name": "Last Activity Average Power"
+      },
+      "last_activity_max_power": {
+        "name": "Last Activity Maximum Power"
+      },
+      "last_activity_avg_speed": {
+        "name": "Last Activity Average Speed"
+      },
+      "weekly_activities": {
+        "name": "Activities over 7 days"
+      },
+      "weekly_distance": {
+        "name": "Distance over 7 days"
+      },
+      "weekly_duration": {
+        "name": "Duration over 7 days"
+      },
+      "weekly_load": {
+        "name": "Load over 7 days"
+      },
+      "weekly_calories": {
+        "name": "Calories over 7 days"
+      },
+      "weekly_elevation": {
+        "name": "Elevation over 7 days"
+      },
+      "monthly_activities": {
+        "name": "Activities over 30 days"
+      },
+      "monthly_distance": {
+        "name": "Distance over 30 days"
+      },
+      "monthly_duration": {
+        "name": "Duration over 30 days"
+      },
+      "monthly_load": {
+        "name": "Load over 30 days"
+      },
+      "monthly_calories": {
+        "name": "Calories over 30 days"
+      },
+      "monthly_elevation": {
+        "name": "Elevation over 30 days"
+      },
+      "planned_today_name": {
+        "name": "Planned Workout Today"
+      },
+      "planned_today_sport": {
+        "name": "Planned Sport Today"
+      },
+      "planned_today_start": {
+        "name": "Planned Workout Start Today"
+      },
+      "planned_today_duration": {
+        "name": "Planned Duration Today"
+      },
+      "planned_today_load": {
+        "name": "Planned Load Today"
+      },
+      "planned_today_description": {
+        "name": "Planned Workout Description Today"
+      },
+      "planned_tomorrow_name": {
+        "name": "Planned Workout Tomorrow"
+      },
+      "planned_tomorrow_sport": {
+        "name": "Planned Sport Tomorrow"
+      },
+      "planned_tomorrow_start": {
+        "name": "Planned Workout Start Tomorrow"
+      },
+      "planned_tomorrow_duration": {
+        "name": "Planned Duration Tomorrow"
+      },
+      "planned_tomorrow_load": {
+        "name": "Planned Load Tomorrow"
+      },
+      "planned_tomorrow_description": {
+        "name": "Planned Workout Description Tomorrow"
       }
     },
     "binary_sensor": {
-      "connection": {
-        "name": "Connection"
+      "positive_form": {
+        "name": "Positive Form"
+      },
+      "high_fatigue": {
+        "name": "High Fatigue"
+      },
+      "planned_today": {
+        "name": "Workout Planned Today"
+      },
+      "planned_tomorrow": {
+        "name": "Workout Planned Tomorrow"
       }
     }
   }
