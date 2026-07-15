@@ -91,6 +91,78 @@
       },
       "last_activity_avg_speed": {
         "name": "Vitesse moyenne"
+      },
+      "weekly_activities": {
+        "name": "Activités sur 7 jours"
+      },
+      "weekly_distance": {
+        "name": "Distance sur 7 jours"
+      },
+      "weekly_duration": {
+        "name": "Durée sur 7 jours"
+      },
+      "weekly_load": {
+        "name": "Charge sur 7 jours"
+      },
+      "weekly_calories": {
+        "name": "Calories sur 7 jours"
+      },
+      "weekly_elevation": {
+        "name": "Dénivelé sur 7 jours"
+      },
+      "monthly_activities": {
+        "name": "Activités sur 30 jours"
+      },
+      "monthly_distance": {
+        "name": "Distance sur 30 jours"
+      },
+      "monthly_duration": {
+        "name": "Durée sur 30 jours"
+      },
+      "monthly_load": {
+        "name": "Charge sur 30 jours"
+      },
+      "monthly_calories": {
+        "name": "Calories sur 30 jours"
+      },
+      "monthly_elevation": {
+        "name": "Dénivelé sur 30 jours"
+      },
+      "planned_today_name": {
+        "name": "Entraînement prévu aujourd'hui"
+      },
+      "planned_today_sport": {
+        "name": "Sport prévu aujourd'hui"
+      },
+      "planned_today_start": {
+        "name": "Heure de l'entraînement aujourd'hui"
+      },
+      "planned_today_duration": {
+        "name": "Durée prévue aujourd'hui"
+      },
+      "planned_today_load": {
+        "name": "Charge prévue aujourd'hui"
+      },
+      "planned_today_description": {
+        "name": "Description de l'entraînement aujourd'hui"
+      },
+      "planned_tomorrow_name": {
+        "name": "Entraînement prévu demain"
+      },
+      "planned_tomorrow_sport": {
+        "name": "Sport prévu demain"
+      },
+      "planned_tomorrow_start": {
+        "name": "Heure de l'entraînement demain"
+      },
+      "planned_tomorrow_duration": {
+        "name": "Durée prévue demain"
+      },
+      "planned_tomorrow_load": {
+        "name": "Charge prévue demain"
+      },
+      "planned_tomorrow_description": {
+        "name": "Description de l'entraînement demain"
       }
     },
     "binary_sensor": {
@@ -99,6 +171,12 @@
       },
       "high_fatigue": {
         "name": "Fatigue élevée"
+      },
+      "planned_today": {
+        "name": "Entraînement prévu aujourd'hui"
+      },
+      "planned_tomorrow": {
+        "name": "Entraînement prévu demain"
       }
     }
   }
