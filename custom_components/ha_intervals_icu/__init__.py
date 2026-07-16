@@ -40,7 +40,7 @@ async def async_setup_entry(
                 StaticPathConfig(
                     FRONTEND_URL,
                     str(FRONTEND_PATH),
-                    True,
+                    False,
                 )
             ]
         )
