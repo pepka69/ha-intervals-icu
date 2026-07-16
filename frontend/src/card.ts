@@ -22,8 +22,6 @@ export class HaIntervalsIcuCard extends LitElement {
       title: "Intervals.icu",
       show_health: true,
       show_weight: true,
-      show_health: true,
-      show_weight: true,
       show_records: true,
       show_history: true,
       show_workout: true,

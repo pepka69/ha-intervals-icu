@@ -970,8 +970,6 @@ let R = class extends S {
       title: "Intervals.icu",
       show_health: !0,
       show_weight: !0,
-      show_health: !0,
-      show_weight: !0,
       show_records: !0,
       show_history: !0,
       show_workout: !0,
