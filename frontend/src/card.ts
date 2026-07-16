@@ -100,6 +100,13 @@ export class HaIntervalsIcuCard extends LitElement {
     const lastLoad = getState(hass, undefined, DEFAULT_KEYS.lastActivityLoad, deviceId);
     const lastCalories = getState(hass, undefined, DEFAULT_KEYS.lastActivityCalories, deviceId);
 
+    const lastNameText = formatState(hass, last);
+    const lastTypeText = formatState(hass, lastType, "Activité");
+    const showLastType =
+      lastTypeText !== "Activité" &&
+      lastTypeText.trim().toLowerCase() !==
+        lastNameText.trim().toLowerCase();
+
     const sync = relativeTime(fitness?.last_updated ?? fitness?.last_changed);
 
     return html`<ha-card>
@@ -151,8 +158,10 @@ export class HaIntervalsIcuCard extends LitElement {
 
           ${this.config.show_last_activity !== false ? html`<article class="feature last-activity">
             <div class="section-title"><ha-icon icon="mdi:history"></ha-icon><span>Dernière activité</span></div>
-            <h3>${formatState(hass, last)}</h3>
-            <div class="pill purple">${formatState(hass, lastType, "Activité")}</div>
+            <h3>${lastNameText}</h3>
+            ${showLastType
+              ? html`<div class="pill purple">${lastTypeText}</div>`
+              : nothing}
             <div class="activity-details">
               <span><ha-icon icon="mdi:calendar-blank-outline"></ha-icon>${formatState(hass, lastDate)}</span>
               <span><ha-icon icon="mdi:clock-outline"></ha-icon>${formatState(hass, lastDuration)}</span>
