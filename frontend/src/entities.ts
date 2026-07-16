@@ -10,6 +10,7 @@ export const DEFAULT_KEYS = {
 
   weeklyLoad: "weekly_load",
   weeklyActivities: "weekly_activities",
+  weight: "weight",
 
   plannedTodayName: "planned_today_name",
   plannedTodaySport: "planned_today_sport",

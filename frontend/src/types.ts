@@ -46,6 +46,9 @@ export interface CardConfig {
   ftp_entity?: string;
   weekly_load_entity?: string;
   weekly_activities_entity?: string;
+  weight_entity?: string;
+  show_health?: boolean;
+  show_weight?: boolean;
   show_records?: boolean;
   show_history?: boolean;
   show_workout?: boolean;

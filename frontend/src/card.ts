@@ -20,6 +20,10 @@ export class HaIntervalsIcuCard extends LitElement {
   static getStubConfig(): Omit<CardConfig, "type"> {
     return {
       title: "Intervals.icu",
+      show_health: true,
+      show_weight: true,
+      show_health: true,
+      show_weight: true,
       show_records: true,
       show_history: true,
       show_workout: true,
@@ -107,6 +111,12 @@ export class HaIntervalsIcuCard extends LitElement {
       lastTypeText.trim().toLowerCase() !==
         lastNameText.trim().toLowerCase();
 
+    const configuredWeightEntity = this.config.weight_entity;
+    const weight =
+      configuredWeightEntity && hass.states[configuredWeightEntity]
+        ? hass.states[configuredWeightEntity]
+        : getState(hass, undefined, DEFAULT_KEYS.weight, deviceId);
+
     const sync = relativeTime(fitness?.last_updated ?? fitness?.last_changed);
 
     return html`<ha-card>
@@ -139,6 +149,26 @@ export class HaIntervalsIcuCard extends LitElement {
             { label: "Forme", values: historyValues(form), className: "form-line" }
           ])}
         </section>` : nothing}
+
+        ${this.config.show_health !== false &&
+        this.config.show_weight !== false &&
+        weight
+          ? html`<section class="section health-section">
+              <div class="section-title">
+                <ha-icon icon="mdi:heart-pulse"></ha-icon>
+                <span>Santé</span>
+              </div>
+              <div class="health-grid">
+                <div class="health-item">
+                  <ha-icon icon="mdi:scale-bathroom"></ha-icon>
+                  <div>
+                    <span>Poids</span>
+                    <strong>${formatState(hass, weight)}</strong>
+                  </div>
+                </div>
+              </div>
+            </section>`
+          : nothing}
 
         <section class="lower-grid">
           ${this.config.show_workout !== false ? html`<article class="feature workout">
