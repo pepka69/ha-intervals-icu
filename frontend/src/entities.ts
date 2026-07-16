@@ -38,6 +38,53 @@ type EntityRegistryEntry = {
   translation_key?: string;
 };
 
+const SPORT_NAMES: Record<string, string> = {
+  AlpineSki: "Ski alpin",
+  BackcountrySki: "Ski de randonnée",
+  Badminton: "Badminton",
+  Basketball: "Basket-ball",
+  Canoeing: "Canoë",
+  Crossfit: "CrossFit",
+  CrossFit: "CrossFit",
+  Cycling: "Vélo",
+  EBikeRide: "VAE",
+  Elliptical: "Vélo elliptique",
+  GravelRide: "Gravel",
+  Handcycle: "Handbike",
+  HighIntensityIntervalTraining: "HIIT",
+  Hike: "Randonnée",
+  IndoorCycling: "Vélo d’intérieur",
+  IndoorRide: "Vélo d’intérieur",
+  IndoorRun: "Course en intérieur",
+  Kayaking: "Kayak",
+  MountainBikeRide: "VTT",
+  NordicSki: "Ski de fond",
+  OpenWaterSwim: "Natation en eau libre",
+  OpenWaterSwimming: "Natation en eau libre",
+  Other: "Autre",
+  Pilates: "Pilates",
+  Ride: "Vélo",
+  RoadBikeRide: "Vélo de route",
+  Rowing: "Rameur",
+  Run: "Course à pied",
+  Running: "Course à pied",
+  Snowboard: "Snowboard",
+  Soccer: "Football",
+  StairStepper: "Escalier",
+  StrengthTraining: "Musculation",
+  Swim: "Natation",
+  Swimming: "Natation",
+  Tennis: "Tennis",
+  TrailRun: "Trail",
+  VirtualRide: "Vélo virtuel",
+  VirtualRun: "Course virtuelle",
+  Walk: "Marche",
+  Walking: "Marche",
+  WeightTraining: "Musculation",
+  Workout: "Entraînement",
+  Yoga: "Yoga"
+};
+
 function belongsToDevice(
   hass: HomeAssistant,
   entityId: string,
@@ -68,6 +115,75 @@ function keyMatches(entry: EntityRegistryEntry, key: string): boolean {
   );
 }
 
+function formatDuration(totalSeconds: number): string {
+  const roundedSeconds = Math.max(0, Math.round(totalSeconds));
+  const hours = Math.floor(roundedSeconds / 3600);
+  const minutes = Math.floor((roundedSeconds % 3600) / 60);
+  const seconds = roundedSeconds % 60;
+
+  if (hours === 0) {
+    if (minutes === 0) {
+      return `${seconds} s`;
+    }
+
+    if (seconds === 0) {
+      return `${minutes} min`;
+    }
+
+    return `${minutes} min ${seconds} s`;
+  }
+
+  return `${hours} h ${String(minutes).padStart(2, "0")} min ${String(
+    seconds
+  ).padStart(2, "0")} s`;
+}
+
+function humanizeSportName(value: string): string {
+  const translated = SPORT_NAMES[value];
+
+  if (translated) {
+    return translated;
+  }
+
+  const normalized = value
+    .replace(/[_-]+/g, " ")
+    .replace(/([a-zà-ÿ0-9])([A-Z])/g, "$1 $2")
+    .trim();
+
+  if (!normalized) {
+    return value;
+  }
+
+  return normalized.charAt(0).toUpperCase() + normalized.slice(1).toLowerCase();
+}
+
+function isDurationEntity(state: HassEntity): boolean {
+  const unit = state.attributes.unit_of_measurement;
+  const translationKey = state.attributes.translation_key;
+  const entityId = state.entity_id ?? "";
+
+  return (
+    unit === "s" ||
+    translationKey === "planned_today_duration" ||
+    translationKey === "last_activity_duration" ||
+    entityId.endsWith("_planned_today_duration") ||
+    entityId.endsWith("_last_activity_duration")
+  );
+}
+
+function isSportEntity(state: HassEntity): boolean {
+  const translationKey = state.attributes.translation_key;
+  const entityId = state.entity_id ?? "";
+
+  return (
+    translationKey === "planned_today_sport" ||
+    translationKey === "last_activity_type" ||
+    entityId.endsWith("_planned_today_sport") ||
+    entityId.endsWith("_last_activity_type") ||
+    Boolean(SPORT_NAMES[state.state])
+  );
+}
+
 export function integrationDevices(hass: HomeAssistant): HassDevice[] {
   const deviceIds = new Set(
     registryEntries(hass)
@@ -86,11 +202,7 @@ export function integrationDevices(hass: HomeAssistant): HassDevice[] {
 }
 
 export function deviceName(device?: HassDevice): string {
-  return (
-    device?.name_by_user ??
-    device?.name ??
-    "Athlète Intervals.icu"
-  );
+  return device?.name_by_user ?? device?.name ?? "Athlète Intervals.icu";
 }
 
 export function findEntity(
@@ -99,9 +211,6 @@ export function findEntity(
   key: string,
   deviceId?: string
 ): string | undefined {
-  /*
-   * 1. Entité choisie manuellement.
-   */
   if (
     configured &&
     hass.states[configured] &&
@@ -110,12 +219,6 @@ export function findEntity(
     return configured;
   }
 
-  /*
-   * 2. Recherche fiable dans le registre Home Assistant.
-   *
-   * On utilise translation_key et unique_id afin de ne pas dépendre
-   * de la langue de l'identifiant d'entité.
-   */
   const registryMatch = registryEntries(hass).find(
     (entry) =>
       entry.platform === INTEGRATION_DOMAIN &&
@@ -124,16 +227,10 @@ export function findEntity(
       keyMatches(entry, key)
   );
 
-  if (
-    registryMatch?.entity_id &&
-    hass.states[registryMatch.entity_id]
-  ) {
+  if (registryMatch?.entity_id && hass.states[registryMatch.entity_id]) {
     return registryMatch.entity_id;
   }
 
-  /*
-   * 3. Ancienne méthode conservée comme solution de secours.
-   */
   const suffix = `_${key}`;
 
   return Object.keys(hass.states).find(
@@ -150,24 +247,15 @@ export function getState(
   key: string,
   deviceId?: string
 ): HassEntity | undefined {
-  const entityId = findEntity(
-    hass,
-    configured,
-    key,
-    deviceId
-  );
+  const entityId = findEntity(hass, configured, key, deviceId);
 
   return entityId ? hass.states[entityId] : undefined;
 }
 
-export function numericValue(
-  state?: HassEntity
-): number | null {
+export function numericValue(state?: HassEntity): number | null {
   if (
     !state ||
-    ["unknown", "unavailable", "none", ""].includes(
-      state.state
-    )
+    ["unknown", "unavailable", "none", ""].includes(state.state)
   ) {
     return null;
   }
@@ -184,11 +272,21 @@ export function formatState(
 ): string {
   if (
     !state ||
-    ["unknown", "unavailable", "none", ""].includes(
-      state.state
-    )
+    ["unknown", "unavailable", "none", ""].includes(state.state)
   ) {
     return fallback;
+  }
+
+  if (isDurationEntity(state)) {
+    const value = Number(state.state);
+
+    if (Number.isFinite(value)) {
+      return formatDuration(value);
+    }
+  }
+
+  if (isSportEntity(state)) {
+    return humanizeSportName(state.state);
   }
 
   try {
@@ -205,9 +303,7 @@ export function formatState(
   }
 }
 
-export function historyValues(
-  state?: HassEntity
-): number[] {
+export function historyValues(state?: HassEntity): number[] {
   const history = state?.attributes.history;
 
   if (!Array.isArray(history)) {
@@ -221,9 +317,7 @@ export function historyValues(
         item !== null &&
         "value" in item
       ) {
-        return Number(
-          (item as { value: unknown }).value
-        );
+        return Number((item as { value: unknown }).value);
       }
 
       return Number(item);
