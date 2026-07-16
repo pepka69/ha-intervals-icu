@@ -5,96 +5,138 @@
 <h1 align="center">Intervals.icu for Home Assistant</h1>
 
 <p align="center">
-Bring Intervals.icu training, recovery and health data into Home Assistant.
+Bring your training, recovery, records and health data from <strong>Intervals.icu</strong> into Home Assistant.
+</p>
+
+<p align="center">
+  <a href="README.fr.md"><strong>🇫🇷 Documentation complète en français</strong></a>
 </p>
 
 <p align="center">
 
-![Version](https://img.shields.io/github/v/release/pepka69/ha-intervals-icu)
-![License](https://img.shields.io/github/license/pepka69/ha-intervals-icu)
-![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Compatible-41BDF5?logo=homeassistant)
+![Release](https://img.shields.io/github/v/release/pepka69/ha-intervals-icu?include_prereleases&label=release)
+![Validation](https://github.com/pepka69/ha-intervals-icu/actions/workflows/validate.yml/badge.svg?branch=develop)
+![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.1%2B-41BDF5?logo=homeassistant&logoColor=white)
 ![HACS](https://img.shields.io/badge/HACS-Custom-orange)
+![License](https://img.shields.io/github/license/pepka69/ha-intervals-icu)
 
 </p>
 
 ---
 
-## Features
+## What it provides
 
-- Fitness, Fatigue and Form
-- FTP
-- Weekly and monthly statistics
-- Latest activity
-- Planned workouts
-- Personal records
-- Health and body-composition metrics
-- Custom Home Assistant health entities
-- Multi-athlete support
-- Dashboard sensor
-- Configurable Lovelace card
-- French sport names and human-readable durations
-- HACS installation
-- Diagnostics and manual refresh service
+| Training | Activity | Health | Home Assistant |
+|---|---|---|---|
+| Fitness, Fatigue and Form | Latest activity | Weight | Config flow |
+| FTP | Human-readable duration | Body composition sensors | Multi-athlete support |
+| Weekly and monthly statistics | French sport names | Resting heart rate | Diagnostics |
+| Planned workouts | Personal records | HRV and sleep | Manual refresh service |
+| Historical trends | Training load | Custom HA sensors | Lovelace card |
+
+The integration creates native Home Assistant entities and a compact **Dashboard sensor** containing the main Intervals.icu data in one place.
 
 ---
 
-## Installation
+## Lovelace card
 
-### HACS
+The included card can display:
 
-Add this repository as a custom integration repository:
+- Fitness, Fatigue and Form;
+- FTP and weekly statistics;
+- training history;
+- planned workouts;
+- personal records;
+- latest activity;
+- health and body-composition values;
+- custom Home Assistant health sensors;
+- multiple athletes.
+
+Sections can be enabled or hidden from the visual card editor.
+
+> Screenshots are being prepared. The repository already contains the expected filenames and instructions in `.github/assets/screenshots/README.md`.
+
+---
+
+## Installation with HACS
+
+This project is currently installed as a **custom repository**.
+
+1. Open **HACS**.
+2. Open **Integrations**.
+3. Open the three-dot menu.
+4. Select **Custom repositories**.
+5. Add:
 
 ```text
 https://github.com/pepka69/ha-intervals-icu
 ```
 
-Install the integration, restart Home Assistant, then add **Intervals.icu** from:
+6. Select the category:
+
+```text
+Integration
+```
+
+7. Install **Intervals.icu for Home Assistant**.
+8. Restart Home Assistant.
+
+Then go to:
 
 ```text
 Settings → Devices & services → Add integration
 ```
 
-You will need:
+Search for:
 
-- your Intervals.icu Athlete ID;
-- your Intervals.icu API key.
+```text
+Intervals.icu
+```
+
+You will need your Intervals.icu **Athlete ID** and **API key**.
 
 ---
 
 ## Lovelace resource
 
-Add this JavaScript module once:
+Add this resource once:
 
 ```text
 /ha_intervals_icu/ha-intervals-icu-card.js
 ```
 
-Then add **Intervals.icu Card** from the dashboard editor.
+Resource type:
+
+```text
+JavaScript module
+```
+
+After that, add **Intervals.icu Card** from the dashboard card picker.
 
 ---
 
-## Documentation
+## Beginner documentation
 
-- [Guide français complet](README.fr.md)
-- [Installation en français](docs/fr/installation.md)
-- [Configuration en français](docs/fr/configuration.md)
-- [Carte Lovelace](docs/fr/lovelace.md)
+### Français
+
+- [Guide complet](README.fr.md)
+- [Créer le compte, trouver l’Athlete ID et la clé API](docs/fr/installation.md)
+- [Configurer plusieurs athlètes et les capteurs](docs/fr/configuration.md)
+- [Installer et personnaliser la carte](docs/fr/lovelace.md)
 - [FAQ](docs/fr/faq.md)
 - [Dépannage](docs/fr/depannage.md)
 
----
+### English
 
-## Multiple athletes
-
-Each configuration entry represents one athlete. The Lovelace card can select the corresponding Home Assistant device and automatically use only that athlete’s entities.
+English documentation is being expanded. The main installation steps are available in this README.
 
 ---
 
 ## Custom health sensors
 
-Health values can come from Intervals.icu or from any Home Assistant sensor, including connected scales and other health integrations.
+A value can come from Intervals.icu or from any Home Assistant sensor.
 
-Supported examples include:
+Examples:
 
 - weight;
 - body fat;
@@ -114,27 +156,56 @@ Supported examples include:
 - stress;
 - daily calories.
 
+This makes it possible to use a non-Garmin scale or any other health integration already connected to Home Assistant.
+
+---
+
+## Multiple athletes
+
+Add one configuration entry per Intervals.icu athlete.
+
+Each athlete gets a separate Home Assistant device. In the card editor, select the corresponding device so the card only uses that athlete’s entities.
+
+---
+
+## Requirements
+
+- Home Assistant 2026.1 or newer;
+- HACS for the recommended installation method;
+- an Intervals.icu account;
+- an Intervals.icu Athlete ID;
+- an Intervals.icu API key.
+
 ---
 
 ## Support
 
-Report bugs and request features through GitHub Issues.
+Open a GitHub issue for bugs or feature requests.
 
-Please include:
+Include:
 
 - Home Assistant version;
 - integration version;
-- reproduction steps;
+- steps to reproduce;
 - relevant logs;
 - diagnostics when appropriate.
+
+Do not publish your API key.
+
+---
+
+## Roadmap and contribution
+
+- [Roadmap](ROADMAP.md)
+- [Project vision](VISION.md)
+- [Contributing](CONTRIBUTING.md)
+- [Changelog](CHANGELOG.md)
 
 ---
 
 ## License
 
 MIT License.
-
----
 
 <p align="center">
 Made with ❤️ for the Home Assistant and Intervals.icu communities.

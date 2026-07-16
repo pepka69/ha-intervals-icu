@@ -5,136 +5,103 @@
 <h1 align="center">Intervals.icu pour Home Assistant</h1>
 
 <p align="center">
-Intégrez vos données d’entraînement, de récupération et de santé Intervals.icu directement dans Home Assistant.
+Retrouvez vos entraînements, votre récupération, vos records et vos données de santé Intervals.icu directement dans Home Assistant.
 </p>
 
 <p align="center">
 
-![Version](https://img.shields.io/github/v/release/pepka69/ha-intervals-icu)
+![Version](https://img.shields.io/github/v/release/pepka69/ha-intervals-icu?include_prereleases&label=version)
+![Validation](https://github.com/pepka69/ha-intervals-icu/actions/workflows/validate.yml/badge.svg?branch=develop)
+![Home Assistant](https://img.shields.io/badge/Home%20Assistant-2026.1%2B-41BDF5?logo=homeassistant&logoColor=white)
+![HACS](https://img.shields.io/badge/HACS-Dépôt%20personnalisé-orange)
 ![Licence](https://img.shields.io/github/license/pepka69/ha-intervals-icu)
-![Home Assistant](https://img.shields.io/badge/Home%20Assistant-Compatible-41BDF5?logo=homeassistant)
-![HACS](https://img.shields.io/badge/HACS-Custom-orange)
 
 </p>
 
 ---
 
-## Pour qui est ce guide ?
+## Ce guide est fait pour les débutants
 
-Ce guide est conçu pour une personne qui découvre :
+Vous n’avez jamais utilisé une clé API ? Vous ne savez pas où trouver l’identifiant d’athlète ? Ce n’est pas un problème.
 
-- Intervals.icu ;
-- HACS ;
-- les identifiants d’athlète ;
-- les clés API ;
-- les cartes Lovelace.
+La documentation explique pas à pas :
 
-Aucune connaissance en programmation n’est nécessaire.
+1. la création du compte Intervals.icu ;
+2. la synchronisation de vos activités ;
+3. la récupération de l’identifiant d’athlète ;
+4. la création de la clé API ;
+5. l’installation dans HACS ;
+6. la configuration dans Home Assistant ;
+7. l’ajout et la personnalisation de la carte.
 
-Temps estimé pour une première installation : **10 à 15 minutes**.
-
----
-
-## Ce que l’intégration affiche
-
-- Fitness (CTL)
-- Fatigue (ATL)
-- Forme (TSB)
-- FTP
-- Charge et activités sur 7 et 30 jours
-- Dernière activité
-- Durée lisible des activités
-- Types de sport traduits en français
-- Records personnels
-- Séances prévues
-- Poids, sommeil et fréquence cardiaque au repos
-- Capteurs de santé Home Assistant personnalisés
-- Plusieurs athlètes dans la même installation
-- Carte Lovelace dédiée
+Temps moyen : **10 à 15 minutes**.
 
 ---
 
-## Installation rapide
+## Fonctionnalités
 
-### 1. Créer un compte Intervals.icu
+| Entraînement | Activité | Santé | Home Assistant |
+|---|---|---|---|
+| Fitness, Fatigue et Forme | Dernière activité | Poids | Configuration graphique |
+| FTP | Durée lisible | Composition corporelle | Plusieurs athlètes |
+| Statistiques 7 et 30 jours | Sports traduits | FC au repos | Diagnostics |
+| Séances planifiées | Records personnels | HRV et sommeil | Action d’actualisation |
+| Historique | Charge d’entraînement | Capteurs externes | Carte Lovelace |
 
-Rendez-vous sur le site Intervals.icu et créez votre compte.
+L’intégration crée aussi un **capteur Dashboard** qui regroupe les informations principales dans ses attributs.
 
-Une fois connecté, vérifiez que vos activités Garmin, Strava, Zwift ou autres remontent correctement dans Intervals.icu avant de poursuivre.
+---
 
-### 2. Trouver l’identifiant d’athlète
+## Installation HACS
 
-Dans Intervals.icu :
+L’intégration s’installe actuellement comme dépôt personnalisé.
 
-1. ouvrez les paramètres ;
-2. recherchez la partie consacrée au compte ou aux développeurs ;
-3. repérez votre identifiant d’athlète.
+Dans HACS :
 
-Il commence généralement par la lettre `i`, par exemple :
-
-```text
-i641230
-```
-
-Ne confondez pas cet identifiant avec votre nom affiché ou votre adresse e-mail.
-
-### 3. Créer une clé API
-
-Dans Intervals.icu :
-
-1. ouvrez **Settings** ;
-2. allez dans **Developer Settings** ;
-3. créez ou copiez votre clé API ;
-4. conservez-la dans un endroit sûr.
-
-Cette clé est personnelle. Ne la publiez jamais dans une capture d’écran, un forum ou une issue GitHub.
-
-### 4. Installer l’intégration avec HACS
-
-Dans Home Assistant :
-
-1. ouvrez **HACS** ;
-2. ouvrez **Intégrations** ;
-3. ouvrez le menu avec les trois points ;
-4. choisissez **Dépôts personnalisés** ;
-5. ajoutez :
+1. ouvrez **Intégrations** ;
+2. ouvrez le menu avec les trois points ;
+3. choisissez **Dépôts personnalisés** ;
+4. ajoutez :
 
 ```text
 https://github.com/pepka69/ha-intervals-icu
 ```
 
-Catégorie :
+5. choisissez la catégorie :
 
 ```text
 Integration
 ```
 
-Installez ensuite **ha-intervals-icu**, puis redémarrez Home Assistant.
+6. installez **Intervals.icu for Home Assistant** ;
+7. redémarrez Home Assistant.
 
-### 5. Ajouter l’intégration
+Ensuite :
 
-Dans Home Assistant :
+```text
+Paramètres → Appareils et services → Ajouter une intégration
+```
 
-1. ouvrez **Paramètres** ;
-2. ouvrez **Appareils et services** ;
-3. cliquez sur **Ajouter une intégration** ;
-4. recherchez `Intervals.icu` ;
-5. saisissez votre identifiant d’athlète ;
-6. saisissez votre clé API ;
-7. validez.
+Recherchez :
 
-Un appareil Home Assistant est créé pour chaque athlète configuré.
+```text
+Intervals.icu
+```
+
+Vous devrez saisir :
+
+- votre identifiant d’athlète ;
+- votre clé API.
+
+Le guide détaillé se trouve ici :
+
+- [Installation pas à pas](docs/fr/installation.md)
 
 ---
 
-## Ajouter la carte Lovelace
+## Ressource de la carte
 
-Dans Home Assistant :
-
-1. ouvrez **Paramètres** ;
-2. ouvrez **Tableaux de bord** ;
-3. ouvrez **Ressources** ;
-4. ajoutez :
+Ajoutez une seule fois :
 
 ```text
 /ha_intervals_icu/ha-intervals-icu-card.js
@@ -146,43 +113,49 @@ Type :
 Module JavaScript
 ```
 
-Ensuite :
-
-1. ouvrez votre tableau de bord ;
-2. cliquez sur **Modifier le tableau de bord** ;
-3. cliquez sur **Ajouter une carte** ;
-4. recherchez **Intervals.icu Card** ;
-5. choisissez l’athlète ;
-6. activez uniquement les sections utiles.
-
-Exemple minimal :
-
-```yaml
-type: custom:ha-intervals-icu-card
-title: Intervals.icu
-show_history: true
-show_records: true
-show_workout: false
-show_last_activity: true
-show_sync_status: true
-```
+Il n’est plus nécessaire de changer le suffixe de version à chaque mise à jour.
 
 ---
 
-## Capteurs de santé personnalisés
+## Carte Lovelace
 
-La carte peut utiliser des capteurs Home Assistant qui ne viennent pas d’Intervals.icu.
+La carte permet d’afficher ou de masquer :
 
-Exemple pour une balance connectée :
+- Fitness, Fatigue et Forme ;
+- FTP et statistiques 7 jours ;
+- graphique d’évolution ;
+- entraînement du jour ;
+- entraînement de demain ;
+- records ;
+- dernière activité ;
+- santé ;
+- état de synchronisation.
 
-```yaml
-weight_entity: sensor.poids_alex
-```
+Elle prend en charge plusieurs athlètes. Le choix se fait avec **Athlète / appareil** dans l’éditeur visuel.
 
-Les données personnalisables peuvent inclure :
+Guide :
+
+- [Installer et configurer la carte](docs/fr/lovelace.md)
+
+---
+
+## Capteurs de santé externes
+
+Vous pouvez utiliser n’importe quel capteur Home Assistant, même s’il ne vient pas de Garmin ou d’Intervals.icu.
+
+Exemples :
+
+- balance connectée ;
+- Withings ;
+- Xiaomi ;
+- Garmin ;
+- capteur Template ;
+- autre intégration de santé.
+
+Données prévues ou disponibles :
 
 - poids ;
-- masse grasse ;
+- graisse corporelle ;
 - masse musculaire ;
 - masse osseuse ;
 - eau corporelle ;
@@ -199,171 +172,64 @@ Les données personnalisables peuvent inclure :
 - stress ;
 - calories quotidiennes.
 
-Le capteur choisi manuellement est prioritaire sur la valeur Intervals.icu.
+Lorsqu’un capteur manuel est choisi, il devient prioritaire sur la valeur Intervals.icu.
 
 ---
 
 ## Plusieurs athlètes
 
-L’intégration prend en charge plusieurs comptes Intervals.icu dans la même installation Home Assistant.
+Ajoutez une entrée d’intégration pour chaque compte Intervals.icu.
 
 Exemple :
 
 - Alexandre ;
 - Katia.
 
-Dans l’éditeur de la carte, sélectionnez l’appareil correspondant à l’athlète. La carte utilisera alors uniquement les entités rattachées à cet appareil.
-
-Le champ « nom affiché » ne sert qu’au titre de la carte. Il ne sélectionne pas les capteurs.
+Chaque entrée possède son appareil et ses entités. Dans la carte, sélectionnez le bon appareil. Le champ du nom affiché ne sélectionne pas les capteurs.
 
 ---
 
-## Mettre à jour l’intégration
+## Documentation
 
-Dans HACS :
-
-1. ouvrez l’intégration ;
-2. choisissez **Retélécharger** ou **Mettre à jour** ;
-3. choisissez la version souhaitée ;
-4. redémarrez Home Assistant.
-
-La ressource Lovelace conserve désormais la même adresse :
-
-```text
-/ha_intervals_icu/ha-intervals-icu-card.js
-```
-
-Après une mise à jour importante, un rechargement complet du navigateur peut rester utile :
-
-```text
-Ctrl + F5
-```
-
----
-
-## Vérifier que tout fonctionne
-
-Dans **Outils de développement → États**, recherchez :
-
-```text
-dashboard
-```
-
-Vous devriez trouver une entité ressemblant à :
-
-```text
-sensor.sport_alex_alex_dashboard
-```
-
-Son état doit être :
-
-```text
-ready
-```
-
-Ses attributs contiennent notamment :
-
-- `summary`
-- `history`
-- `weekly`
-- `monthly`
-- `health`
-- `records`
-- `last_activity`
-- `planned_today`
-- `planned_tomorrow`
-
----
-
-## Dépannage rapide
-
-### La dernière activité est ancienne
-
-Lancez l’action :
-
-```text
-ha_intervals_icu.refresh
-```
-
-Puis attendez quelques secondes.
-
-Vérifiez également que l’activité est bien visible dans Intervals.icu.
-
-### La carte affiche une autre personne
-
-Éditez la carte et sélectionnez le bon appareil dans **Athlète / appareil**.
-
-### Le poids ne s’affiche pas
-
-Vérifiez que :
-
-- le bloc Santé est activé ;
-- l’affichage du poids est activé ;
-- l’entité choisie existe ;
-- son état est numérique ;
-- elle n’est ni `unknown` ni `unavailable`.
-
-### La carte n’apparaît pas dans la liste
-
-Vérifiez la ressource :
-
-```text
-/ha_intervals_icu/ha-intervals-icu-card.js
-```
-
-Type :
-
-```text
-Module JavaScript
-```
-
-Puis rechargez complètement le navigateur.
-
-### La clé API est refusée
-
-Vérifiez :
-
-- l’identifiant d’athlète ;
-- l’absence d’espace avant ou après la clé ;
-- que la clé est toujours active ;
-- que l’identifiant commence bien par `i` lorsque c’est le format utilisé par votre compte.
-
----
-
-## Documentation détaillée
-
-- [Installation pas à pas](docs/fr/installation.md)
+- [Installation](docs/fr/installation.md)
 - [Configuration](docs/fr/configuration.md)
 - [Carte Lovelace](docs/fr/lovelace.md)
 - [FAQ](docs/fr/faq.md)
 - [Dépannage](docs/fr/depannage.md)
+- [Roadmap](ROADMAP.md)
+- [Vision du projet](VISION.md)
 
 ---
 
-## Aide et signalement de bug
+## Captures d’écran
 
-Avant d’ouvrir une issue, préparez :
+Les emplacements et noms attendus sont préparés dans :
+
+```text
+.github/assets/screenshots/
+```
+
+Le fichier d’instructions précise les captures à ajouter pour GitHub et HACS.
+
+---
+
+## Assistance
+
+Pour signaler un problème, indiquez :
 
 - la version de Home Assistant ;
 - la version de l’intégration ;
-- le type d’installation Home Assistant ;
-- les logs liés à `ha_intervals_icu` ;
-- une description précise du problème ;
-- les étapes permettant de le reproduire.
+- les étapes permettant de reproduire le problème ;
+- les logs utiles ;
+- les diagnostics si nécessaire.
 
-Dépôt GitHub :
-
-```text
-https://github.com/pepka69/ha-intervals-icu
-```
+Ne publiez jamais votre clé API.
 
 ---
 
 ## Licence
 
-Ce projet est publié sous licence MIT.
-
----
+Licence MIT.
 
 <p align="center">
 Développé avec ❤️ pour les communautés Home Assistant et Intervals.icu.
