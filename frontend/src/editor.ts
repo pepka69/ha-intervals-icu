@@ -7,7 +7,11 @@ import {
   findEntity,
   integrationDevices
 } from "./entities";
-import type { CardConfig, HomeAssistant } from "./types";
+import type {
+  CardConfig,
+  HealthMetricKey,
+  HomeAssistant
+} from "./types";
 
 const fields: Array<[keyof CardConfig, string, string]> = [
   ["fitness_entity", "Fitness", DEFAULT_KEYS.fitness],
@@ -32,8 +36,30 @@ const toggles: Array<[keyof CardConfig, string]> = [
   ["show_records", "Afficher les records"],
   ["show_history", "Afficher l’historique"],
   ["show_health", "Afficher le bloc Santé"],
-  ["show_weight", "Afficher le poids"],
   ["show_sync_status", "Afficher l’état de synchronisation"]
+];
+
+const healthMetrics: Array<{
+  key: HealthMetricKey;
+  label: string;
+}> = [
+  { key: "weight", label: "Poids" },
+  { key: "body_fat", label: "Graisse corporelle" },
+  { key: "muscle_mass", label: "Masse musculaire" },
+  { key: "bone_mass", label: "Masse osseuse" },
+  { key: "body_water", label: "Eau corporelle" },
+  { key: "visceral_fat", label: "Graisse viscérale" },
+  { key: "bmi", label: "IMC" },
+  { key: "metabolic_age", label: "Âge métabolique" },
+  { key: "resting_hr", label: "Fréquence cardiaque au repos" },
+  { key: "hrv", label: "HRV" },
+  { key: "sleep", label: "Sommeil" },
+  { key: "vo2max", label: "VO₂max" },
+  { key: "blood_oxygen", label: "Saturation en oxygène" },
+  { key: "respiration_rate", label: "Fréquence respiratoire" },
+  { key: "body_temperature", label: "Température corporelle" },
+  { key: "stress", label: "Stress" },
+  { key: "daily_calories", label: "Calories quotidiennes" }
 ];
 
 @customElement("ha-intervals-icu-card-editor")
@@ -81,6 +107,51 @@ export class IntervalsIcuCardEditor extends LitElement {
 
     for (const field of entityOverrideFields) {
       delete config[field];
+    }
+
+    this.emitConfig(config);
+  }
+
+  private healthMetricConfig(key: HealthMetricKey) {
+    const configured = this.config?.health?.[key];
+
+    if (key === "weight") {
+      return {
+        show: configured?.show ?? this.config?.show_weight ?? true,
+        entity: configured?.entity ?? this.config?.weight_entity ?? ""
+      };
+    }
+
+    return {
+      show: configured?.show ?? false,
+      entity: configured?.entity ?? ""
+    };
+  }
+
+  private changeHealthMetric(
+    key: HealthMetricKey,
+    propertyName: "show" | "entity",
+    value: boolean | string
+  ): void {
+    const currentHealth = { ...(this.config?.health ?? {}) };
+    const currentMetric = { ...(currentHealth[key] ?? {}) };
+
+    if (propertyName === "entity" && value === "") {
+      delete currentMetric.entity;
+    } else {
+      Object.assign(currentMetric, { [propertyName]: value });
+    }
+
+    currentHealth[key] = currentMetric;
+
+    const config: CardConfig = {
+      ...this.config!,
+      health: currentHealth
+    };
+
+    if (key === "weight") {
+      delete config.weight_entity;
+      delete config.show_weight;
     }
 
     this.emitConfig(config);
@@ -192,8 +263,7 @@ export class IntervalsIcuCardEditor extends LitElement {
                 ${athleteSensorIds.map(
                   (id) => html`
                     <option value=${id}>
-                      ${this.hass!.states[id].attributes.friendly_name ??
-                      id}
+                      ${this.hass!.states[id].attributes.friendly_name ?? id}
                     </option>
                   `
                 )}
@@ -202,28 +272,61 @@ export class IntervalsIcuCardEditor extends LitElement {
           `
         )}
 
-        <label>
-          Capteur de poids personnalisé
-          <select
-            .value=${this.config.weight_entity ?? ""}
-            @change=${(event: Event) =>
-              this.change(
-                "weight_entity",
-                (event.target as HTMLSelectElement).value
-              )}
-          >
-            <option value="">
-              Détection automatique Intervals.icu
-            </option>
-            ${allSensorIds.map(
-              (id) => html`
-                <option value=${id}>
-                  ${this.hass!.states[id].attributes.friendly_name ?? id}
-                </option>
-              `
-            )}
-          </select>
-        </label>
+        <div class="editor-group">
+          <h3>Santé et composition corporelle</h3>
+          <p class="editor-help">
+            Active uniquement les données que tu souhaites afficher, puis
+            sélectionne n’importe quel capteur Home Assistant. Sans capteur
+            manuel, les données Intervals.icu disponibles sont utilisées.
+          </p>
+
+          ${healthMetrics.map(({ key, label }) => {
+            const metric = this.healthMetricConfig(key);
+
+            return html`
+              <div class="health-editor-row">
+                <label class="check">
+                  <input
+                    type="checkbox"
+                    .checked=${metric.show}
+                    @change=${(event: Event) =>
+                      this.changeHealthMetric(
+                        key,
+                        "show",
+                        (event.target as HTMLInputElement).checked
+                      )}
+                  />
+                  Afficher ${label}
+                </label>
+
+                <label>
+                  Capteur — ${label}
+                  <select
+                    .value=${metric.entity}
+                    @change=${(event: Event) =>
+                      this.changeHealthMetric(
+                        key,
+                        "entity",
+                        (event.target as HTMLSelectElement).value
+                      )}
+                  >
+                    <option value="">
+                      Détection automatique Intervals.icu
+                    </option>
+                    ${allSensorIds.map(
+                      (id) => html`
+                        <option value=${id}>
+                          ${this.hass!.states[id].attributes.friendly_name ??
+                          id}
+                        </option>
+                      `
+                    )}
+                  </select>
+                </label>
+              </div>
+            `;
+          })}
+        </div>
 
         ${toggles.map(
           ([field, label]) => html`

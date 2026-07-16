@@ -10,6 +10,7 @@ export interface HassEntity {
     change_7_days?: number;
     activity_name?: string;
     activity_date?: string;
+    translation_key?: string;
   };
 }
 
@@ -17,6 +18,8 @@ export interface HassEntityRegistryEntry {
   entity_id: string;
   device_id?: string | null;
   platform?: string;
+  unique_id?: string;
+  translation_key?: string;
 }
 
 export interface HassDevice {
@@ -35,20 +38,57 @@ export interface HomeAssistant {
   locale?: { language?: string };
 }
 
+export const HEALTH_METRIC_KEYS = [
+  "weight",
+  "body_fat",
+  "muscle_mass",
+  "bone_mass",
+  "body_water",
+  "visceral_fat",
+  "bmi",
+  "metabolic_age",
+  "resting_hr",
+  "hrv",
+  "sleep",
+  "vo2max",
+  "blood_oxygen",
+  "respiration_rate",
+  "body_temperature",
+  "stress",
+  "daily_calories"
+] as const;
+
+export type HealthMetricKey = (typeof HEALTH_METRIC_KEYS)[number];
+
+export interface HealthMetricConfig {
+  show?: boolean;
+  entity?: string;
+}
+
+export type HealthConfig = Partial<
+  Record<HealthMetricKey, HealthMetricConfig>
+>;
+
 export interface CardConfig {
   type: string;
   title?: string;
   athlete_name?: string;
   device_id?: string;
+
   fitness_entity?: string;
   fatigue_entity?: string;
   form_entity?: string;
   ftp_entity?: string;
   weekly_load_entity?: string;
   weekly_activities_entity?: string;
+
+  health?: HealthConfig;
+
+  /* Backward compatibility with existing YAML. */
   weight_entity?: string;
-  show_health?: boolean;
   show_weight?: boolean;
+
+  show_health?: boolean;
   show_records?: boolean;
   show_history?: boolean;
   show_workout?: boolean;
