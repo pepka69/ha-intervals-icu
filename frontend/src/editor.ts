@@ -13,14 +13,6 @@ import type {
   HomeAssistant
 } from "./types";
 
-
-const INTEGRATION_VERSION = "1.2.0-beta5";
-const PROJECT_URL = "https://github.com/pepka69/ha-intervals-icu";
-const DOCUMENTATION_URL = `${PROJECT_URL}/blob/main/README.fr.md`;
-const ISSUES_URL = `${PROJECT_URL}/issues`;
-const FEATURE_REQUEST_URL = `${PROJECT_URL}/issues/new/choose`;
-const SUPPORT_URL = "https://buymeacoffee.com/pep_ka";
-
 const fields: Array<[keyof CardConfig, string, string]> = [
   ["fitness_entity", "Fitness", DEFAULT_KEYS.fitness],
   ["fatigue_entity", "Fatigue", DEFAULT_KEYS.fatigue],
@@ -352,59 +344,6 @@ export class IntervalsIcuCardEditor extends LitElement {
             </label>
           `
         )}
-
-        <details class="about-panel">
-          <summary>
-            <span class="about-summary">
-              <ha-icon icon="mdi:information-outline"></ha-icon>
-              À propos
-            </span>
-            <span class="about-version">v${INTEGRATION_VERSION}</span>
-          </summary>
-
-          <div class="about-content">
-            <div class="about-heading">
-              <ha-icon icon="mdi:chart-timeline-variant-shimmer"></ha-icon>
-              <div>
-                <strong>Intervals.icu pour Home Assistant</strong>
-                <span>Développé par Alexandre Perez</span>
-              </div>
-            </div>
-
-            <div class="about-links">
-              <a href=${DOCUMENTATION_URL} target="_blank" rel="noopener noreferrer">
-                <ha-icon icon="mdi:book-open-page-variant-outline"></ha-icon>
-                Documentation
-              </a>
-              <a href=${ISSUES_URL} target="_blank" rel="noopener noreferrer">
-                <ha-icon icon="mdi:bug-outline"></ha-icon>
-                Signaler un bug
-              </a>
-              <a href=${FEATURE_REQUEST_URL} target="_blank" rel="noopener noreferrer">
-                <ha-icon icon="mdi:lightbulb-on-outline"></ha-icon>
-                Proposer une fonctionnalité
-              </a>
-              <a href=${PROJECT_URL} target="_blank" rel="noopener noreferrer">
-                <ha-icon icon="mdi:github"></ha-icon>
-                Dépôt GitHub
-              </a>
-            </div>
-
-            <a
-              class="beer-link"
-              href=${SUPPORT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ha-icon icon="mdi:beer"></ha-icon>
-              <span>
-                <strong>Offrez-moi une bière</strong>
-                <small>Soutenir discrètement le développement bénévole</small>
-              </span>
-              <ha-icon icon="mdi:open-in-new"></ha-icon>
-            </a>
-          </div>
-        </details>
       </div>
     `;
   }
