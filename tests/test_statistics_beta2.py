@@ -16,12 +16,14 @@ def _activity(day_offset: int, load: float = 10) -> dict:
 
 
 def test_42_day_statistics_and_streak() -> None:
-    data = calculate_training_statistics([
-        _activity(0),
-        _activity(1),
-        _activity(2),
-        _activity(40),
-    ])
+    data = calculate_training_statistics(
+        [
+            _activity(0),
+            _activity(1),
+            _activity(2),
+            _activity(40),
+        ]
+    )
 
     assert data["activities_42_days"] == 4
     assert data["load_42_days"] == 40
