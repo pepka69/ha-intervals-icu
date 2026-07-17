@@ -220,7 +220,7 @@ If it is useful to you and you would like to support its development, you can bu
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src=".github/assets/bmc-brand-logo.svg" width="180" alt="Buy me a beer">
+    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/bmc-brand-logo.svg" width="220" alt="Buy me a beer">
   </a>
 </p>
 

@@ -1,16 +1,21 @@
-# v1.3.0-beta1
+# v1.3.0-beta2
 
-## Premium Lovelace card
+## Performance and recovery
 
-- Completely refreshed visual design.
-- Improved dark-mode and mobile rendering.
-- New icon-based weekly statistic tiles.
-- New manual refresh button.
-- New compact mode available in the card editor.
-- Sport-aware icon for the latest activity.
-- Rebuilt and committed the production frontend bundle.
+- Added HRV when supplied by Intervals.icu wellness data.
+- Added recovery score when available.
+- Added ramp rate with a seven-day fitness-change fallback.
+- Added 42-day activity count, duration and training load.
+- Added the current training-day streak.
+- Added general next-planned-workout entities.
 
-## Validation
+## Dashboard
 
-- TypeScript type check passed.
-- Frontend production build passed.
+- Added performance, recovery and next-workout data to the dashboard sensor.
+
+## Presentation
+
+- Fixed the support section permanently.
+- The official logo is now loaded through an absolute GitHub raw URL.
+- The logo and the **Offre-moi une bière / Buy me a beer** text are clickable.
+- Removed the obsolete QR code and caption.

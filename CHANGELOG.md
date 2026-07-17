@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.3.0-beta2] - 2026-07-17
+
+### Added
+
+- HRV and recovery score sensors when available.
+- Ramp rate and 42-day training metrics.
+- Training streak sensor.
+- General next planned workout sensors.
+- Dashboard attributes for performance and recovery.
+
+### Fixed
+
+- Buy Me a Coffee logo display in GitHub and HACS.
+- Clickable French and English support sections.
+- Removed the obsolete QR-code asset and caption.
+
+
 All notable changes to this project are documented here.
 
 ## [1.3.0-beta1] - 2026-07-17

@@ -245,7 +245,7 @@ Si elle vous est utile et que vous souhaitez soutenir son développement, vous p
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src=".github/assets/bmc-brand-logo.svg" width="180" alt="Offre-moi une bière">
+    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/bmc-brand-logo.svg" width="220" alt="Offre-moi une bière">
   </a>
 </p>
 

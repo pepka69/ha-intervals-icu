@@ -245,6 +245,45 @@
       },
       "record_eftp": {
         "name": "Record eFTP (365 jours)"
+      },
+      "hrv": {
+        "name": "VFC"
+      },
+      "recovery_score": {
+        "name": "Score de récupération"
+      },
+      "ramp_rate": {
+        "name": "Taux de progression"
+      },
+      "load_42_days": {
+        "name": "Charge d’entraînement sur 42 jours"
+      },
+      "activities_42_days": {
+        "name": "Activités sur 42 jours"
+      },
+      "duration_42_days": {
+        "name": "Durée sur 42 jours"
+      },
+      "training_streak": {
+        "name": "Série de jours d’entraînement"
+      },
+      "next_workout_name": {
+        "name": "Prochaine séance planifiée"
+      },
+      "next_workout_sport": {
+        "name": "Sport de la prochaine séance"
+      },
+      "next_workout_start": {
+        "name": "Début de la prochaine séance"
+      },
+      "next_workout_duration": {
+        "name": "Durée de la prochaine séance"
+      },
+      "next_workout_load": {
+        "name": "Charge de la prochaine séance"
+      },
+      "next_workout_description": {
+        "name": "Description de la prochaine séance"
       }
     },
     "binary_sensor": {

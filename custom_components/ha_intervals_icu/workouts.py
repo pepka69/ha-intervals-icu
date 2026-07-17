@@ -29,7 +29,15 @@ def planned_workouts(
         "planned_tomorrow_duration": None,
         "planned_tomorrow_load": None,
         "planned_tomorrow_description": None,
+        "next_workout_name": None,
+        "next_workout_sport": None,
+        "next_workout_start": None,
+        "next_workout_duration": None,
+        "next_workout_load": None,
+        "next_workout_description": None,
     }
+
+    dated_workouts: list[tuple[datetime, dict[str, Any], Any]] = []
 
     for workout in workouts:
         raw = (
@@ -48,6 +56,14 @@ def planned_workouts(
                 workout_day = date.fromisoformat(str(raw)[:10])
             except Exception:
                 continue
+
+        try:
+            parsed_start = datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+        except Exception:
+            parsed_start = datetime.combine(workout_day, datetime.min.time())
+
+        if workout_day >= today:
+            dated_workouts.append((parsed_start, workout, raw))
 
         target = None
 
@@ -81,5 +97,22 @@ def planned_workouts(
         )
 
         result[f"planned_{target}_description"] = workout.get("description")
+
+    if dated_workouts:
+        _, workout, raw = min(dated_workouts, key=lambda item: item[0])
+        result["next_workout_name"] = workout.get("name") or workout.get("title")
+        result["next_workout_sport"] = workout.get("type") or workout.get("sport")
+        result["next_workout_start"] = raw
+        result["next_workout_duration"] = (
+            workout.get("moving_time")
+            or workout.get("duration")
+            or workout.get("seconds")
+        )
+        result["next_workout_load"] = (
+            workout.get("icu_training_load")
+            or workout.get("load")
+            or workout.get("tss")
+        )
+        result["next_workout_description"] = workout.get("description")
 
     return result
