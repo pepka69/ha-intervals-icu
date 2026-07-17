@@ -8,12 +8,9 @@
 Bring your training, recovery, records and health data from <strong>Intervals.icu</strong> into Home Assistant.
 </p>
 
-## 🇫🇷 Documentation en français
-
-Consultez la documentation complète :
-
-https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md
-
+<p align="center">
+  <a href="https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md"><strong>🇫🇷 Documentation complète en français</strong></a>
+</p>
 
 <p align="center">
 
@@ -63,26 +60,25 @@ Sections can be enabled or hidden from the visual card editor.
 
 ## Installation with HACS
 
-This project is currently installed as a **custom repository**.
+Click the button below to open this repository directly in HACS:
+
+[![Open your Home Assistant instance and open this repository in HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=pepka69&repository=ha-intervals-icu&category=integration)
+
+Then install **Intervals.icu for Home Assistant** and restart Home Assistant.
+
+<details>
+<summary>Manual HACS installation</summary>
 
 1. Open **HACS**.
 2. Open **Integrations**.
 3. Open the three-dot menu.
 4. Select **Custom repositories**.
-5. Add:
-
-```text
-https://github.com/pepka69/ha-intervals-icu
-```
-
-6. Select the category:
-
-```text
-Integration
-```
-
+5. Add `https://github.com/pepka69/ha-intervals-icu`.
+6. Select **Integration**.
 7. Install **Intervals.icu for Home Assistant**.
 8. Restart Home Assistant.
+
+</details>
 
 Then go to:
 
@@ -123,11 +119,11 @@ After that, add **Intervals.icu Card** from the dashboard card picker.
 ### Français
 
 - [Guide complet](https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md)
-- [Créer le compte, trouver l’Athlete ID et la clé API](docs/fr/installation.md)
-- [Configurer plusieurs athlètes et les capteurs](docs/fr/configuration.md)
-- [Installer et personnaliser la carte](docs/fr/lovelace.md)
-- [FAQ](docs/fr/faq.md)
-- [Dépannage](docs/fr/depannage.md)
+- [Créer le compte, trouver l’Athlete ID et la clé API](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/installation.md)
+- [Configurer plusieurs athlètes et les capteurs](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/configuration.md)
+- [Installer et personnaliser la carte](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/lovelace.md)
+- [FAQ](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/faq.md)
+- [Dépannage](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/depannage.md)
 
 ### English
 
