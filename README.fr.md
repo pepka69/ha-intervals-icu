@@ -234,3 +234,21 @@ Licence MIT.
 <p align="center">
 Développé avec ❤️ pour les communautés Home Assistant et Intervals.icu.
 </p>
+
+---
+
+## 🍺 Offrez-moi une bière
+
+Cette intégration est développée bénévolement sur mon temps libre.
+
+Si elle vous est utile et que vous souhaitez soutenir son développement, vous pouvez m’offrir une bière.
+
+<p align="center">
+  <a href="https://buymeacoffee.com/pep_ka">
+    <img src=".github/assets/buy-me-a-beer-qr.png" width="220" alt="QR code pour offrir une bière">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="https://buymeacoffee.com/pep_ka">🍺 Offrir une bière</a></strong>
+</p>

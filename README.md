@@ -210,3 +210,21 @@ MIT License.
 <p align="center">
 Made with ❤️ for the Home Assistant and Intervals.icu communities.
 </p>
+
+---
+
+## 🍺 Buy me a beer
+
+This integration is developed voluntarily in my free time.
+
+If it is useful to you and you would like to support its development, you can buy me a beer.
+
+<p align="center">
+  <a href="https://buymeacoffee.com/pep_ka">
+    <img src=".github/assets/buy-me-a-beer-qr.png" width="220" alt="QR code to buy me a beer">
+  </a>
+</p>
+
+<p align="center">
+  <strong><a href="https://buymeacoffee.com/pep_ka">🍺 Buy me a beer</a></strong>
+</p>
