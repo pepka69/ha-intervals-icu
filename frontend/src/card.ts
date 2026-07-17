@@ -50,6 +50,7 @@ export class HaIntervalsIcuCard extends LitElement {
 
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private config?: CardConfig;
+  @state() private refreshing = false;
 
   static getConfigElement() {
     return document.createElement("ha-intervals-icu-card-editor");
@@ -64,6 +65,8 @@ export class HaIntervalsIcuCard extends LitElement {
       show_workout: true,
       show_last_activity: true,
       show_sync_status: true,
+      show_refresh_button: true,
+      compact: false,
       health: {
         weight: { show: true }
       }
@@ -80,6 +83,8 @@ export class HaIntervalsIcuCard extends LitElement {
       show_workout: true,
       show_last_activity: true,
       show_sync_status: true,
+      show_refresh_button: true,
+      compact: false,
       ...config
     };
   }
@@ -90,6 +95,31 @@ export class HaIntervalsIcuCard extends LitElement {
 
   public getGridOptions() {
     return { columns: 12, min_columns: 6, rows: 9, min_rows: 5 };
+  }
+
+
+  private async refresh(): Promise<void> {
+    if (!this.hass?.callService || this.refreshing) return;
+    this.refreshing = true;
+    try {
+      await this.hass.callService("ha_intervals_icu", "refresh", {});
+    } finally {
+      window.setTimeout(() => { this.refreshing = false; }, 900);
+    }
+  }
+
+  private sportIcon(value?: string): string {
+    const sport = (value ?? "").toLowerCase();
+    if (sport.includes("ride") || sport.includes("cycl") || sport.includes("vélo")) return "mdi:bike-fast";
+    if (sport.includes("run") || sport.includes("course")) return "mdi:run-fast";
+    if (sport.includes("swim") || sport.includes("natation")) return "mdi:swim";
+    if (sport.includes("strength") || sport.includes("musculation") || sport.includes("crossfit")) return "mdi:weight-lifter";
+    if (sport.includes("walk") || sport.includes("marche")) return "mdi:walk";
+    return "mdi:arm-flex";
+  }
+
+  private quickStat(icon: string, label: string, state?: HassEntity) {
+    return html`<div class="quick-stat"><ha-icon icon=${icon}></ha-icon><div><span>${label}</span><strong>${formatState(this.hass!, state)}</strong></div></div>`;
   }
 
   private state(
@@ -289,7 +319,7 @@ export class HaIntervalsIcuCard extends LitElement {
       fitness?.last_updated ?? fitness?.last_changed
     );
 
-    return html`<ha-card>
+    return html`<ha-card class=${this.config.compact ? "compact" : ""}>
       <div class="card-shell">
         <header class="header">
           <div class="identity">
@@ -305,11 +335,16 @@ export class HaIntervalsIcuCard extends LitElement {
                 : nothing}
             </div>
           </div>
-          ${this.config.show_sync_status !== false
-            ? html`<div class="sync">
-                <span class="dot ${sync.level}"></span>${sync.label}
-              </div>`
-            : nothing}
+          <div class="header-actions">
+            ${this.config.show_sync_status !== false
+              ? html`<div class="sync"><span class="dot ${sync.level}"></span>${sync.label}</div>`
+              : nothing}
+            ${this.config.show_refresh_button !== false
+              ? html`<button class="refresh" title="Actualiser" @click=${() => this.refresh()}>
+                  <ha-icon class=${this.refreshing ? "spinning" : ""} icon="mdi:refresh"></ha-icon>
+                </button>`
+              : nothing}
+          </div>
         </header>
 
         <section class="metrics">
@@ -319,17 +354,9 @@ export class HaIntervalsIcuCard extends LitElement {
         </section>
 
         <section class="quick-stats">
-          <div>
-            <span>FTP</span><strong>${formatState(hass, ftp)}</strong>
-          </div>
-          <div>
-            <span>Charge 7 j</span
-            ><strong>${formatState(hass, weeklyLoad)}</strong>
-          </div>
-          <div>
-            <span>Activités 7 j</span
-            ><strong>${formatState(hass, weeklyActivities)}</strong>
-          </div>
+          ${this.quickStat("mdi:bike-fast", "FTP", ftp)}
+          ${this.quickStat("mdi:chart-areaspline", "Charge 7 j", weeklyLoad)}
+          ${this.quickStat("mdi:calendar-check", "Activités 7 j", weeklyActivities)}
         </section>
 
         ${this.config.show_history !== false
@@ -382,7 +409,7 @@ export class HaIntervalsIcuCard extends LitElement {
 
         <section class="lower-grid">
           ${this.config.show_workout !== false
-            ? html`<article class="feature workout">
+            ? html`<article class="feature workout spotlight">
                 <div class="section-title">
                   <ha-icon icon="mdi:calendar-today"></ha-icon
                   ><span>Aujourd’hui</span>
@@ -459,9 +486,9 @@ export class HaIntervalsIcuCard extends LitElement {
             : nothing}
 
           ${this.config.show_last_activity !== false
-            ? html`<article class="feature last-activity">
+            ? html`<article class="feature last-activity spotlight">
                 <div class="section-title">
-                  <ha-icon icon="mdi:history"></ha-icon
+                  <ha-icon icon=${this.sportIcon(lastTypeText)}></ha-icon
                   ><span>Dernière activité</span>
                 </div>
                 <h3>${lastNameText}</h3>

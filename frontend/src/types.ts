@@ -36,6 +36,7 @@ export interface HomeAssistant {
   devices?: Record<string, HassDevice>;
   formatEntityState?: (state: HassEntity) => string;
   locale?: { language?: string };
+  callService?: (domain: string, service: string, data?: Record<string, unknown>) => Promise<unknown>;
 }
 
 export const HEALTH_METRIC_KEYS = [
@@ -94,4 +95,6 @@ export interface CardConfig {
   show_workout?: boolean;
   show_last_activity?: boolean;
   show_sync_status?: boolean;
+  show_refresh_button?: boolean;
+  compact?: boolean;
 }

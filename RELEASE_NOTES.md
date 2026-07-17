@@ -1,15 +1,16 @@
-# v1.2.0-beta9
+# v1.3.0-beta1
 
-## Documentation and presentation
+## Premium Lovelace card
 
-- Added the clickable Buy Me a Coffee brand logo.
-- Changed the French support wording to **Offre-moi une bière**.
-- Removed the old QR-code image and unwanted QR-code caption.
-- Completed `CONTRIBUTING.md`.
-- Restored and updated `CHANGELOG.md`.
-- Kept the direct HACS installation button and documentation links.
+- Completely refreshed visual design.
+- Improved dark-mode and mobile rendering.
+- New icon-based weekly statistic tiles.
+- New manual refresh button.
+- New compact mode available in the card editor.
+- Sport-aware icon for the latest activity.
+- Rebuilt and committed the production frontend bundle.
 
-## Maintenance
+## Validation
 
-- Updated the integration version to `1.2.0-beta9`.
-- Cleaned transfer archives and build dependencies from the delivered ZIP.
+- TypeScript type check passed.
+- Frontend production build passed.

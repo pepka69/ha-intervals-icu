@@ -14,7 +14,7 @@ import type {
 } from "./types";
 
 
-const INTEGRATION_VERSION = "1.2.0-beta5";
+const INTEGRATION_VERSION = "1.3.0-beta1";
 const PROJECT_URL = "https://github.com/pepka69/ha-intervals-icu";
 const DOCUMENTATION_URL = `${PROJECT_URL}/blob/main/README.fr.md`;
 const ISSUES_URL = `${PROJECT_URL}/issues`;
@@ -44,7 +44,9 @@ const toggles: Array<[keyof CardConfig, string]> = [
   ["show_records", "Afficher les records"],
   ["show_history", "Afficher l’historique"],
   ["show_health", "Afficher le bloc Santé"],
-  ["show_sync_status", "Afficher l’état de synchronisation"]
+  ["show_sync_status", "Afficher l’état de synchronisation"],
+  ["show_refresh_button", "Afficher le bouton Actualiser"],
+  ["compact", "Mode compact"]
 ];
 
 const healthMetrics: Array<{

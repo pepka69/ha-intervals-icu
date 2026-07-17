@@ -2,6 +2,21 @@
 
 All notable changes to this project are documented here.
 
+## [1.3.0-beta1] - 2026-07-17
+
+### Added
+
+- New premium Lovelace card design with improved dark-mode rendering.
+- Manual refresh button calling the integration refresh service.
+- Compact display mode in the visual editor.
+- Sport-aware icon for the latest activity.
+
+### Changed
+
+- Redesigned fitness, fatigue, form, weekly statistics, health, workout, records, and latest-activity sections.
+- Improved mobile responsiveness and card spacing.
+- Updated frontend and integration versions.
+
 ## [1.2.0-beta9] - 2026-07-17
 
 ### Changed
