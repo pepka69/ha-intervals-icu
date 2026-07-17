@@ -237,7 +237,7 @@ Développé avec ❤️ pour les communautés Home Assistant et Intervals.icu.
 
 ---
 
-## 🍺 Offrez-moi une bière
+## 🍺 Offre-moi une bière
 
 Cette intégration est développée bénévolement sur mon temps libre.
 
@@ -245,10 +245,10 @@ Si elle vous est utile et que vous souhaitez soutenir son développement, vous p
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src=".github/assets/buy-me-a-beer-qr.png" width="220" alt="QR code pour offrir une bière">
+    <img src=".github/assets/bmc-brand-logo.svg" width="180" alt="Offre-moi une bière">
   </a>
 </p>
 
 <p align="center">
-  <strong><a href="https://buymeacoffee.com/pep_ka">🍺 Offrir une bière</a></strong>
+  <strong><a href="https://buymeacoffee.com/pep_ka">🍺 Offre-moi une bière</a></strong>
 </p>
