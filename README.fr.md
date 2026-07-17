@@ -237,18 +237,10 @@ Développé avec ❤️ pour les communautés Home Assistant et Intervals.icu.
 
 ---
 
-## 🍺 Offre-moi une bière
-
-Cette intégration est développée bénévolement sur mon temps libre.
-
-Si elle vous est utile et que vous souhaitez soutenir son développement, vous pouvez m’offrir une bière.
+## Soutenir le projet
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/bmc-brand-logo.svg" width="220" alt="Offre-moi une bière">
+    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/buy-me-a-beer-yellow.png" width="320" alt="Soutenir le projet">
   </a>
-</p>
-
-<p align="center">
-  <strong><a href="https://buymeacoffee.com/pep_ka">🍺 Offre-moi une bière</a></strong>
 </p>

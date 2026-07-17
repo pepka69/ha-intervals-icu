@@ -212,18 +212,10 @@ Made with ❤️ for the Home Assistant and Intervals.icu communities.
 
 ---
 
-## 🍺 Buy me a beer
-
-This integration is developed voluntarily in my free time.
-
-If it is useful to you and you would like to support its development, you can buy me a beer.
+## Support the project
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/bmc-brand-logo.svg" width="220" alt="Buy me a beer">
+    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/buy-me-a-beer-yellow.png" width="320" alt="Support the project">
   </a>
-</p>
-
-<p align="center">
-  <strong><a href="https://buymeacoffee.com/pep_ka">🍺 Buy me a beer</a></strong>
 </p>

@@ -284,6 +284,63 @@
       },
       "next_workout_description": {
         "name": "Next workout description"
+      },
+      "distance_42_days": {
+        "name": "Distance over 42 days"
+      },
+      "calories_42_days": {
+        "name": "Calories over 42 days"
+      },
+      "elevation_42_days": {
+        "name": "Elevation over 42 days"
+      },
+      "previous_week_activities": {
+        "name": "Activities during previous 7 days"
+      },
+      "previous_week_duration": {
+        "name": "Duration during previous 7 days"
+      },
+      "previous_week_load": {
+        "name": "Load during previous 7 days"
+      },
+      "acute_chronic_ratio": {
+        "name": "Acute chronic load ratio"
+      },
+      "load_change_percent": {
+        "name": "Load change"
+      },
+      "duration_change_percent": {
+        "name": "Duration change"
+      },
+      "average_daily_load_7_days": {
+        "name": "Average daily load over 7 days"
+      },
+      "average_daily_load_42_days": {
+        "name": "Average daily load over 42 days"
+      },
+      "average_weekly_load_42_days": {
+        "name": "Average weekly load over 42 days"
+      },
+      "average_weekly_duration_42_days": {
+        "name": "Average weekly duration over 42 days"
+      },
+      "average_activities_per_week_42_days": {
+        "name": "Average activities per week over 42 days"
+      },
+      "longest_training_streak_42_days": {
+        "name": "Longest training streak over 42 days"
+      },
+      "days_since_training": {
+        "name": "Days since last training"
+      },
+      "training_days_42_days": {
+        "name": "Training days over 42 days"
+      },
+      "rest_days_42_days": {
+        "name": "Rest days over 42 days"
+      },
+      "main_sport_42_days": {
+        "name": "Main sport over 42 days"
       }
     },
     "binary_sensor": {

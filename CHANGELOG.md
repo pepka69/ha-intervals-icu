@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.3.0-beta4] - 2026-07-17
+
+### Added
+
+- Detailed current and previous seven-day statistics.
+- Full 42-day distance, duration, load, calories and elevation metrics.
+- Acute/chronic load ratio and seven-day comparison percentages.
+- Training averages, streaks, training days and rest days.
+- Main-sport and per-sport dashboard statistics.
+
+### Fixed
+
+- Replaced the support logo with a yellow transparent version.
+- Removed the duplicated support text from HACS documentation.
+
+
 ## [1.3.0-beta2] - 2026-07-17
 
 ### Added

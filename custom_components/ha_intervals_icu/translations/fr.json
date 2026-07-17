@@ -284,6 +284,63 @@
       },
       "next_workout_description": {
         "name": "Description de la prochaine séance"
+      },
+      "distance_42_days": {
+        "name": "Distance sur 42 jours"
+      },
+      "calories_42_days": {
+        "name": "Calories sur 42 jours"
+      },
+      "elevation_42_days": {
+        "name": "Dénivelé sur 42 jours"
+      },
+      "previous_week_activities": {
+        "name": "Activités des 7 jours précédents"
+      },
+      "previous_week_duration": {
+        "name": "Durée des 7 jours précédents"
+      },
+      "previous_week_load": {
+        "name": "Charge des 7 jours précédents"
+      },
+      "acute_chronic_ratio": {
+        "name": "Ratio de charge aiguë chronique"
+      },
+      "load_change_percent": {
+        "name": "Évolution de la charge"
+      },
+      "duration_change_percent": {
+        "name": "Évolution de la durée"
+      },
+      "average_daily_load_7_days": {
+        "name": "Charge quotidienne moyenne sur 7 jours"
+      },
+      "average_daily_load_42_days": {
+        "name": "Charge quotidienne moyenne sur 42 jours"
+      },
+      "average_weekly_load_42_days": {
+        "name": "Charge hebdomadaire moyenne sur 42 jours"
+      },
+      "average_weekly_duration_42_days": {
+        "name": "Durée hebdomadaire moyenne sur 42 jours"
+      },
+      "average_activities_per_week_42_days": {
+        "name": "Nombre moyen d’activités par semaine sur 42 jours"
+      },
+      "longest_training_streak_42_days": {
+        "name": "Plus longue série d’entraînement sur 42 jours"
+      },
+      "days_since_training": {
+        "name": "Jours depuis le dernier entraînement"
+      },
+      "training_days_42_days": {
+        "name": "Jours d’entraînement sur 42 jours"
+      },
+      "rest_days_42_days": {
+        "name": "Jours de repos sur 42 jours"
+      },
+      "main_sport_42_days": {
+        "name": "Sport principal sur 42 jours"
       }
     },
     "binary_sensor": {
