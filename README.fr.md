@@ -95,7 +95,7 @@ Vous devrez saisir :
 
 Le guide détaillé se trouve ici :
 
-- [Installation pas à pas](docs/fr/installation.md)
+- [Installation pas à pas](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/installation.md)
 
 ---
 
@@ -135,7 +135,7 @@ Elle prend en charge plusieurs athlètes. Le choix se fait avec **Athlète / app
 
 Guide :
 
-- [Installer et configurer la carte](docs/fr/lovelace.md)
+- [Installer et configurer la carte](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/lovelace.md)
 
 ---
 
@@ -191,13 +191,13 @@ Chaque entrée possède son appareil et ses entités. Dans la carte, sélectionn
 
 ## Documentation
 
-- [Installation](docs/fr/installation.md)
-- [Configuration](docs/fr/configuration.md)
-- [Carte Lovelace](docs/fr/lovelace.md)
-- [FAQ](docs/fr/faq.md)
-- [Dépannage](docs/fr/depannage.md)
-- [Roadmap](ROADMAP.md)
-- [Vision du projet](VISION.md)
+- [Installation](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/installation.md)
+- [Configuration](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/configuration.md)
+- [Carte Lovelace](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/lovelace.md)
+- [FAQ](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/faq.md)
+- [Dépannage](https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/fr/depannage.md)
+- [Roadmap](https://github.com/pepka69/ha-intervals-icu/blob/develop/ROADMAP.md)
+- [Vision du projet](https://github.com/pepka69/ha-intervals-icu/blob/develop/VISION.md)
 
 ---
 

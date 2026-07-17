@@ -9,7 +9,7 @@ Bring your training, recovery, records and health data from <strong>Intervals.ic
 </p>
 
 <p align="center">
-  <a href="README.fr.md"><strong>🇫🇷 Documentation complète en français</strong></a>
+  <a href="https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md"><strong>🇫🇷 Documentation complète en français</strong></a>
 </p>
 
 <p align="center">
@@ -119,7 +119,7 @@ After that, add **Intervals.icu Card** from the dashboard card picker.
 
 ### Français
 
-- [Guide complet](README.fr.md)
+- [Guide complet](https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md)
 - [Créer le compte, trouver l’Athlete ID et la clé API](docs/fr/installation.md)
 - [Configurer plusieurs athlètes et les capteurs](docs/fr/configuration.md)
 - [Installer et personnaliser la carte](docs/fr/lovelace.md)
@@ -196,10 +196,10 @@ Do not publish your API key.
 
 ## Roadmap and contribution
 
-- [Roadmap](ROADMAP.md)
-- [Project vision](VISION.md)
-- [Contributing](CONTRIBUTING.md)
-- [Changelog](CHANGELOG.md)
+- [Roadmap](https://github.com/pepka69/ha-intervals-icu/blob/develop/ROADMAP.md)
+- [Project vision](https://github.com/pepka69/ha-intervals-icu/blob/develop/VISION.md)
+- [Contributing](https://github.com/pepka69/ha-intervals-icu/blob/develop/CONTRIBUTING.md)
+- [Changelog](https://github.com/pepka69/ha-intervals-icu/blob/develop/CHANGELOG.md)
 
 ---
 
