@@ -1,11 +1,12 @@
-# v1.3.0-beta6
+# v1.3.0-beta7
 
-## Priority fix: official Intervals.icu statistics
+## Priority 1: statistics
 
-- The wellness request now explicitly asks Intervals.icu for `ctl`, `atl`, `rampRate`, `ctlLoad`, `atlLoad` and `eftp`.
-- Fitness, fatigue and form are therefore based on the official Intervals.icu wellness series instead of activity approximations.
-- Added dedicated CTL Load, ATL Load, eFTP and sleep-score sensors.
-- Seven-day and thirty-day comparisons now use the closest available previous wellness record when an exact date is missing.
-- Dashboard attributes expose the official statistics and the date of the source wellness record.
-
-This release deliberately prioritises reliable training statistics.
+- Wellness history increased to 90 days.
+- Added a dedicated official-statistics layer based on Intervals.icu Wellness data.
+- Added CTL, ATL, Form, Ramp Rate, CTL Load, ATL Load and eFTP histories and trends.
+- Added 7-day and 30-day averages, changes, minimums and maximums.
+- Added Wellness field inventory so diagnostics show exactly what the account API exposes.
+- Added HR and power time-in-zone aggregation when those fields are present in activity summaries.
+- Added official statistics and zone arrays to the dashboard entity attributes.
+- No fitness value is fabricated: missing API values remain unavailable.

@@ -7,6 +7,8 @@ from typing import Any
 from .activities import last_activity
 from .history import calculate_fitness_history
 from .statistics import calculate_training_statistics
+from .wellness_statistics import calculate_wellness_statistics
+from .zones import calculate_zone_statistics
 
 
 def _first_value(data: dict[str, Any], *keys: str) -> Any:
@@ -65,10 +67,12 @@ def build_dashboard(
     }
 
     dashboard.update(history)
+    dashboard.update(calculate_wellness_statistics(wellness))
 
     if dashboard["ramp_rate"] is None:
         dashboard["ramp_rate"] = dashboard.get("fitness_change_7_days")
 
     dashboard.update(last_activity(activities))
     dashboard.update(calculate_training_statistics(activities))
+    dashboard.update(calculate_zone_statistics(activities))
     return dashboard

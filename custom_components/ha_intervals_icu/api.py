@@ -83,7 +83,7 @@ class IntervalsICUClient:
 
     async def get_wellness(
         self,
-        days: int = 30,
+        days: int = 90,
     ) -> list[dict[str, Any]]:
         """Return wellness history."""
 
@@ -103,7 +103,8 @@ class IntervalsICUClient:
                     "ctl,atl,rampRate,ctlLoad,atlLoad,eftp,"
                     "weight,restingHR,hrv,hrvRMSSD,hrvSDNN,"
                     "sleepSecs,sleepScore,mood,energy,stress,soreness,"
-                    "fatigue,readiness,recovery"
+                    "fatigue,readiness,recovery,vo2max,steps,respiration,"
+                    "avg_sleep_hr,spo2,bodyFat,menstrualPhase"
                 ),
             },
         )

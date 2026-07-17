@@ -401,6 +401,33 @@
       },
       "sleep_score": {
         "name": "Sleep score"
+      },
+      "official_ctl_average_7_days": {
+        "name": "Official CTL average over 7 days"
+      },
+      "official_ctl_average_30_days": {
+        "name": "Official CTL average over 30 days"
+      },
+      "official_atl_average_7_days": {
+        "name": "Official ATL average over 7 days"
+      },
+      "official_atl_average_30_days": {
+        "name": "Official ATL average over 30 days"
+      },
+      "official_eftp_change_7_days": {
+        "name": "Official eFTP change over 7 days"
+      },
+      "official_eftp_change_30_days": {
+        "name": "Official eFTP change over 30 days"
+      },
+      "wellness_record_count": {
+        "name": "Wellness records loaded"
+      },
+      "hr_zone_total_60_days": {
+        "name": "Heart-rate zone time over 60 days"
+      },
+      "power_zone_total_60_days": {
+        "name": "Power-zone time over 60 days"
       }
     },
     "binary_sensor": {

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0-beta7] - 2026-07-17
+
+### Added
+
+- Official Wellness statistics layer with a 90-day history.
+- CTL, ATL, Form, Ramp Rate, load and eFTP trends.
+- Wellness API field inventory.
+- HR and power time-in-zone aggregation when exposed by activity data.
+
+
 ## [1.3.0-beta6] - 2026-07-17
 
 ### Fixed
