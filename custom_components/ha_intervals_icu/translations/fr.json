@@ -341,6 +341,54 @@
       },
       "main_sport_42_days": {
         "name": "Sport principal sur 42 jours"
+      },
+      "weekly_hrss": {
+        "name": "HRSS sur 7 jours"
+      },
+      "weekly_trimp": {
+        "name": "TRIMP sur 7 jours"
+      },
+      "forty_two_days_hrss": {
+        "name": "HRSS sur 42 jours"
+      },
+      "forty_two_days_trimp": {
+        "name": "TRIMP sur 42 jours"
+      },
+      "previous_month_load": {
+        "name": "Charge des 30 jours précédents"
+      },
+      "previous_month_duration": {
+        "name": "Durée des 30 jours précédents"
+      },
+      "monthly_load_change_percent": {
+        "name": "Évolution de la charge sur 30 jours"
+      },
+      "monthly_duration_change_percent": {
+        "name": "Évolution de la durée sur 30 jours"
+      },
+      "sport_count_42_days": {
+        "name": "Nombre de sports sur 42 jours"
+      },
+      "load_trend": {
+        "name": "Tendance de charge sur 7 jours"
+      },
+      "monthly_load_trend": {
+        "name": "Tendance de charge sur 30 jours"
+      },
+      "record_power_5s": {
+        "name": "Meilleure puissance sur 5 secondes"
+      },
+      "record_power_1m": {
+        "name": "Meilleure puissance sur 1 minute"
+      },
+      "record_power_5m": {
+        "name": "Meilleure puissance sur 5 minutes"
+      },
+      "record_power_20m": {
+        "name": "Meilleure puissance sur 20 minutes"
+      },
+      "record_power_1h": {
+        "name": "Meilleure puissance sur 1 heure"
       }
     },
     "binary_sensor": {

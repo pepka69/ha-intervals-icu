@@ -91,6 +91,41 @@ def calculate_personal_records(
         "record_average_speed": ("average_speed",),
         "record_ftp": ("icu_ftp", "ftp"),
         "record_eftp": ("icu_eftp", "eftp", "eFTP"),
+        "record_power_5s": (
+            "power_5s",
+            "watts_5s",
+            "icu_power_5s",
+            "icu_pm_5s",
+            "p5s",
+        ),
+        "record_power_1m": (
+            "power_60s",
+            "watts_60s",
+            "icu_power_60s",
+            "icu_pm_60s",
+            "p1m",
+        ),
+        "record_power_5m": (
+            "power_300s",
+            "watts_300s",
+            "icu_power_300s",
+            "icu_pm_300s",
+            "p5m",
+        ),
+        "record_power_20m": (
+            "power_1200s",
+            "watts_1200s",
+            "icu_power_1200s",
+            "icu_pm_1200s",
+            "p20m",
+        ),
+        "record_power_1h": (
+            "power_3600s",
+            "watts_3600s",
+            "icu_power_3600s",
+            "icu_pm_3600s",
+            "p1h",
+        ),
     }
 
     records: dict[str, Any] = {

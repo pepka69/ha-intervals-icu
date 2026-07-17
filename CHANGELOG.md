@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.0-beta5] - 2026-07-17
+
+### Added
+
+- Current versus previous 30-day training comparisons.
+- HRSS and TRIMP statistics over 7 and 42 days.
+- Seven-day and 30-day load trends.
+- Distinct sport count over 42 days.
+- Peak-power records for 5 s, 1 min, 5 min, 20 min and 1 h.
+
+### Changed
+
+- Activity statistics retrieval now covers 60 days.
+
+
 ## [1.3.0-beta4] - 2026-07-17
 
 ### Added

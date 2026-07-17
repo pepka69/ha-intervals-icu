@@ -341,6 +341,54 @@
       },
       "main_sport_42_days": {
         "name": "Main sport over 42 days"
+      },
+      "weekly_hrss": {
+        "name": "HRSS over 7 days"
+      },
+      "weekly_trimp": {
+        "name": "TRIMP over 7 days"
+      },
+      "forty_two_days_hrss": {
+        "name": "HRSS over 42 days"
+      },
+      "forty_two_days_trimp": {
+        "name": "TRIMP over 42 days"
+      },
+      "previous_month_load": {
+        "name": "Load during previous 30 days"
+      },
+      "previous_month_duration": {
+        "name": "Duration during previous 30 days"
+      },
+      "monthly_load_change_percent": {
+        "name": "30-day load change"
+      },
+      "monthly_duration_change_percent": {
+        "name": "30-day duration change"
+      },
+      "sport_count_42_days": {
+        "name": "Sports over 42 days"
+      },
+      "load_trend": {
+        "name": "Seven-day load trend"
+      },
+      "monthly_load_trend": {
+        "name": "Thirty-day load trend"
+      },
+      "record_power_5s": {
+        "name": "Best 5-second power"
+      },
+      "record_power_1m": {
+        "name": "Best 1-minute power"
+      },
+      "record_power_5m": {
+        "name": "Best 5-minute power"
+      },
+      "record_power_20m": {
+        "name": "Best 20-minute power"
+      },
+      "record_power_1h": {
+        "name": "Best 1-hour power"
       }
     },
     "binary_sensor": {

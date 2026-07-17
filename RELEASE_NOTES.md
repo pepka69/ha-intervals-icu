@@ -1,20 +1,21 @@
-# v1.3.0-beta4
+# v1.3.0-beta5
 
-## Training statistics
+## Advanced training statistics
 
-- Complete statistics for the current 7 days and the previous 7 days.
-- Complete 42-day activity, duration, distance, load, calories and elevation totals.
-- Acute/chronic load ratio based on current 7-day load versus the 42-day weekly average.
-- Load and duration comparisons with the previous 7-day period.
-- Daily and weekly load averages.
-- Average weekly duration and activity count over 42 days.
-- Current streak, longest 42-day streak and days since the last training day.
-- Training-day and rest-day counts.
-- Main sport and detailed per-sport statistics in dashboard attributes.
+- Added comparison between the latest 30 days and the preceding 30 days.
+- Added 30-day load and duration trends.
+- Added HRSS and TRIMP totals over 7 and 42 days when exposed by activities.
+- Added the number of distinct sports over 42 days.
+- Extended dashboard attributes with monthly comparisons and load-method totals.
+- Activity retrieval now covers 60 days in one request for reliable monthly comparisons.
 
-## HACS and documentation
+## Cycling records
 
-- Replaced the previous support artwork with a fully yellow transparent logo.
-- The logo remains visible in light and dark themes.
-- Removed the duplicated “Buy me a beer / Offre-moi une bière” visible text.
-- The single logo remains clickable.
+- Added best power sensors for 5 seconds, 1 minute, 5 minutes, 20 minutes and 1 hour.
+- Multiple known Intervals.icu field aliases are supported.
+- Values remain unavailable rather than invented when the API does not expose them.
+
+## Documentation
+
+- Kept the single yellow transparent support logo.
+- No duplicated support heading or Buy Me a Beer text.

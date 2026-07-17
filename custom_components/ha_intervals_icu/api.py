@@ -145,7 +145,7 @@ class IntervalsICUClient:
 
         athlete = await self.get_athlete()
         wellness = await self.get_wellness()
-        activities = await self.get_activities(days=42)
+        activities = await self.get_activities(days=60)
         workouts = await self.get_workouts()
         record_activities = await self.get_activities(days=365)
 
