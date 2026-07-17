@@ -20,6 +20,17 @@ Retrouvez vos entraînements, votre récupération, vos records et vos données 
 
 ---
 
+
+### Statistics card / Carte statistiques
+
+```yaml
+type: custom:ha-intervals-icu-statistics-card
+title: Intervals.icu Statistics
+default_period: 30_days
+```
+
+Cette carte dédiée affiche les comparaisons sur 7/30/90/365 jours, les statistiques par sport, les records, les tendances, les analyses et la qualité des données API, sans surcharger la carte Athlete Summary.
+
 ## Ce guide est fait pour les débutants
 
 Vous n’avez jamais utilisé une clé API ? Vous ne savez pas où trouver l’identifiant d’athlète ? Ce n’est pas un problème.

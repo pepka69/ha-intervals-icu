@@ -428,6 +428,24 @@
       },
       "power_zone_total_60_days": {
         "name": "Temps en zones de puissance sur 60 jours"
+      },
+      "activities_90_days": {
+        "name": "Activités (90 jours)"
+      },
+      "training_days_90_days": {
+        "name": "Jours d’entraînement (90 jours)"
+      },
+      "duration_90_days": {
+        "name": "Durée (90 jours)"
+      },
+      "load_90_days": {
+        "name": "Charge d’entraînement (90 jours)"
+      },
+      "average_weekly_load_90_days": {
+        "name": "Charge hebdomadaire moyenne (90 jours)"
+      },
+      "activity_data_completeness_percent": {
+        "name": "Complétude des données d’activité"
       }
     },
     "binary_sensor": {

@@ -1,8 +1,23 @@
-# v1.3.0-beta9
+# v1.3.0-beta11
 
-## Localized support logos
+## Statistics & Performance Center
 
-- English documentation now displays only the clickable **Buy me a beer** logo.
-- French documentation now displays only the clickable **Offre-moi une bière** logo.
-- The Home Assistant card editor now displays only the English **Buy me a beer** logo.
-- Removed the previous combined bilingual image to prevent duplicate languages.
+- Adds a second Lovelace card: `custom:ha-intervals-icu-statistics-card`.
+- Adds a dedicated `Statistics Dashboard` entity with structured attributes.
+- Adds 7, 30, 90 and 365-day summaries with previous-period comparisons.
+- Adds per-sport statistics for every supported period.
+- Adds wellness trends for CTL, ATL, Form, eFTP, weight, sleep, resting heart rate and HRV.
+- Adds per-sport activity records and best week/month records.
+- Adds deterministic training insights based on load, form, sleep and sport mix.
+- Adds a data-quality view for API field completeness.
+- Extends wellness and activity history to 365 days.
+- Reuses a single 365-day activity request for dashboard and records to avoid a duplicate API request.
+- Rebuilds the frontend bundle and prepares the integration for the 1.3.0 stable release.
+
+## Lovelace
+
+```yaml
+type: custom:ha-intervals-icu-statistics-card
+title: Intervals.icu Statistics
+default_period: 30_days
+```

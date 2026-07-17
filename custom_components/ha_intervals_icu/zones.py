@@ -62,11 +62,42 @@ def calculate_zone_statistics(
         ),
     )
 
+    hr_total = sum(hr)
+    power_total = sum(power)
+    hr_percentages = (
+        [round(value * 100 / hr_total, 1) for value in hr] if hr_total else []
+    )
+    power_percentages = (
+        [round(value * 100 / power_total, 1) for value in power]
+        if power_total
+        else []
+    )
+
     return {
         "hr_zone_times_60_days": hr,
         "power_zone_times_60_days": power,
-        "hr_zone_total_60_days": sum(hr) if hr else None,
-        "power_zone_total_60_days": sum(power) if power else None,
+        "hr_zone_percentages_60_days": hr_percentages,
+        "power_zone_percentages_60_days": power_percentages,
+        "hr_zone_distribution_60_days": [
+            {"zone": index + 1, "seconds": value, "percent": hr_percentages[index]}
+            for index, value in enumerate(hr)
+        ],
+        "power_zone_distribution_60_days": [
+            {
+                "zone": index + 1,
+                "seconds": value,
+                "percent": power_percentages[index],
+            }
+            for index, value in enumerate(power)
+        ],
+        "hr_zone_total_60_days": hr_total if hr else None,
+        "power_zone_total_60_days": power_total if power else None,
         "hr_zone_count": len(hr),
         "power_zone_count": len(power),
+        "dominant_hr_zone_60_days": (
+            hr.index(max(hr)) + 1 if hr and max(hr) > 0 else None
+        ),
+        "dominant_power_zone_60_days": (
+            power.index(max(power)) + 1 if power and max(power) > 0 else None
+        ),
     }

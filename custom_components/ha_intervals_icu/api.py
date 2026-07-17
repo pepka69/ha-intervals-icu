@@ -83,7 +83,7 @@ class IntervalsICUClient:
 
     async def get_wellness(
         self,
-        days: int = 90,
+        days: int = 365,
     ) -> list[dict[str, Any]]:
         """Return wellness history."""
 
@@ -153,10 +153,9 @@ class IntervalsICUClient:
         """Return processed dashboard data."""
 
         athlete = await self.get_athlete()
-        wellness = await self.get_wellness()
-        activities = await self.get_activities(days=60)
+        wellness = await self.get_wellness(days=365)
+        activities = await self.get_activities(days=365)
         workouts = await self.get_workouts()
-        record_activities = await self.get_activities(days=365)
 
         dashboard = build_dashboard(
             athlete,
@@ -167,7 +166,7 @@ class IntervalsICUClient:
         dashboard.update(
             calculate_personal_records(
                 athlete,
-                record_activities,
+                activities,
             )
         )
 

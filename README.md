@@ -24,6 +24,17 @@ Bring your training, recovery, records and health data from <strong>Intervals.ic
 
 ---
 
+
+### Statistics card / Carte statistiques
+
+```yaml
+type: custom:ha-intervals-icu-statistics-card
+title: Intervals.icu Statistics
+default_period: 30_days
+```
+
+The dedicated card provides 7/30/90/365-day comparisons, sport breakdowns, records, trends, insights and API data quality without overloading the Athlete Summary card.
+
 ## What it provides
 
 | Training | Activity | Health | Home Assistant |

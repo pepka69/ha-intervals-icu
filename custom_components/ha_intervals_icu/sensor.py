@@ -328,9 +328,35 @@ def build_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:
         },
         "zones_60_days": {
             "heart_rate_seconds": data.get("hr_zone_times_60_days", []),
+            "heart_rate_percentages": data.get("hr_zone_percentages_60_days", []),
+            "heart_rate_distribution": data.get("hr_zone_distribution_60_days", []),
             "power_seconds": data.get("power_zone_times_60_days", []),
+            "power_percentages": data.get("power_zone_percentages_60_days", []),
+            "power_distribution": data.get("power_zone_distribution_60_days", []),
             "heart_rate_zone_count": data.get("hr_zone_count"),
             "power_zone_count": data.get("power_zone_count"),
+            "dominant_heart_rate_zone": data.get("dominant_hr_zone_60_days"),
+            "dominant_power_zone": data.get("dominant_power_zone_60_days"),
+        },
+        "statistics_90_days": {
+            "activities": data.get("activities_90_days"),
+            "training_days": data.get("training_days_90_days"),
+            "distance": data.get("distance_90_days"),
+            "duration": data.get("duration_90_days"),
+            "load": data.get("load_90_days"),
+            "calories": data.get("calories_90_days"),
+            "elevation": data.get("elevation_90_days"),
+            "average_weekly_load": data.get("average_weekly_load_90_days"),
+            "average_weekly_duration": data.get("average_weekly_duration_90_days"),
+            "main_sport": data.get("main_sport_90_days"),
+            "sports": data.get("sport_statistics_90_days", {}),
+            "weekly_history": data.get("weekly_history_90_days", []),
+        },
+        "activity_api_coverage": {
+            "completeness_percent": data.get("activity_data_completeness_percent"),
+            "field_count": data.get("activity_field_count"),
+            "available_fields": data.get("activity_available_fields", []),
+            "coverage": data.get("activity_data_coverage", {}),
         },
         "records_period_days": data.get("records_period_days"),
         "records_activity_count": data.get("records_activity_count"),
@@ -362,6 +388,26 @@ def build_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:
             "load": data.get("next_workout_load"),
             "description": data.get("next_workout_description"),
         },
+    }
+
+
+def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:
+    """Return structured data for the dedicated statistics card."""
+
+    return {
+        "integration": {
+            "domain": DOMAIN,
+            "version": _integration_version(),
+        },
+        "periods": data.get("advanced_periods", {}),
+        "sports": data.get("advanced_sports", {}),
+        "trends": data.get("advanced_trends", {}),
+        "records_by_sport": data.get("advanced_records_by_sport", {}),
+        "period_records": data.get("advanced_period_records", {}),
+        "records": build_dashboard_attributes(data).get("records", {}),
+        "zones": build_dashboard_attributes(data).get("zones_60_days", {}),
+        "data_quality": build_dashboard_attributes(data).get("activity_api_coverage", {}),
+        "insights": data.get("training_insights", []),
     }
 
 
@@ -1384,6 +1430,55 @@ SENSORS: tuple[IntervalsICUSensorDescription, ...] = (
         value_fn=_value("main_sport_42_days"),
     ),
     IntervalsICUSensorDescription(
+        key="activities_90_days",
+        translation_key="activities_90_days",
+        icon="mdi:calendar-range",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_value("activities_90_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="training_days_90_days",
+        translation_key="training_days_90_days",
+        icon="mdi:calendar-check-outline",
+        native_unit_of_measurement="d",
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_value("training_days_90_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="duration_90_days",
+        translation_key="duration_90_days",
+        icon="mdi:timer-outline",
+        device_class=SensorDeviceClass.DURATION,
+        native_unit_of_measurement=UnitOfTime.SECONDS,
+        state_class=SensorStateClass.MEASUREMENT,
+        value_fn=_value("duration_90_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="load_90_days",
+        translation_key="load_90_days",
+        icon="mdi:weight-lifter",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("load_90_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="average_weekly_load_90_days",
+        translation_key="average_weekly_load_90_days",
+        icon="mdi:chart-line",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("average_weekly_load_90_days"),
+    ),
+    IntervalsICUSensorDescription(
+        key="activity_data_completeness_percent",
+        translation_key="activity_data_completeness_percent",
+        icon="mdi:database-check-outline",
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
+        value_fn=_round_value("activity_data_completeness_percent"),
+    ),
+    IntervalsICUSensorDescription(
         key="training_streak",
         translation_key="training_streak",
         icon="mdi:fire",
@@ -1514,6 +1609,13 @@ async def async_setup_entry(
             athlete_name=athlete_name,
         )
     )
+    entities.append(
+        IntervalsICUStatisticsDashboardSensor(
+            coordinator=coordinator,
+            athlete_id=entry.data["athlete_id"],
+            athlete_name=athlete_name,
+        )
+    )
 
     async_add_entities(entities)
 
@@ -1634,3 +1736,25 @@ class IntervalsICUDashboardSensor(
         """Return all data required by the Lovelace card."""
 
         return build_dashboard_attributes(self.coordinator.data)
+
+
+class IntervalsICUStatisticsDashboardSensor(
+    IntervalsICUEntity,
+    SensorEntity,
+):
+    """Structured statistics entity for the dedicated Lovelace card."""
+
+    _attr_icon = "mdi:chart-box-outline"
+    _attr_name = "Statistics Dashboard"
+
+    def __init__(self, coordinator, athlete_id: str, athlete_name: str | None) -> None:
+        super().__init__(coordinator, athlete_id, athlete_name)
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_statistics_dashboard"
+
+    @property
+    def native_value(self) -> str:
+        return "ready" if self.coordinator.last_update_success else "error"
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        return build_statistics_dashboard_attributes(self.coordinator.data)

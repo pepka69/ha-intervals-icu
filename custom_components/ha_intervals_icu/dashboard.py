@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from .activities import last_activity
+from .advanced_statistics import calculate_advanced_statistics
+from .activity_statistics import calculate_activity_statistics
 from .history import calculate_fitness_history
 from .statistics import calculate_training_statistics
 from .wellness_statistics import calculate_wellness_statistics
@@ -74,5 +76,7 @@ def build_dashboard(
 
     dashboard.update(last_activity(activities))
     dashboard.update(calculate_training_statistics(activities))
+    dashboard.update(calculate_activity_statistics(activities))
     dashboard.update(calculate_zone_statistics(activities))
+    dashboard.update(calculate_advanced_statistics(activities, wellness))
     return dashboard

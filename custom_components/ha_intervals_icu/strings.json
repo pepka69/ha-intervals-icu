@@ -428,6 +428,24 @@
       },
       "power_zone_total_60_days": {
         "name": "Power-zone time over 60 days"
+      },
+      "activities_90_days": {
+        "name": "Activities (90 days)"
+      },
+      "training_days_90_days": {
+        "name": "Training days (90 days)"
+      },
+      "duration_90_days": {
+        "name": "Duration (90 days)"
+      },
+      "load_90_days": {
+        "name": "Training load (90 days)"
+      },
+      "average_weekly_load_90_days": {
+        "name": "Average weekly load (90 days)"
+      },
+      "activity_data_completeness_percent": {
+        "name": "Activity data completeness"
       }
     },
     "binary_sensor": {
