@@ -220,7 +220,7 @@ If it is useful to you and you would like to support its development, you can bu
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src=".github/assets/buy-me-a-beer-qr.png" width="220" alt="QR code to buy me a beer">
+    <img src=".github/assets/buy-me-a-beer-qr.png" width="220" alt="">
   </a>
 </p>
 
