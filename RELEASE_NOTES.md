@@ -1,12 +1,14 @@
-# v1.3.0-beta7
+# v1.3.0-beta8
 
-## Priority 1: statistics
+## Corrections de la carte Lovelace
 
-- Wellness history increased to 90 days.
-- Added a dedicated official-statistics layer based on Intervals.icu Wellness data.
-- Added CTL, ATL, Form, Ramp Rate, CTL Load, ATL Load and eFTP histories and trends.
-- Added 7-day and 30-day averages, changes, minimums and maximums.
-- Added Wellness field inventory so diagnostics show exactly what the account API exposes.
-- Added HR and power time-in-zone aggregation when those fields are present in activity summaries.
-- Added official statistics and zone arrays to the dashboard entity attributes.
-- No fitness value is fabricated: missing API values remain unavailable.
+- La version affichée dans le panneau **À propos** provient maintenant du `manifest.json` installé via l’entité Dashboard.
+- Suppression de la version `1.3.0-beta1` codée en dur dans l’éditeur de carte.
+- Correction du lien **Documentation** vers le README français de la branche `develop`.
+- Correction du lien de documentation déclaré par la carte Lovelace.
+- Synchronisation de la version dans `manifest.json` et le paquet frontend.
+
+## Vérifications
+
+- Audit des occurrences de versions codées en dur et des liens GitHub du panneau À propos.
+- Compilation du frontend et contrôles Ruff.

@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import json
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from homeassistant.components.sensor import (
@@ -28,6 +31,20 @@ from homeassistant.util import dt as dt_util
 
 from .const import DOMAIN
 from .entity import IntervalsICUEntity
+
+
+@lru_cache(maxsize=1)
+def _integration_version() -> str:
+    """Return the installed integration version from manifest.json."""
+
+    manifest_path = Path(__file__).with_name("manifest.json")
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return "unknown"
+
+    version = manifest.get("version")
+    return version if isinstance(version, str) and version else "unknown"
 
 
 def _value(key: str) -> Callable[[dict[str, Any]], Any]:
@@ -185,6 +202,7 @@ def build_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:
 
     return {
         "schema_version": 1,
+        "integration_version": _integration_version(),
         "athlete_name": athlete_name,
         "summary": {
             "fitness": data.get("fitness"),

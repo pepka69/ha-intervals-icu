@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.3.0-beta8] - 2026-07-17
+
+### Fixed
+
+- Read the About panel version from the installed integration manifest through the Dashboard entity.
+- Removed the stale hard-coded `1.3.0-beta1` card version.
+- Fixed French documentation links that incorrectly targeted `main`.
+- Updated Lovelace card metadata to use the valid development documentation path.
+
+
 ## [1.3.0-beta7] - 2026-07-17
 
 ### Added

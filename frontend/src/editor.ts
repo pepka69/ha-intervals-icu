@@ -14,9 +14,8 @@ import type {
 } from "./types";
 
 
-const INTEGRATION_VERSION = "1.3.0-beta1";
 const PROJECT_URL = "https://github.com/pepka69/ha-intervals-icu";
-const DOCUMENTATION_URL = `${PROJECT_URL}/blob/main/README.fr.md`;
+const DOCUMENTATION_URL = `${PROJECT_URL}/blob/develop/README.fr.md`;
 const ISSUES_URL = `${PROJECT_URL}/issues`;
 const FEATURE_REQUEST_URL = `${PROJECT_URL}/issues/new/choose`;
 const SUPPORT_URL = "https://buymeacoffee.com/pep_ka";
@@ -81,6 +80,25 @@ export class IntervalsIcuCardEditor extends LitElement {
 
   public setConfig(config: CardConfig): void {
     this.config = { ...config };
+  }
+
+
+  private integrationVersion(): string {
+    if (!this.hass) {
+      return "unknown";
+    }
+
+    const dashboardEntity = findEntity(
+      this.hass,
+      undefined,
+      "dashboard",
+      this.config?.device_id
+    );
+    const version = dashboardEntity
+      ? this.hass.states[dashboardEntity]?.attributes.integration_version
+      : undefined;
+
+    return typeof version === "string" && version ? version : "unknown";
   }
 
   private emitConfig(config: CardConfig): void {
@@ -361,7 +379,7 @@ export class IntervalsIcuCardEditor extends LitElement {
               <ha-icon icon="mdi:information-outline"></ha-icon>
               À propos
             </span>
-            <span class="about-version">v${INTEGRATION_VERSION}</span>
+            <span class="about-version">v${this.integrationVersion()}</span>
           </summary>
 
           <div class="about-content">
