@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.3.0-beta9] - 2026-07-17
+
+### Fixed
+
+- Separated the French and English support logos.
+- Displayed only the English support logo in Home Assistant and the English README.
+- Displayed only the French support logo in the French README.
+
+
 ## [1.3.0-beta8] - 2026-07-17
 
 ### Fixed

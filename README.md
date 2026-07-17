@@ -216,6 +216,6 @@ Made with ❤️ for the Home Assistant and Intervals.icu communities.
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/buy-me-a-beer-yellow.png" width="320" alt="Support the project">
+    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/buy-me-a-beer-en.png" width="320" alt="Buy me a beer">
   </a>
 </p>

@@ -241,6 +241,6 @@ Développé avec ❤️ pour les communautés Home Assistant et Intervals.icu.
 
 <p align="center">
   <a href="https://buymeacoffee.com/pep_ka">
-    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/buy-me-a-beer-yellow.png" width="320" alt="Soutenir le projet">
+    <img src="https://raw.githubusercontent.com/pepka69/ha-intervals-icu/develop/.github/assets/offre-moi-une-biere-fr.png" width="320" alt="Offre-moi une bière">
   </a>
 </p>

@@ -1,14 +1,8 @@
-# v1.3.0-beta8
+# v1.3.0-beta9
 
-## Corrections de la carte Lovelace
+## Localized support logos
 
-- La version affichée dans le panneau **À propos** provient maintenant du `manifest.json` installé via l’entité Dashboard.
-- Suppression de la version `1.3.0-beta1` codée en dur dans l’éditeur de carte.
-- Correction du lien **Documentation** vers le README français de la branche `develop`.
-- Correction du lien de documentation déclaré par la carte Lovelace.
-- Synchronisation de la version dans `manifest.json` et le paquet frontend.
-
-## Vérifications
-
-- Audit des occurrences de versions codées en dur et des liens GitHub du panneau À propos.
-- Compilation du frontend et contrôles Ruff.
+- English documentation now displays only the clickable **Buy me a beer** logo.
+- French documentation now displays only the clickable **Offre-moi une bière** logo.
+- The Home Assistant card editor now displays only the English **Buy me a beer** logo.
+- Removed the previous combined bilingual image to prevent duplicate languages.

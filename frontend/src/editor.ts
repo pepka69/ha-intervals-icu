@@ -19,6 +19,8 @@ const DOCUMENTATION_URL = `${PROJECT_URL}/blob/develop/README.fr.md`;
 const ISSUES_URL = `${PROJECT_URL}/issues`;
 const FEATURE_REQUEST_URL = `${PROJECT_URL}/issues/new/choose`;
 const SUPPORT_URL = "https://buymeacoffee.com/pep_ka";
+const SUPPORT_LOGO_URL =
+  `${PROJECT_URL}/raw/develop/.github/assets/buy-me-a-beer-en.png`;
 
 const fields: Array<[keyof CardConfig, string, string]> = [
   ["fitness_entity", "Fitness", DEFAULT_KEYS.fitness],
@@ -416,11 +418,11 @@ export class IntervalsIcuCardEditor extends LitElement {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <ha-icon icon="mdi:beer"></ha-icon>
-              <span>
-                <strong>Offrez-moi une bière</strong>
-                <small>Soutenir discrètement le développement bénévole</small>
-              </span>
+              <img
+                class="beer-logo"
+                src=${SUPPORT_LOGO_URL}
+                alt="Buy me a beer"
+              />
               <ha-icon icon="mdi:open-in-new"></ha-icon>
             </a>
           </div>
