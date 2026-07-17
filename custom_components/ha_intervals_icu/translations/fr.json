@@ -389,6 +389,18 @@
       },
       "record_power_1h": {
         "name": "Meilleure puissance sur 1 heure"
+      },
+      "ctl_load": {
+        "name": "Charge CTL"
+      },
+      "atl_load": {
+        "name": "Charge ATL"
+      },
+      "eftp": {
+        "name": "FTP estimée"
+      },
+      "sleep_score": {
+        "name": "Score de sommeil"
       }
     },
     "binary_sensor": {

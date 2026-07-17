@@ -57,6 +57,11 @@ def build_dashboard(
             "readinessScore",
         ),
         "ramp_rate": _first_value(latest, "rampRate", "ramp_rate"),
+        "ctl_load": _first_value(latest, "ctlLoad", "ctl_load"),
+        "atl_load": _first_value(latest, "atlLoad", "atl_load"),
+        "eftp": _first_value(latest, "eftp", "eFTP", "icu_eftp"),
+        "sleep_score": _first_value(latest, "sleepScore", "sleep_score"),
+        "wellness_date": _first_value(latest, "id", "date"),
     }
 
     dashboard.update(history)

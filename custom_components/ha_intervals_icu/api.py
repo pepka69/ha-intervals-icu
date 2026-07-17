@@ -97,6 +97,14 @@ class IntervalsICUClient:
             params={
                 "oldest": start.isoformat(),
                 "newest": end.isoformat(),
+                # Intervals.icu does not always include calculated training
+                # metrics unless they are explicitly requested.
+                "cols": (
+                    "ctl,atl,rampRate,ctlLoad,atlLoad,eftp,"
+                    "weight,restingHR,hrv,hrvRMSSD,hrvSDNN,"
+                    "sleepSecs,sleepScore,mood,energy,stress,soreness,"
+                    "fatigue,readiness,recovery"
+                ),
             },
         )
 

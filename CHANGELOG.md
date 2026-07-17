@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.3.0-beta6] - 2026-07-17
+
+### Fixed
+
+- Explicitly request official CTL, ATL, ramp rate, CTL load, ATL load and eFTP fields from the Intervals.icu wellness endpoint.
+- Use the nearest available historical wellness record for 7-day and 30-day comparisons.
+
+### Added
+
+- CTL Load, ATL Load, eFTP and sleep-score sensors.
+
+
 ## [1.3.0-beta5] - 2026-07-17
 
 ### Added

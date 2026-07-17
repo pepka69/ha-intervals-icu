@@ -55,6 +55,18 @@ def _variation(current: float | None, previous: float | None) -> float | None:
     return round(current - previous, 1)
 
 
+def _record_on_or_before(
+    records: dict[date, dict[str, Any]],
+    target: date,
+) -> dict[str, Any]:
+    """Return the closest wellness record on or before a target date."""
+
+    candidates = [record_date for record_date in records if record_date <= target]
+    if not candidates:
+        return {}
+    return records[max(candidates)]
+
+
 def calculate_fitness_history(
     wellness: list[dict[str, Any]],
 ) -> dict[str, Any]:
@@ -91,8 +103,8 @@ def calculate_fitness_history(
 
     latest_date = max(records)
     latest = records[latest_date]
-    seven_days_ago = records.get(latest_date - timedelta(days=7), {})
-    thirty_days_ago = records.get(latest_date - timedelta(days=30), {})
+    seven_days_ago = _record_on_or_before(records, latest_date - timedelta(days=7))
+    thirty_days_ago = _record_on_or_before(records, latest_date - timedelta(days=30))
 
     fitness = _number(latest, "ctl")
     fatigue = _number(latest, "atl")
