@@ -8,9 +8,12 @@
 Bring your training, recovery, records and health data from <strong>Intervals.icu</strong> into Home Assistant.
 </p>
 
-<p align="center">
-  <a href="https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md"><strong>🇫🇷 Documentation complète en français</strong></a>
-</p>
+## 🇫🇷 Documentation en français
+
+Consultez la documentation complète :
+
+https://github.com/pepka69/ha-intervals-icu/blob/develop/README.fr.md
+
 
 <p align="center">
 
