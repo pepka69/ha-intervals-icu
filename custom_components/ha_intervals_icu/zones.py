@@ -68,9 +68,7 @@ def calculate_zone_statistics(
         [round(value * 100 / hr_total, 1) for value in hr] if hr_total else []
     )
     power_percentages = (
-        [round(value * 100 / power_total, 1) for value in power]
-        if power_total
-        else []
+        [round(value * 100 / power_total, 1) for value in power] if power_total else []
     )
 
     return {

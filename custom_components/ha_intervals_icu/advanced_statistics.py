@@ -32,7 +32,9 @@ def _num(item: dict[str, Any], *keys: str) -> float:
 
 
 def _sport(item: dict[str, Any]) -> str:
-    return str(item.get("type") or item.get("sport") or item.get("sport_type") or "Other")
+    return str(
+        item.get("type") or item.get("sport") or item.get("sport_type") or "Other"
+    )
 
 
 def _pct(current: float, previous: float) -> float | None:
@@ -42,17 +44,25 @@ def _pct(current: float, previous: float) -> float | None:
 
 
 def _summary(items: list[dict[str, Any]]) -> dict[str, Any]:
-    duration = sum(_num(a, "moving_time", "elapsed_time", "duration") for a in items)
-    load = sum(_num(a, "icu_training_load", "training_load", "load") for a in items)
-    distance = sum(_num(a, "distance") for a in items)
-    hrss = sum(_num(a, "hrss", "icu_hrss", "hr_load") for a in items)
-    trimp = sum(_num(a, "trimp", "icu_trimp") for a in items)
-    elevation = sum(_num(a, "total_elevation_gain", "elevation_gain") for a in items)
-    calories = sum(_num(a, "calories") for a in items)
-    days = {_day(a) for a in items if _day(a)}
+    duration = sum(
+        _num(activity, "moving_time", "elapsed_time", "duration") for activity in items
+    )
+    load = sum(
+        _num(activity, "icu_training_load", "training_load", "load")
+        for activity in items
+    )
+    distance = sum(_num(activity, "distance") for activity in items)
+    hrss = sum(_num(activity, "hrss", "icu_hrss", "hr_load") for activity in items)
+    trimp = sum(_num(activity, "trimp", "icu_trimp") for activity in items)
+    elevation = sum(
+        _num(activity, "total_elevation_gain", "elevation_gain") for activity in items
+    )
+    calories = sum(_num(activity, "calories") for activity in items)
+    training_days = {_day(activity) for activity in items if _day(activity)}
+
     return {
         "activities": len(items),
-        "training_days": len(days),
+        "training_days": len(training_days),
         "duration_hours": round(duration / 3600, 2),
         "distance_km": round(distance / 1000, 2),
         "load": round(load, 1),
@@ -60,36 +70,74 @@ def _summary(items: list[dict[str, Any]]) -> dict[str, Any]:
         "trimp": round(trimp, 1),
         "elevation_m": round(elevation),
         "calories": round(calories),
-        "average_activity_minutes": round(duration / len(items) / 60, 1) if items else 0,
+        "average_activity_minutes": (
+            round(duration / len(items) / 60, 1) if items else 0
+        ),
         "average_activity_load": round(load / len(items), 1) if items else 0,
     }
 
 
 def _comparison(current: dict[str, Any], previous: dict[str, Any]) -> dict[str, Any]:
-    keys = ("activities", "training_days", "duration_hours", "distance_km", "load", "hrss", "trimp", "elevation_m", "calories")
-    return {f"{key}_change_percent": _pct(float(current[key]), float(previous[key])) for key in keys}
+    keys = (
+        "activities",
+        "training_days",
+        "duration_hours",
+        "distance_km",
+        "load",
+        "hrss",
+        "trimp",
+        "elevation_m",
+        "calories",
+    )
+    return {
+        f"{key}_change_percent": _pct(
+            float(current[key]),
+            float(previous[key]),
+        )
+        for key in keys
+    }
 
 
 def _sport_summaries(items: list[dict[str, Any]]) -> dict[str, Any]:
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for item in items:
         grouped[_sport(item)].append(item)
+
     result = {sport: _summary(values) for sport, values in grouped.items()}
-    return dict(sorted(result.items(), key=lambda row: row[1]["duration_hours"], reverse=True))
+    return dict(
+        sorted(
+            result.items(),
+            key=lambda row: row[1]["duration_hours"],
+            reverse=True,
+        )
+    )
 
 
-def _record(items: list[dict[str, Any]], keys: tuple[str, ...]) -> dict[str, Any] | None:
+def _record(
+    items: list[dict[str, Any]], keys: tuple[str, ...]
+) -> dict[str, Any] | None:
     best: tuple[float, dict[str, Any]] | None = None
     for item in items:
         value = _num(item, *keys)
         if value > 0 and (best is None or value > best[0]):
             best = (value, item)
+
     if best is None:
         return None
+
     value, item = best
+    activity_keys = (
+        "id",
+        "name",
+        "type",
+        "start_date_local",
+        "start_date",
+    )
     return {
         "value": round(value, 2),
-        "activity": {key: item.get(key) for key in ("id", "name", "type", "start_date_local", "start_date") if item.get(key) is not None},
+        "activity": {
+            key: item.get(key) for key in activity_keys if item.get(key) is not None
+        },
     }
 
 
@@ -101,16 +149,26 @@ def _records_by_sport(items: list[dict[str, Any]]) -> dict[str, Any]:
         "load": ("icu_training_load", "training_load", "load"),
         "calories": ("calories",),
         "max_power_w": ("max_watts", "max_power"),
-        "average_power_w": ("average_watts", "weighted_average_watts", "average_power"),
+        "average_power_w": (
+            "average_watts",
+            "weighted_average_watts",
+            "average_power",
+        ),
         "max_hr_bpm": ("max_heartrate", "max_hr"),
         "average_speed_mps": ("average_speed",),
     }
     grouped: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for item in items:
         grouped[_sport(item)].append(item)
+
     output: dict[str, Any] = {}
     for sport, values in grouped.items():
-        output[sport] = {name: record for name, keys in definitions.items() if (record := _record(values, keys)) is not None}
+        records: dict[str, Any] = {}
+        for name, keys in definitions.items():
+            record = _record(values, keys)
+            if record is not None:
+                records[name] = record
+        output[sport] = records
     return output
 
 
@@ -118,18 +176,23 @@ def _period_records(items: list[dict[str, Any]]) -> dict[str, Any]:
     weekly: dict[str, list[dict[str, Any]]] = defaultdict(list)
     monthly: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for item in items:
-        day = _day(item)
-        if day is None:
+        item_day = _day(item)
+        if item_day is None:
             continue
-        year, week, _ = day.isocalendar()
+        year, week, _ = item_day.isocalendar()
         weekly[f"{year}-W{week:02d}"].append(item)
-        monthly[day.strftime("%Y-%m")].append(item)
+        monthly[item_day.strftime("%Y-%m")].append(item)
 
-    def best(groups: dict[str, list[dict[str, Any]]], metric: str) -> dict[str, Any] | None:
+    def best(
+        groups: dict[str, list[dict[str, Any]]], metric: str
+    ) -> dict[str, Any] | None:
         summaries = [(key, _summary(value)) for key, value in groups.items()]
         if not summaries:
             return None
-        period, summary = max(summaries, key=lambda row: float(row[1][metric]))
+        period, summary = max(
+            summaries,
+            key=lambda row: float(row[1][metric]),
+        )
         return {"period": period, **summary}
 
     return {
@@ -141,74 +204,164 @@ def _period_records(items: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def _wellness_trends(wellness: list[dict[str, Any]]) -> dict[str, Any]:
-    rows = sorted(((day, item) for item in wellness if (day := _day(item))), key=lambda row: row[0])
+    rows = sorted(
+        ((item_day, item) for item in wellness if (item_day := _day(item))),
+        key=lambda row: row[0],
+    )
     aliases = {
-        "ctl": ("ctl",), "atl": ("atl",), "form": ("form",),
-        "eftp": ("eftp", "eFTP", "icu_eftp"), "weight": ("weight",),
-        "sleep_hours": ("sleepSecs",), "resting_hr": ("restingHR",), "hrv": ("hrv", "hrvRMSSD", "hrvSDNN"),
+        "ctl": ("ctl",),
+        "atl": ("atl",),
+        "form": ("form",),
+        "eftp": ("eftp", "eFTP", "icu_eftp"),
+        "weight": ("weight",),
+        "sleep_hours": ("sleepSecs",),
+        "resting_hr": ("restingHR",),
+        "hrv": ("hrv", "hrvRMSSD", "hrvSDNN"),
     }
     today = date.today()
     result: dict[str, Any] = {}
+
     for name, keys in aliases.items():
-        points = []
-        for day, item in rows:
+        points: list[dict[str, Any]] = []
+        for item_day, item in rows:
             value = _num(item, *keys)
             if name == "sleep_hours" and value:
                 value /= 3600
             if value:
-                points.append({"date": day.isoformat(), "value": round(value, 2)})
+                points.append(
+                    {
+                        "date": item_day.isoformat(),
+                        "value": round(value, 2),
+                    }
+                )
+
         metric: dict[str, Any] = {"history": points}
         if points:
-            metric["latest"] = points[-1]["value"]
+            latest = points[-1]["value"]
+            metric["latest"] = latest
             for period in PERIODS:
-                eligible = [p for p in points if date.fromisoformat(p["date"]) <= today - timedelta(days=period)]
+                cutoff = today - timedelta(days=period)
+                eligible = [
+                    point
+                    for point in points
+                    if date.fromisoformat(point["date"]) <= cutoff
+                ]
                 old = eligible[-1]["value"] if eligible else None
-                metric[f"change_{period}_days"] = round(points[-1]["value"] - old, 2) if old is not None else None
+                metric[f"change_{period}_days"] = (
+                    round(latest - old, 2) if old is not None else None
+                )
         result[name] = metric
+
     return result
 
 
-def _insights(periods: dict[str, Any], trends: dict[str, Any], sports: dict[str, Any]) -> list[dict[str, str]]:
+def _insights(
+    periods: dict[str, Any],
+    trends: dict[str, Any],
+    sports: dict[str, Any],
+) -> list[dict[str, str]]:
     insights: list[dict[str, str]] = []
     p30 = periods.get("30_days", {})
     change = p30.get("comparison", {}).get("load_change_percent")
     if isinstance(change, (int, float)):
         level = "warning" if change > 25 else "positive" if change > 5 else "neutral"
-        insights.append({"type": level, "title": "Training load", "message": f"30-day load is {abs(change):.0f}% {'higher' if change >= 0 else 'lower'} than the previous period."})
+        direction = "higher" if change >= 0 else "lower"
+        insights.append(
+            {
+                "type": level,
+                "title": "Training load",
+                "message": (
+                    f"30-day load is {abs(change):.0f}% {direction} "
+                    "than the previous period."
+                ),
+            }
+        )
+
     form = trends.get("form", {}).get("latest")
     if isinstance(form, (int, float)) and form < -20:
-        insights.append({"type": "warning", "title": "Fatigue", "message": "Form is below -20. Consider recovery before another hard session."})
+        insights.append(
+            {
+                "type": "warning",
+                "title": "Fatigue",
+                "message": (
+                    "Form is below -20. Consider recovery before another hard session."
+                ),
+            }
+        )
+
     sleep = trends.get("sleep_hours", {}).get("change_7_days")
     if isinstance(sleep, (int, float)) and sleep < -1:
-        insights.append({"type": "warning", "title": "Sleep", "message": "Latest sleep is more than one hour below the value from seven days ago."})
+        insights.append(
+            {
+                "type": "warning",
+                "title": "Sleep",
+                "message": (
+                    "Latest sleep is more than one hour below the value "
+                    "from seven days ago."
+                ),
+            }
+        )
+
     sport30 = sports.get("30_days", {})
     if sport30:
         main, values = next(iter(sport30.items()))
         total = sum(float(row.get("duration_hours", 0)) for row in sport30.values())
         share = float(values.get("duration_hours", 0)) * 100 / total if total else 0
-        insights.append({"type": "info", "title": "Sport mix", "message": f"{main} represents {share:.0f}% of training time over the last 30 days."})
+        insights.append(
+            {
+                "type": "info",
+                "title": "Sport mix",
+                "message": (
+                    f"{main} represents {share:.0f}% of training time "
+                    "over the last 30 days."
+                ),
+            }
+        )
+
     return insights[:6]
 
 
-def calculate_advanced_statistics(activities: list[dict[str, Any]], wellness: list[dict[str, Any]]) -> dict[str, Any]:
+def calculate_advanced_statistics(
+    activities: list[dict[str, Any]],
+    wellness: list[dict[str, Any]],
+) -> dict[str, Any]:
     """Calculate the complete Statistics Dashboard payload."""
     today = date.today()
-    dated = [(day, item) for item in activities if (day := _day(item)) and day <= today]
+    dated = [
+        (item_day, item)
+        for item in activities
+        if (item_day := _day(item)) and item_day <= today
+    ]
     periods: dict[str, Any] = {}
     sports: dict[str, Any] = {}
+
     for days in PERIODS:
-        current_items = [item for day, item in dated if 0 <= (today - day).days < days]
-        previous_items = [item for day, item in dated if days <= (today - day).days < days * 2]
+        current_items = [
+            item for item_day, item in dated if 0 <= (today - item_day).days < days
+        ]
+        previous_items = [
+            item
+            for item_day, item in dated
+            if days <= (today - item_day).days < days * 2
+        ]
         current = _summary(current_items)
         previous = _summary(previous_items)
-        periods[f"{days}_days"] = {"current": current, "previous": previous, "comparison": _comparison(current, previous)}
+        periods[f"{days}_days"] = {
+            "current": current,
+            "previous": previous,
+            "comparison": _comparison(current, previous),
+        }
         sports[f"{days}_days"] = _sport_summaries(current_items)
+
     trends = _wellness_trends(wellness)
+    recent_activities = [
+        item for item_day, item in dated if (today - item_day).days < 365
+    ]
     return {
         "advanced_periods": periods,
         "advanced_sports": sports,
         "advanced_trends": trends,
-        "advanced_records_by_sport": _records_by_sport([item for day, item in dated if (today - day).days < 365]),
-        "advanced_period_records": _period_records([item for day, item in dated if (today - day).days < 365]),
+        "advanced_records_by_sport": _records_by_sport(recent_activities),
+        "advanced_period_records": _period_records(recent_activities),
         "training_insights": _insights(periods, trends, sports),
     }

@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import Any
 
 from .activities import last_activity
-from .advanced_statistics import calculate_advanced_statistics
 from .activity_statistics import calculate_activity_statistics
+from .advanced_statistics import calculate_advanced_statistics
 from .history import calculate_fitness_history
 from .statistics import calculate_training_statistics
 from .wellness_statistics import calculate_wellness_statistics

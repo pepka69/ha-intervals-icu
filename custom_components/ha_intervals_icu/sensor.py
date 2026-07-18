@@ -406,7 +406,9 @@ def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any
         "period_records": data.get("advanced_period_records", {}),
         "records": build_dashboard_attributes(data).get("records", {}),
         "zones": build_dashboard_attributes(data).get("zones_60_days", {}),
-        "data_quality": build_dashboard_attributes(data).get("activity_api_coverage", {}),
+        "data_quality": build_dashboard_attributes(data).get(
+            "activity_api_coverage", {}
+        ),
         "insights": data.get("training_insights", []),
     }
 
