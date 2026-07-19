@@ -20,7 +20,7 @@ async def test_config_flow_success(
     """Test successful config flow."""
 
     with patch(
-        "custom_components.ha_intervals_icu.config_flow.IntervalsICUClient.get_athlete",
+        "custom_components.ha_intervals_icu.config_flow._validate_input",
         new=AsyncMock(
             return_value={
                 "name": "Test Athlete",
@@ -54,7 +54,7 @@ async def test_config_flow_invalid_auth(
     )
 
     with patch(
-        "custom_components.ha_intervals_icu.config_flow.IntervalsICUClient.get_athlete",
+        "custom_components.ha_intervals_icu.config_flow._validate_input",
         side_effect=IntervalsICUAuthenticationError,
     ):
         result = await hass.config_entries.flow.async_init(

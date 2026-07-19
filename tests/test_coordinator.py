@@ -4,6 +4,10 @@ from unittest.mock import AsyncMock
 
 import pytest
 
+from custom_components.ha_intervals_icu.atlas import (
+    ATLAS_READINESS_KEY,
+    ATLAS_TRAINING_STATUS_KEY,
+)
 from custom_components.ha_intervals_icu.coordinator import (
     IntervalsICUCoordinator,
 )
@@ -14,27 +18,16 @@ async def test_coordinator_update(hass):
     """Test coordinator data update."""
 
     client = AsyncMock()
-
-    client.get_athlete.return_value = {
-        "id": "123",
-        "name": "Test Athlete",
+    client.get_dashboard.return_value = {
+        "athlete": {
+            "id": "123",
+            "name": "Test Athlete",
+        },
+        "fitness": 50,
+        "fatigue": 40,
+        "form": 10,
+        "last_activity_name": "CrossFit",
     }
-
-    client.get_wellness.return_value = [
-        {
-            "ctl": 50,
-            "atl": 40,
-            "tsb": 10,
-            "hrv": 60,
-            "weight": 72,
-        }
-    ]
-
-    client.get_activities.return_value = [
-        {
-            "name": "CrossFit",
-        }
-    ]
 
     coordinator = IntervalsICUCoordinator(
         hass,
@@ -44,5 +37,9 @@ async def test_coordinator_update(hass):
     await coordinator.async_config_entry_first_refresh()
 
     assert coordinator.data["athlete"]["id"] == "123"
-    assert coordinator.data["wellness"][0]["ctl"] == 50
-    assert coordinator.data["activities"][0]["name"] == "CrossFit"
+    assert coordinator.data["fitness"] == 50
+    assert coordinator.data["fatigue"] == 40
+    assert coordinator.data["last_activity_name"] == "CrossFit"
+    assert ATLAS_TRAINING_STATUS_KEY in coordinator.data
+    assert ATLAS_READINESS_KEY in coordinator.data
+    client.get_dashboard.assert_awaited_once_with()
