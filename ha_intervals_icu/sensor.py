@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import logging
-
 import json
 from collections.abc import Callable
 from dataclasses import dataclass
@@ -460,9 +458,6 @@ def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any
 
 
 @dataclass(frozen=True, kw_only=True)
-
-LOGGER = logging.getLogger(__name__)
-
 class IntervalsICUSensorDescription(SensorEntityDescription):
     """Describe an Intervals.icu sensor."""
 
@@ -1637,6 +1632,8 @@ async def async_setup_entry(
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
+
+    raise Exception('DEBUG SENSOR LOADED - beta3-debug2')
     """Set up Intervals.icu sensors."""
 
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
@@ -1696,17 +1693,6 @@ async def async_setup_entry(
             athlete_name=athlete_name,
         )
     )
-
-    LOGGER.warning("========== HA_INTERVALS_ICU ENTITIES ==========")
-    LOGGER.warning("HA_INTERVALS_ICU: %s entities prepared", len(entities))
-    for entity in entities:
-        LOGGER.warning(
-            "HA_INTERVALS_ICU ENTITY: %s | unique_id=%s | translation_key=%s",
-            entity.__class__.__name__,
-            getattr(entity, "unique_id", None),
-            getattr(entity, "translation_key", None),
-        )
-    LOGGER.warning("===============================================")
 
     async_add_entities(entities)
 
