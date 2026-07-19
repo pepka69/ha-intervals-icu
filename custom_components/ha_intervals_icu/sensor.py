@@ -1699,10 +1699,11 @@ async def async_setup_entry(
     LOGGER.warning("HA_INTERVALS_ICU: %s entities prepared", len(entities))
     for entity in entities:
         LOGGER.warning(
-            "HA_INTERVALS_ICU ENTITY: %s | unique_id=%s | translation_key=%s",
+            "CLASS=%s | UNIQUE_ID=%s | NAME=%s | TRANSLATION=%s",
             entity.__class__.__name__,
-            getattr(entity, "unique_id", None),
-            getattr(entity, "translation_key", None),
+            getattr(entity, "_attr_unique_id", None),
+            getattr(entity, "_attr_name", None),
+            getattr(entity, "_attr_translation_key", None),
         )
     LOGGER.warning("===============================================")
 
