@@ -42,7 +42,6 @@ from .atlas import (
 from .const import DOMAIN
 from .entity import IntervalsICUEntity
 
-
 LOGGER = logging.getLogger(__name__)
 
 
