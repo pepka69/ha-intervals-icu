@@ -25,14 +25,11 @@ class AthleteMetrics:
     fitness: float | None = None
     fatigue: float | None = None
     form: float | None = None
-
     hrv: float | None = None
     resting_hr: float | None = None
     sleep_score: float | None = None
-
     load_7d: float | None = None
     load_30d: float | None = None
-
     consecutive_training_days: int = 0
 
 
@@ -51,10 +48,7 @@ class TrainingStatus:
     """Atlas Engine result."""
 
     state: TrainingState
-
     icon: str
     color: str
-
     confidence: int
-
     explanation: Explanation

@@ -446,6 +446,9 @@
       },
       "activity_data_completeness_percent": {
         "name": "Activity data completeness"
+      },
+      "training_status": {
+        "name": "Training status"
       }
     },
     "binary_sensor": {

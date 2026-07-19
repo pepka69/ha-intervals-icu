@@ -6,9 +6,10 @@ from .models import AthleteMetrics, TrainingState
 
 
 def classify_training_state(metrics: AthleteMetrics) -> TrainingState:
-    """Classify the current training state from athlete metrics."""
+    """Classify the current training state from Intervals.icu metrics."""
     if metrics.form is None:
         return TrainingState.UNKNOWN
+
     if metrics.form <= -30:
         return TrainingState.RECOVERY
     if metrics.form <= -20:
@@ -19,6 +20,7 @@ def classify_training_state(metrics: AthleteMetrics) -> TrainingState:
         return TrainingState.PRODUCTIVE
     if metrics.form <= 15:
         return TrainingState.FRESH
+
     return TrainingState.PEAK
 
 

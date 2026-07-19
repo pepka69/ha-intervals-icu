@@ -29,6 +29,7 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
+from .atlas import AthleteMetrics, TrainingStatus, evaluate_training_status
 from .const import DOMAIN
 from .entity import IntervalsICUEntity
 
@@ -168,6 +169,44 @@ def _compact_activity(activity: Any) -> dict[str, Any] | None:
     )
 
     return {key: activity.get(key) for key in keys if activity.get(key) is not None}
+
+
+def _optional_float(value: Any) -> float | None:
+    """Return a float when a coordinator value is numeric."""
+    if value is None:
+        return None
+
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _optional_int(value: Any) -> int:
+    """Return an integer when a coordinator value is numeric."""
+    if value is None:
+        return 0
+
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 0
+
+
+def build_training_status(data: dict[str, Any]) -> TrainingStatus:
+    """Build the Atlas training status from coordinator data."""
+    metrics = AthleteMetrics(
+        fitness=_optional_float(data.get("fitness")),
+        fatigue=_optional_float(data.get("fatigue")),
+        form=_optional_float(data.get("form")),
+        hrv=_optional_float(data.get("hrv")),
+        resting_hr=_optional_float(data.get("resting_hr")),
+        sleep_score=_optional_float(data.get("sleep_score")),
+        load_7d=_optional_float(data.get("weekly_load")),
+        load_30d=_optional_float(data.get("load_42_days")),
+        consecutive_training_days=_optional_int(data.get("training_streak")),
+    )
+    return evaluate_training_status(metrics)
 
 
 def build_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:
@@ -1605,6 +1644,13 @@ async def async_setup_entry(
         for description in SENSORS
     ]
     entities.append(
+        IntervalsICUTrainingStatusSensor(
+            coordinator=coordinator,
+            athlete_id=entry.data["athlete_id"],
+            athlete_name=athlete_name,
+        )
+    )
+    entities.append(
         IntervalsICUDashboardSensor(
             coordinator=coordinator,
             athlete_id=entry.data["athlete_id"],
@@ -1704,6 +1750,53 @@ class IntervalsICUSensor(
                 "calories",
             )
             if activity.get(attribute) is not None
+        }
+
+
+class IntervalsICUTrainingStatusSensor(
+    IntervalsICUEntity,
+    SensorEntity,
+):
+    """Actionable Atlas training status sensor."""
+
+    _attr_translation_key = "training_status"
+
+    def __init__(
+        self,
+        coordinator,
+        athlete_id: str,
+        athlete_name: str | None,
+    ) -> None:
+        """Initialize the Atlas training status sensor."""
+        super().__init__(coordinator, athlete_id, athlete_name)
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_training_status"
+
+    @property
+    def _status(self) -> TrainingStatus:
+        """Return the current Atlas evaluation."""
+        return build_training_status(self.coordinator.data)
+
+    @property
+    def native_value(self) -> str:
+        """Return the classified training state."""
+        return self._status.state.value
+
+    @property
+    def icon(self) -> str:
+        """Return an icon matching the current training state."""
+        return self._status.icon
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return the actionable Atlas explanation."""
+        status = self._status
+        return {
+            "title": status.explanation.title,
+            "summary": status.explanation.summary,
+            "recommendation": status.explanation.recommendation,
+            "confidence": status.confidence,
+            "color": status.color,
+            "reasons": status.explanation.reasons,
         }
 
 

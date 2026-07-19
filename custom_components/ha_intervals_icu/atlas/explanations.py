@@ -5,14 +5,17 @@ from __future__ import annotations
 from .models import AthleteMetrics, Explanation, TrainingState
 
 
-def build_explanation(state: TrainingState, metrics: AthleteMetrics) -> Explanation:
+def build_explanation(
+    state: TrainingState,
+    metrics: AthleteMetrics,
+) -> Explanation:
     """Build an actionable explanation for a classified training state."""
     reasons = _build_reasons(metrics)
     explanations = {
         TrainingState.UNKNOWN: Explanation(
             title="Données insuffisantes",
             summary="Atlas ne dispose pas encore des données nécessaires.",
-            recommendation="Synchronisez vos activités puis réessayez plus tard.",
+            recommendation="Synchronisez vos activités et réessayez plus tard.",
             reasons=reasons,
         ),
         TrainingState.RECOVERY: Explanation(
@@ -56,12 +59,14 @@ def build_explanation(state: TrainingState, metrics: AthleteMetrics) -> Explanat
 
 
 def _build_reasons(metrics: AthleteMetrics) -> list[str]:
-    """Build concise reasons from available metrics."""
+    """Build concise reasons from the available metrics."""
     reasons: list[str] = []
+
     if metrics.form is not None:
         reasons.append(f"Forme : {metrics.form:.1f}")
     if metrics.fitness is not None:
         reasons.append(f"Fitness : {metrics.fitness:.1f}")
     if metrics.fatigue is not None:
         reasons.append(f"Fatigue : {metrics.fatigue:.1f}")
+
     return reasons
