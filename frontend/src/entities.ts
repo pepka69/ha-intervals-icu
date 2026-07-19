@@ -8,6 +8,12 @@ export const DEFAULT_KEYS = {
   form: "form",
   ftp: "ftp",
 
+  trainingStatus: "training_status",
+  readinessScore: "readiness_score",
+  readinessLevel: "readiness_level",
+  readinessRecoveryHours: "readiness_recovery_hours",
+  atlasCoach: "atlas_coach",
+
   weeklyLoad: "weekly_load",
   weeklyActivities: "weekly_activities",
 

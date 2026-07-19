@@ -59,3 +59,19 @@ weight_entity: sensor.poids_alex
 - Compact
 - Standard
 - Complet
+
+## Dashboard Atlas 2.0
+
+La carte détecte automatiquement les entités Atlas du périphérique sélectionné et affiche :
+
+- le score et le niveau de préparation ;
+- le temps de récupération estimé ;
+- le statut d’entraînement ;
+- la recommandation quotidienne Atlas Coach ;
+- l’intensité, la durée et la zone recommandées.
+
+Le bloc est activé par défaut. Pour le masquer :
+
+```yaml
+show_atlas: false
+```

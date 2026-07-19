@@ -1,3 +1,13 @@
+# Changelog
+
+## v2.0.0-beta2
+
+- Added the Atlas dashboard section to the official Lovelace card.
+- Added automatic discovery of Training Status, Readiness and Atlas Coach entities.
+- Added a visual readiness summary, recovery estimate and daily coaching recommendation.
+- Added a `show_atlas` card option, enabled by default.
+- Updated French and English Lovelace documentation.
+
 ## 1.3.0-beta11
 
 ## Statistics & Performance Center

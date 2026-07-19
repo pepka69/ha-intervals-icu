@@ -59,6 +59,7 @@ export class HaIntervalsIcuCard extends LitElement {
   static getStubConfig(): Omit<CardConfig, "type"> {
     return {
       title: "Intervals.icu",
+      show_atlas: true,
       show_health: true,
       show_records: true,
       show_history: true,
@@ -77,6 +78,7 @@ export class HaIntervalsIcuCard extends LitElement {
     if (!config) throw new Error("Configuration manquante");
 
     this.config = {
+      show_atlas: true,
       show_health: true,
       show_records: true,
       show_history: true,
@@ -235,6 +237,37 @@ export class HaIntervalsIcuCard extends LitElement {
       DEFAULT_KEYS.weeklyActivities
     );
 
+    const trainingStatus = getState(
+      hass,
+      undefined,
+      DEFAULT_KEYS.trainingStatus,
+      this.config.device_id
+    );
+    const readinessScore = getState(
+      hass,
+      undefined,
+      DEFAULT_KEYS.readinessScore,
+      this.config.device_id
+    );
+    const readinessLevel = getState(
+      hass,
+      undefined,
+      DEFAULT_KEYS.readinessLevel,
+      this.config.device_id
+    );
+    const readinessRecovery = getState(
+      hass,
+      undefined,
+      DEFAULT_KEYS.readinessRecoveryHours,
+      this.config.device_id
+    );
+    const atlasCoach = getState(
+      hass,
+      undefined,
+      DEFAULT_KEYS.atlasCoach,
+      this.config.device_id
+    );
+
     const deviceId = this.config.device_id;
     const selectedDevice = deviceId ? hass.devices?.[deviceId] : undefined;
     const athleteLabel =
@@ -346,6 +379,44 @@ export class HaIntervalsIcuCard extends LitElement {
               : nothing}
           </div>
         </header>
+
+        ${this.config.show_atlas !== false
+          ? html`<section class="atlas-panel">
+              <article class="atlas-readiness">
+                <div class="section-title">
+                  <ha-icon icon="mdi:gauge"></ha-icon><span>Atlas Readiness</span>
+                </div>
+                <div class="atlas-score">
+                  <strong>${formatState(hass, readinessScore)}</strong>
+                  <span>${formatState(hass, readinessLevel, "Indisponible")}</span>
+                </div>
+                <div class="atlas-meta">
+                  <span><ha-icon icon="mdi:timer-sand"></ha-icon>Récupération ${formatState(hass, readinessRecovery)}</span>
+                  <span><ha-icon icon=${trainingStatus?.attributes.icon as string || "mdi:chart-timeline-variant-shimmer"}></ha-icon>${formatState(hass, trainingStatus, "Statut inconnu")}</span>
+                </div>
+              </article>
+              <article class="atlas-coach">
+                <div class="section-title">
+                  <ha-icon icon="mdi:account-heart-outline"></ha-icon><span>Atlas Coach</span>
+                </div>
+                <h3>${formatState(hass, atlasCoach, "Aucune recommandation")}</h3>
+                ${atlasCoach?.attributes.recommendation
+                  ? html`<p>${String(atlasCoach.attributes.recommendation)}</p>`
+                  : nothing}
+                <div class="atlas-chips">
+                  ${atlasCoach?.attributes.intensity
+                    ? html`<span>${String(atlasCoach.attributes.intensity)}</span>`
+                    : nothing}
+                  ${atlasCoach?.attributes.duration_minutes
+                    ? html`<span>${String(atlasCoach.attributes.duration_minutes)} min</span>`
+                    : nothing}
+                  ${atlasCoach?.attributes.heart_rate_zone
+                    ? html`<span>${String(atlasCoach.attributes.heart_rate_zone)}</span>`
+                    : nothing}
+                </div>
+              </article>
+            </section>`
+          : nothing}
 
         <section class="metrics">
           ${this.metric("FITNESS", "CTL", "fitness", fitness)}

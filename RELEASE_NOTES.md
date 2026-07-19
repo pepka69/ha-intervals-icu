@@ -1,3 +1,9 @@
+# v2.0.0-beta2 — Atlas Dashboard
+
+This release makes Atlas immediately visible in Home Assistant through the official Lovelace card. The card now presents readiness, recovery, training status and the daily coaching recommendation in one responsive section.
+
+No manual entity IDs are required when a device is selected: Atlas entities are discovered through the Home Assistant entity registry.
+
 # v1.3.0-beta11
 
 ## Statistics & Performance Center

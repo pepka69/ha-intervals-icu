@@ -89,6 +89,7 @@ export interface CardConfig {
   weight_entity?: string;
   show_weight?: boolean;
 
+  show_atlas?: boolean;
   show_health?: boolean;
   show_records?: boolean;
   show_history?: boolean;
