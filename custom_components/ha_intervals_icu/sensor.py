@@ -30,6 +30,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from .atlas import (
+    ATLAS_READINESS_KEY,
     ATLAS_TRAINING_STATUS_KEY,
     Explanation,
     TrainingState,
@@ -1653,6 +1654,21 @@ async def async_setup_entry(
             athlete_name=athlete_name,
         )
     )
+    entities.extend(
+        IntervalsICUReadinessSensor(
+            coordinator=coordinator,
+            athlete_id=entry.data["athlete_id"],
+            athlete_name=athlete_name,
+            kind=kind,
+        )
+        for kind in (
+            "score",
+            "level",
+            "fatigue_level",
+            "load_trend",
+            "recovery_hours",
+        )
+    )
     entities.append(
         IntervalsICUDashboardSensor(
             coordinator=coordinator,
@@ -1800,6 +1816,71 @@ class IntervalsICUTrainingStatusSensor(
             "confidence": status.confidence,
             "color": status.color,
             "reasons": status.explanation.reasons,
+        }
+
+
+class IntervalsICUReadinessSensor(
+    IntervalsICUEntity,
+    SensorEntity,
+):
+    """Expose one value from the Atlas readiness evaluation."""
+
+    def __init__(
+        self,
+        coordinator,
+        athlete_id: str,
+        athlete_name: str | None,
+        kind: str,
+    ) -> None:
+        """Initialize an Atlas readiness sensor."""
+        super().__init__(coordinator, athlete_id, athlete_name)
+        self._kind = kind
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_readiness_{kind}"
+        self._attr_translation_key = f"readiness_{kind}"
+
+        if kind == "score":
+            self._attr_native_unit_of_measurement = PERCENTAGE
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_icon = "mdi:gauge"
+        elif kind == "recovery_hours":
+            self._attr_native_unit_of_measurement = UnitOfTime.HOURS
+            self._attr_device_class = SensorDeviceClass.DURATION
+            self._attr_state_class = SensorStateClass.MEASUREMENT
+            self._attr_icon = "mdi:timer-sand"
+        elif kind == "level":
+            self._attr_icon = "mdi:heart-pulse"
+        elif kind == "fatigue_level":
+            self._attr_icon = "mdi:battery-heart-variant"
+        else:
+            self._attr_icon = "mdi:chart-timeline-variant-shimmer"
+
+    @property
+    def _payload(self) -> dict[str, Any]:
+        """Return the cached coordinator readiness payload."""
+        payload = self.coordinator.data.get(ATLAS_READINESS_KEY)
+        return payload if isinstance(payload, dict) else {}
+
+    @property
+    def native_value(self) -> Any:
+        """Return the selected readiness value."""
+        key = "recovery_hours" if self._kind == "recovery_hours" else self._kind
+        return self._payload.get(key)
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any] | None:
+        """Expose score context on the main readiness sensor."""
+        if self._kind != "score":
+            return None
+        payload = self._payload
+        return {
+            "level": payload.get("level"),
+            "confidence": payload.get("confidence"),
+            "recommendation": payload.get("recommendation"),
+            "fatigue_level": payload.get("fatigue_level"),
+            "load_trend": payload.get("load_trend"),
+            "recovery_hours": payload.get("recovery_hours"),
+            "positive_factors": payload.get("positive_factors", []),
+            "negative_factors": payload.get("negative_factors", []),
         }
 
 

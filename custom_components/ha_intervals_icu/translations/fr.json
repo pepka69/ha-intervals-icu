@@ -449,6 +449,21 @@
       },
       "training_status": {
         "name": "État d'entraînement"
+      },
+      "readiness_score": {
+        "name": "Score de préparation"
+      },
+      "readiness_level": {
+        "name": "Niveau de préparation"
+      },
+      "readiness_fatigue_level": {
+        "name": "Niveau de fatigue"
+      },
+      "readiness_load_trend": {
+        "name": "Tendance de charge"
+      },
+      "readiness_recovery_hours": {
+        "name": "Temps de récupération restant"
       }
     },
     "binary_sensor": {

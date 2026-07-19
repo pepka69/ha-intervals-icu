@@ -6,8 +6,10 @@ from typing import Any
 
 from .engine import evaluate_training_status
 from .models import AthleteMetrics, TrainingStatus
+from .readiness import evaluate_readiness
 
 ATLAS_TRAINING_STATUS_KEY = "atlas_training_status"
+ATLAS_READINESS_KEY = "atlas_readiness"
 
 
 def _optional_float(value: Any) -> float | None:
@@ -70,4 +72,5 @@ def enrich_dashboard_with_atlas(data: dict[str, Any]) -> dict[str, Any]:
     """Attach the Atlas evaluation to dashboard data once per refresh."""
     enriched = dict(data)
     enriched[ATLAS_TRAINING_STATUS_KEY] = build_atlas_payload(data)
+    enriched[ATLAS_READINESS_KEY] = evaluate_readiness(data).as_payload()
     return enriched
