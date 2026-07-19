@@ -1,3 +1,6 @@
+import logging
+
+LOGGER = logging.getLogger(__name__)
 """Sensors for ha-intervals-icu."""
 
 from __future__ import annotations
@@ -1634,8 +1637,6 @@ async def async_setup_entry(
 ) -> None:
     """Set up Intervals.icu sensors."""
 
-    raise Exception("DEBUG SENSOR LOADED - beta3-debug2")
-
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
 
     athlete = coordinator.data.get("athlete", {})
@@ -1693,6 +1694,17 @@ async def async_setup_entry(
             athlete_name=athlete_name,
         )
     )
+
+    LOGGER.warning("========== HA_INTERVALS_ICU ENTITIES ==========")
+    LOGGER.warning("HA_INTERVALS_ICU: %s entities prepared", len(entities))
+    for entity in entities:
+        LOGGER.warning(
+            "HA_INTERVALS_ICU ENTITY: %s | unique_id=%s | translation_key=%s",
+            entity.__class__.__name__,
+            getattr(entity, "unique_id", None),
+            getattr(entity, "translation_key", None),
+        )
+    LOGGER.warning("===============================================")
 
     async_add_entities(entities)
 
