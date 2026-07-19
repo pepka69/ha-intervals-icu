@@ -1,11 +1,9 @@
-import logging
-
-LOGGER = logging.getLogger(__name__)
 """Sensors for ha-intervals-icu."""
 
 from __future__ import annotations
 
 import json
+import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from datetime import datetime
@@ -43,6 +41,9 @@ from .atlas import (
 )
 from .const import DOMAIN
 from .entity import IntervalsICUEntity
+
+
+LOGGER = logging.getLogger(__name__)
 
 
 @lru_cache(maxsize=1)
