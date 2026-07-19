@@ -18,6 +18,7 @@ from .api import (
     IntervalsICUClient,
     IntervalsICUConnectionError,
 )
+from .atlas import enrich_dashboard_with_atlas
 from .const import DEFAULT_SCAN_INTERVAL, DOMAIN
 
 LOGGER = logging.getLogger(__name__)
@@ -48,7 +49,8 @@ class IntervalsICUCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         """Fetch Intervals.icu dashboard data."""
 
         try:
-            return await self.client.get_dashboard()
+            dashboard = await self.client.get_dashboard()
+            return enrich_dashboard_with_atlas(dashboard)
 
         except IntervalsICUAuthenticationError as err:
             raise ConfigEntryAuthFailed("Intervals.icu authentication failed") from err

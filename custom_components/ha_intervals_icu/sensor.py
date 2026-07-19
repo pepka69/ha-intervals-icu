@@ -29,7 +29,13 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
-from .atlas import AthleteMetrics, TrainingStatus, evaluate_training_status
+from .atlas import (
+    ATLAS_TRAINING_STATUS_KEY,
+    Explanation,
+    TrainingState,
+    TrainingStatus,
+    build_atlas_payload,
+)
 from .const import DOMAIN
 from .entity import IntervalsICUEntity
 
@@ -171,42 +177,39 @@ def _compact_activity(activity: Any) -> dict[str, Any] | None:
     return {key: activity.get(key) for key in keys if activity.get(key) is not None}
 
 
-def _optional_float(value: Any) -> float | None:
-    """Return a float when a coordinator value is numeric."""
-    if value is None:
-        return None
-
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def _optional_int(value: Any) -> int:
-    """Return an integer when a coordinator value is numeric."""
-    if value is None:
-        return 0
-
-    try:
-        return int(value)
-    except (TypeError, ValueError):
-        return 0
-
-
 def build_training_status(data: dict[str, Any]) -> TrainingStatus:
     """Build the Atlas training status from coordinator data."""
-    metrics = AthleteMetrics(
-        fitness=_optional_float(data.get("fitness")),
-        fatigue=_optional_float(data.get("fatigue")),
-        form=_optional_float(data.get("form")),
-        hrv=_optional_float(data.get("hrv")),
-        resting_hr=_optional_float(data.get("resting_hr")),
-        sleep_score=_optional_float(data.get("sleep_score")),
-        load_7d=_optional_float(data.get("weekly_load")),
-        load_30d=_optional_float(data.get("load_42_days")),
-        consecutive_training_days=_optional_int(data.get("training_streak")),
+    payload = data.get(ATLAS_TRAINING_STATUS_KEY)
+    if not isinstance(payload, dict):
+        payload = build_atlas_payload(data)
+
+    try:
+        state = TrainingState(str(payload.get("state", TrainingState.UNKNOWN.value)))
+    except ValueError:
+        state = TrainingState.UNKNOWN
+
+    reasons = payload.get("reasons")
+    if not isinstance(reasons, list):
+        reasons = []
+
+    confidence = payload.get("confidence", 0)
+    try:
+        parsed_confidence = int(confidence)
+    except (TypeError, ValueError):
+        parsed_confidence = 0
+
+    return TrainingStatus(
+        state=state,
+        icon=str(payload.get("icon", "mdi:help-circle-outline")),
+        color=str(payload.get("color", "grey")),
+        confidence=parsed_confidence,
+        explanation=Explanation(
+            title=str(payload.get("title", "Training status unavailable")),
+            summary=str(payload.get("summary", "")),
+            recommendation=str(payload.get("recommendation", "")),
+            reasons=[str(reason) for reason in reasons],
+        ),
     )
-    return evaluate_training_status(metrics)
 
 
 def build_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any]:

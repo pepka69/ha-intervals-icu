@@ -36,3 +36,28 @@ def test_build_training_status_ignores_invalid_numbers() -> None:
 
     assert status.state is TrainingState.PRODUCTIVE
     assert status.confidence == 40
+
+
+def test_build_training_status_prefers_coordinator_atlas_payload() -> None:
+    """Use the Atlas result calculated by the coordinator during refresh."""
+    status = build_training_status(
+        {
+            "fitness": 1,
+            "fatigue": 1,
+            "form": 1,
+            "atlas_training_status": {
+                "state": "peak_performance",
+                "icon": "mdi:trophy-outline",
+                "color": "purple",
+                "confidence": 87,
+                "title": "Peak performance",
+                "summary": "You are ready for a key effort.",
+                "recommendation": "Prioritize quality over volume.",
+                "reasons": ["Positive form"],
+            },
+        }
+    )
+
+    assert status.state is TrainingState.PEAK
+    assert status.confidence == 87
+    assert status.explanation.reasons == ["Positive form"]
