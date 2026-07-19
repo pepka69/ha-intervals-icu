@@ -34,7 +34,7 @@ async def test_coordinator_update(hass):
         client,
     )
 
-    await coordinator.async_config_entry_first_refresh()
+    await coordinator.async_refresh()
 
     assert coordinator.data["athlete"]["id"] == "123"
     assert coordinator.data["fitness"] == 50
