@@ -1628,12 +1628,13 @@ SENSORS: tuple[IntervalsICUSensorDescription, ...] = (
 
 
 async def async_setup_entry(
-    raise Exception('DEBUG SENSOR LOADED - beta3-debug2')
     hass: HomeAssistant,
     entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Set up Intervals.icu sensors."""
+
+    raise Exception("DEBUG SENSOR LOADED - beta3-debug2")
 
     coordinator = hass.data[DOMAIN][entry.entry_id]["coordinator"]
 
