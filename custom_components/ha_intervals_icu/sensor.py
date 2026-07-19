@@ -30,6 +30,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
 from .atlas import (
+    ATLAS_COACH_KEY,
     ATLAS_READINESS_KEY,
     ATLAS_TRAINING_STATUS_KEY,
     Explanation,
@@ -1670,6 +1671,13 @@ async def async_setup_entry(
         )
     )
     entities.append(
+        IntervalsICUCoachSensor(
+            coordinator=coordinator,
+            athlete_id=entry.data["athlete_id"],
+            athlete_name=athlete_name,
+        )
+    )
+    entities.append(
         IntervalsICUDashboardSensor(
             coordinator=coordinator,
             athlete_id=entry.data["athlete_id"],
@@ -1882,6 +1890,42 @@ class IntervalsICUReadinessSensor(
             "positive_factors": payload.get("positive_factors", []),
             "negative_factors": payload.get("negative_factors", []),
         }
+
+
+class IntervalsICUCoachSensor(
+    IntervalsICUEntity,
+    SensorEntity,
+):
+    """Expose the Atlas daily coaching recommendation."""
+
+    _attr_translation_key = "atlas_coach"
+    _attr_icon = "mdi:account-heart-outline"
+
+    def __init__(
+        self,
+        coordinator,
+        athlete_id: str,
+        athlete_name: str | None,
+    ) -> None:
+        """Initialize the Atlas coach sensor."""
+        super().__init__(coordinator, athlete_id, athlete_name)
+        self._attr_unique_id = f"{DOMAIN}_{athlete_id}_atlas_coach"
+
+    @property
+    def _payload(self) -> dict[str, Any]:
+        """Return the cached coordinator coach payload."""
+        payload = self.coordinator.data.get(ATLAS_COACH_KEY)
+        return payload if isinstance(payload, dict) else {}
+
+    @property
+    def native_value(self) -> str | None:
+        """Return the recommended intensity."""
+        return self._payload.get("intensity")
+
+    @property
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return the complete daily recommendation."""
+        return dict(self._payload)
 
 
 class IntervalsICUDashboardSensor(

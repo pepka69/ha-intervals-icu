@@ -464,6 +464,9 @@
       },
       "readiness_recovery_hours": {
         "name": "Recovery time remaining"
+      },
+      "atlas_coach": {
+        "name": "Atlas Coach"
       }
     },
     "binary_sensor": {
