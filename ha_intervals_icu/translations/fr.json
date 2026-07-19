@@ -1,0 +1,487 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "ha-intervals-icu",
+        "description": "Connectez votre compte Intervals.icu.",
+        "data": {
+          "athlete_id": "ID athlète",
+          "api_key": "Clé API"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnecter Intervals.icu",
+        "description": "Saisissez une nouvelle clé API Intervals.icu pour cet athlète.",
+        "data": {
+          "api_key": "Clé API"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "ID athlète ou clé API invalide",
+      "cannot_connect": "Impossible de se connecter à Intervals.icu",
+      "unknown": "Erreur inattendue"
+    },
+    "abort": {
+      "already_configured": "Cet athlète est déjà configuré",
+      "reauth_successful": "L'authentification a été mise à jour",
+      "reauth_entry_missing": "L'entrée de configuration n'existe plus"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "fitness": {
+        "name": "Condition physique"
+      },
+      "fatigue": {
+        "name": "Fatigue"
+      },
+      "form": {
+        "name": "Forme"
+      },
+      "fitness_7_days_ago": {
+        "name": "Condition physique il y a 7 jours"
+      },
+      "fitness_30_days_ago": {
+        "name": "Condition physique il y a 30 jours"
+      },
+      "fitness_change_7_days": {
+        "name": "Évolution de la condition physique sur 7 jours"
+      },
+      "fitness_change_30_days": {
+        "name": "Évolution de la condition physique sur 30 jours"
+      },
+      "fatigue_7_days_ago": {
+        "name": "Fatigue il y a 7 jours"
+      },
+      "fatigue_30_days_ago": {
+        "name": "Fatigue il y a 30 jours"
+      },
+      "fatigue_change_7_days": {
+        "name": "Évolution de la fatigue sur 7 jours"
+      },
+      "fatigue_change_30_days": {
+        "name": "Évolution de la fatigue sur 30 jours"
+      },
+      "form_7_days_ago": {
+        "name": "Forme il y a 7 jours"
+      },
+      "form_30_days_ago": {
+        "name": "Forme il y a 30 jours"
+      },
+      "form_change_7_days": {
+        "name": "Évolution de la forme sur 7 jours"
+      },
+      "form_change_30_days": {
+        "name": "Évolution de la forme sur 30 jours"
+      },
+      "activities": {
+        "name": "Activités"
+      },
+      "ftp": {
+        "name": "FTP"
+      },
+      "resting_hr": {
+        "name": "Fréquence cardiaque au repos"
+      },
+      "weight": {
+        "name": "Poids"
+      },
+      "sleep": {
+        "name": "Sommeil"
+      },
+      "mood": {
+        "name": "Humeur"
+      },
+      "energy": {
+        "name": "Énergie"
+      },
+      "stress": {
+        "name": "Stress"
+      },
+      "soreness": {
+        "name": "Courbatures"
+      },
+      "last_activity_name": {
+        "name": "Dernière activité"
+      },
+      "last_activity_type": {
+        "name": "Type de la dernière activité"
+      },
+      "last_activity_date": {
+        "name": "Date de la dernière activité"
+      },
+      "last_activity_distance": {
+        "name": "Distance de la dernière activité"
+      },
+      "last_activity_duration": {
+        "name": "Durée de la dernière activité"
+      },
+      "last_activity_load": {
+        "name": "Charge de la dernière activité"
+      },
+      "last_activity_calories": {
+        "name": "Calories de la dernière activité"
+      },
+      "last_activity_elevation_gain": {
+        "name": "Dénivelé positif"
+      },
+      "last_activity_avg_hr": {
+        "name": "FC moyenne"
+      },
+      "last_activity_max_hr": {
+        "name": "FC maximale"
+      },
+      "last_activity_avg_power": {
+        "name": "Puissance moyenne"
+      },
+      "last_activity_max_power": {
+        "name": "Puissance maximale"
+      },
+      "last_activity_avg_speed": {
+        "name": "Vitesse moyenne"
+      },
+      "weekly_activities": {
+        "name": "Activités sur 7 jours"
+      },
+      "weekly_distance": {
+        "name": "Distance sur 7 jours"
+      },
+      "weekly_duration": {
+        "name": "Durée sur 7 jours"
+      },
+      "weekly_load": {
+        "name": "Charge sur 7 jours"
+      },
+      "weekly_calories": {
+        "name": "Calories sur 7 jours"
+      },
+      "weekly_elevation": {
+        "name": "Dénivelé sur 7 jours"
+      },
+      "monthly_activities": {
+        "name": "Activités sur 30 jours"
+      },
+      "monthly_distance": {
+        "name": "Distance sur 30 jours"
+      },
+      "monthly_duration": {
+        "name": "Durée sur 30 jours"
+      },
+      "monthly_load": {
+        "name": "Charge sur 30 jours"
+      },
+      "monthly_calories": {
+        "name": "Calories sur 30 jours"
+      },
+      "monthly_elevation": {
+        "name": "Dénivelé sur 30 jours"
+      },
+      "planned_today_name": {
+        "name": "Entraînement prévu aujourd'hui"
+      },
+      "planned_today_sport": {
+        "name": "Sport prévu aujourd'hui"
+      },
+      "planned_today_start": {
+        "name": "Heure de l'entraînement aujourd'hui"
+      },
+      "planned_today_duration": {
+        "name": "Durée prévue aujourd'hui"
+      },
+      "planned_today_load": {
+        "name": "Charge prévue aujourd'hui"
+      },
+      "planned_today_description": {
+        "name": "Description de l'entraînement aujourd'hui"
+      },
+      "planned_tomorrow_name": {
+        "name": "Entraînement prévu demain"
+      },
+      "planned_tomorrow_sport": {
+        "name": "Sport prévu demain"
+      },
+      "planned_tomorrow_start": {
+        "name": "Heure de l'entraînement demain"
+      },
+      "planned_tomorrow_duration": {
+        "name": "Durée prévue demain"
+      },
+      "planned_tomorrow_load": {
+        "name": "Charge prévue demain"
+      },
+      "planned_tomorrow_description": {
+        "name": "Description de l'entraînement demain"
+      },
+      "record_distance": {
+        "name": "Record de distance (365 jours)"
+      },
+      "record_duration": {
+        "name": "Record de durée (365 jours)"
+      },
+      "record_elevation": {
+        "name": "Record de dénivelé positif (365 jours)"
+      },
+      "record_load": {
+        "name": "Record de charge d’entraînement (365 jours)"
+      },
+      "record_calories": {
+        "name": "Record de calories (365 jours)"
+      },
+      "record_max_power": {
+        "name": "Record de puissance maximale (365 jours)"
+      },
+      "record_average_power": {
+        "name": "Record de puissance moyenne (365 jours)"
+      },
+      "record_max_hr": {
+        "name": "Record de fréquence cardiaque maximale (365 jours)"
+      },
+      "record_average_speed": {
+        "name": "Record de vitesse moyenne (365 jours)"
+      },
+      "record_ftp": {
+        "name": "Record FTP (365 jours)"
+      },
+      "record_eftp": {
+        "name": "Record eFTP (365 jours)"
+      },
+      "hrv": {
+        "name": "VFC"
+      },
+      "recovery_score": {
+        "name": "Score de récupération"
+      },
+      "ramp_rate": {
+        "name": "Taux de progression"
+      },
+      "load_42_days": {
+        "name": "Charge d’entraînement sur 42 jours"
+      },
+      "activities_42_days": {
+        "name": "Activités sur 42 jours"
+      },
+      "duration_42_days": {
+        "name": "Durée sur 42 jours"
+      },
+      "training_streak": {
+        "name": "Série de jours d’entraînement"
+      },
+      "next_workout_name": {
+        "name": "Prochaine séance planifiée"
+      },
+      "next_workout_sport": {
+        "name": "Sport de la prochaine séance"
+      },
+      "next_workout_start": {
+        "name": "Début de la prochaine séance"
+      },
+      "next_workout_duration": {
+        "name": "Durée de la prochaine séance"
+      },
+      "next_workout_load": {
+        "name": "Charge de la prochaine séance"
+      },
+      "next_workout_description": {
+        "name": "Description de la prochaine séance"
+      },
+      "distance_42_days": {
+        "name": "Distance sur 42 jours"
+      },
+      "calories_42_days": {
+        "name": "Calories sur 42 jours"
+      },
+      "elevation_42_days": {
+        "name": "Dénivelé sur 42 jours"
+      },
+      "previous_week_activities": {
+        "name": "Activités des 7 jours précédents"
+      },
+      "previous_week_duration": {
+        "name": "Durée des 7 jours précédents"
+      },
+      "previous_week_load": {
+        "name": "Charge des 7 jours précédents"
+      },
+      "acute_chronic_ratio": {
+        "name": "Ratio de charge aiguë chronique"
+      },
+      "load_change_percent": {
+        "name": "Évolution de la charge"
+      },
+      "duration_change_percent": {
+        "name": "Évolution de la durée"
+      },
+      "average_daily_load_7_days": {
+        "name": "Charge quotidienne moyenne sur 7 jours"
+      },
+      "average_daily_load_42_days": {
+        "name": "Charge quotidienne moyenne sur 42 jours"
+      },
+      "average_weekly_load_42_days": {
+        "name": "Charge hebdomadaire moyenne sur 42 jours"
+      },
+      "average_weekly_duration_42_days": {
+        "name": "Durée hebdomadaire moyenne sur 42 jours"
+      },
+      "average_activities_per_week_42_days": {
+        "name": "Nombre moyen d’activités par semaine sur 42 jours"
+      },
+      "longest_training_streak_42_days": {
+        "name": "Plus longue série d’entraînement sur 42 jours"
+      },
+      "days_since_training": {
+        "name": "Jours depuis le dernier entraînement"
+      },
+      "training_days_42_days": {
+        "name": "Jours d’entraînement sur 42 jours"
+      },
+      "rest_days_42_days": {
+        "name": "Jours de repos sur 42 jours"
+      },
+      "main_sport_42_days": {
+        "name": "Sport principal sur 42 jours"
+      },
+      "weekly_hrss": {
+        "name": "HRSS sur 7 jours"
+      },
+      "weekly_trimp": {
+        "name": "TRIMP sur 7 jours"
+      },
+      "forty_two_days_hrss": {
+        "name": "HRSS sur 42 jours"
+      },
+      "forty_two_days_trimp": {
+        "name": "TRIMP sur 42 jours"
+      },
+      "previous_month_load": {
+        "name": "Charge des 30 jours précédents"
+      },
+      "previous_month_duration": {
+        "name": "Durée des 30 jours précédents"
+      },
+      "monthly_load_change_percent": {
+        "name": "Évolution de la charge sur 30 jours"
+      },
+      "monthly_duration_change_percent": {
+        "name": "Évolution de la durée sur 30 jours"
+      },
+      "sport_count_42_days": {
+        "name": "Nombre de sports sur 42 jours"
+      },
+      "load_trend": {
+        "name": "Tendance de charge sur 7 jours"
+      },
+      "monthly_load_trend": {
+        "name": "Tendance de charge sur 30 jours"
+      },
+      "record_power_5s": {
+        "name": "Meilleure puissance sur 5 secondes"
+      },
+      "record_power_1m": {
+        "name": "Meilleure puissance sur 1 minute"
+      },
+      "record_power_5m": {
+        "name": "Meilleure puissance sur 5 minutes"
+      },
+      "record_power_20m": {
+        "name": "Meilleure puissance sur 20 minutes"
+      },
+      "record_power_1h": {
+        "name": "Meilleure puissance sur 1 heure"
+      },
+      "ctl_load": {
+        "name": "Charge CTL"
+      },
+      "atl_load": {
+        "name": "Charge ATL"
+      },
+      "eftp": {
+        "name": "FTP estimée"
+      },
+      "sleep_score": {
+        "name": "Score de sommeil"
+      },
+      "official_ctl_average_7_days": {
+        "name": "Moyenne CTL officielle sur 7 jours"
+      },
+      "official_ctl_average_30_days": {
+        "name": "Moyenne CTL officielle sur 30 jours"
+      },
+      "official_atl_average_7_days": {
+        "name": "Moyenne ATL officielle sur 7 jours"
+      },
+      "official_atl_average_30_days": {
+        "name": "Moyenne ATL officielle sur 30 jours"
+      },
+      "official_eftp_change_7_days": {
+        "name": "Évolution eFTP officielle sur 7 jours"
+      },
+      "official_eftp_change_30_days": {
+        "name": "Évolution eFTP officielle sur 30 jours"
+      },
+      "wellness_record_count": {
+        "name": "Relevés Wellness chargés"
+      },
+      "hr_zone_total_60_days": {
+        "name": "Temps en zones cardiaques sur 60 jours"
+      },
+      "power_zone_total_60_days": {
+        "name": "Temps en zones de puissance sur 60 jours"
+      },
+      "activities_90_days": {
+        "name": "Activités (90 jours)"
+      },
+      "training_days_90_days": {
+        "name": "Jours d’entraînement (90 jours)"
+      },
+      "duration_90_days": {
+        "name": "Durée (90 jours)"
+      },
+      "load_90_days": {
+        "name": "Charge d’entraînement (90 jours)"
+      },
+      "average_weekly_load_90_days": {
+        "name": "Charge hebdomadaire moyenne (90 jours)"
+      },
+      "activity_data_completeness_percent": {
+        "name": "Complétude des données d’activité"
+      },
+      "training_status": {
+        "name": "État d'entraînement"
+      },
+      "readiness_score": {
+        "name": "Score de préparation"
+      },
+      "readiness_level": {
+        "name": "Niveau de préparation"
+      },
+      "readiness_fatigue_level": {
+        "name": "Niveau de fatigue"
+      },
+      "readiness_load_trend": {
+        "name": "Tendance de charge"
+      },
+      "readiness_recovery_hours": {
+        "name": "Temps de récupération restant"
+      },
+      "atlas_coach": {
+        "name": "Coach Atlas"
+      }
+    },
+    "binary_sensor": {
+      "positive_form": {
+        "name": "Forme positive"
+      },
+      "high_fatigue": {
+        "name": "Fatigue élevée"
+      },
+      "planned_today": {
+        "name": "Entraînement prévu aujourd'hui"
+      },
+      "planned_tomorrow": {
+        "name": "Entraînement prévu demain"
+      }
+    }
+  }
+}
