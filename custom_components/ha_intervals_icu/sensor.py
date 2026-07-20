@@ -29,6 +29,7 @@ from homeassistant.const import (
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
+from homeassistant.util import slugify
 
 from .atlas import (
     ATLAS_COACH_KEY,
@@ -43,6 +44,16 @@ from .const import DOMAIN
 from .entity import IntervalsICUEntity
 
 LOGGER = logging.getLogger(__name__)
+
+
+def _atlas_suggested_object_id(
+    athlete_id: str,
+    athlete_name: str | None,
+    suffix: str,
+) -> str:
+    """Return a stable, language-independent object ID for an Atlas entity."""
+    athlete_slug = slugify(athlete_name or athlete_id)
+    return f"{athlete_slug}_{suffix}"
 
 
 @lru_cache(maxsize=1)
@@ -1695,18 +1706,6 @@ async def async_setup_entry(
         )
     )
 
-    LOGGER.warning("========== HA_INTERVALS_ICU ENTITIES ==========")
-    LOGGER.warning("HA_INTERVALS_ICU: %s entities prepared", len(entities))
-    for entity in entities:
-        LOGGER.warning(
-            "CLASS=%s | UNIQUE_ID=%s | NAME=%s | TRANSLATION=%s",
-            entity.__class__.__name__,
-            getattr(entity, "_attr_unique_id", None),
-            getattr(entity, "_attr_name", None),
-            getattr(entity, "_attr_translation_key", None),
-        )
-    LOGGER.warning("===============================================")
-
     async_add_entities(entities)
 
 
@@ -1812,6 +1811,9 @@ class IntervalsICUTrainingStatusSensor(
         """Initialize the Atlas training status sensor."""
         super().__init__(coordinator, athlete_id, athlete_name)
         self._attr_unique_id = f"{DOMAIN}_{athlete_id}_training_status"
+        self._attr_suggested_object_id = _atlas_suggested_object_id(
+            athlete_id, athlete_name, "training_status"
+        )
 
     @property
     def _status(self) -> TrainingStatus:
@@ -1859,6 +1861,16 @@ class IntervalsICUReadinessSensor(
         super().__init__(coordinator, athlete_id, athlete_name)
         self._kind = kind
         self._attr_unique_id = f"{DOMAIN}_{athlete_id}_readiness_{kind}"
+        suggested_suffix = {
+            "score": "readiness_score",
+            "level": "readiness_level",
+            "fatigue_level": "fatigue_level",
+            "load_trend": "load_trend",
+            "recovery_hours": "recovery_hours",
+        }[kind]
+        self._attr_suggested_object_id = _atlas_suggested_object_id(
+            athlete_id, athlete_name, suggested_suffix
+        )
         self._attr_translation_key = f"readiness_{kind}"
 
         if kind == "score":
@@ -1925,6 +1937,9 @@ class IntervalsICUCoachSensor(
         """Initialize the Atlas coach sensor."""
         super().__init__(coordinator, athlete_id, athlete_name)
         self._attr_unique_id = f"{DOMAIN}_{athlete_id}_atlas_coach"
+        self._attr_suggested_object_id = _atlas_suggested_object_id(
+            athlete_id, athlete_name, "atlas_coach"
+        )
 
     @property
     def _payload(self) -> dict[str, Any]:
@@ -1962,6 +1977,9 @@ class IntervalsICUDashboardSensor(
 
         super().__init__(coordinator, athlete_id, athlete_name)
         self._attr_unique_id = f"{DOMAIN}_{athlete_id}_dashboard"
+        self._attr_suggested_object_id = _atlas_suggested_object_id(
+            athlete_id, athlete_name, "dashboard"
+        )
 
     @property
     def native_value(self) -> str:
@@ -1988,6 +2006,9 @@ class IntervalsICUStatisticsDashboardSensor(
     def __init__(self, coordinator, athlete_id: str, athlete_name: str | None) -> None:
         super().__init__(coordinator, athlete_id, athlete_name)
         self._attr_unique_id = f"{DOMAIN}_{athlete_id}_statistics_dashboard"
+        self._attr_suggested_object_id = _atlas_suggested_object_id(
+            athlete_id, athlete_name, "statistics_dashboard"
+        )
 
     @property
     def native_value(self) -> str:
