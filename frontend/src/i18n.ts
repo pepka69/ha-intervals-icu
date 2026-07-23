@@ -191,6 +191,10 @@ export function t(
 }
 
 const VALUES_FR: Record<string, string> = {
+  overview: "Vue d’ensemble",
+  training_load: "Charge d’entraînement",
+  sleep: "Sommeil",
+  sport_mix: "Répartition des sports",
   moderate: "Modérée",
   low: "Faible",
   very_low: "Très faible",

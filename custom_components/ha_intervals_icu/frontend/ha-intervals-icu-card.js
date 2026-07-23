@@ -65,7 +65,7 @@ const { is: ot, defineProperty: nt, getOwnPropertyDescriptor: lt, getOwnProperty
   return i;
 } }, pe = (t, e) => !ot(t, e), we = { attribute: !0, type: String, converter: Z, reflect: !1, useDefault: !1, hasChanged: pe };
 Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), Q.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-let R = class extends HTMLElement {
+let T = class extends HTMLElement {
   static addInitializer(e) {
     this._$Ei(), (this.l ??= []).push(e);
   }
@@ -246,10 +246,10 @@ let R = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-R.elementStyles = [], R.shadowRootOptions = { mode: "open" }, R[D("elementProperties")] = /* @__PURE__ */ new Map(), R[D("finalized")] = /* @__PURE__ */ new Map(), ut?.({ ReactiveElement: R }), (Q.reactiveElementVersions ??= []).push("2.1.2");
+T.elementStyles = [], T.shadowRootOptions = { mode: "open" }, T[D("elementProperties")] = /* @__PURE__ */ new Map(), T[D("finalized")] = /* @__PURE__ */ new Map(), ut?.({ ReactiveElement: T }), (Q.reactiveElementVersions ??= []).push("2.1.2");
 const ue = globalThis, ke = (t) => t, Y = ue.trustedTypes, Ae = Y ? Y.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, De = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, je = "?" + $, gt = `<${je}>`, C = document, j = () => C.createComment(""), I = (t) => t === null || typeof t != "object" && typeof t != "function", ge = Array.isArray, mt = (t) => ge(t) || typeof t?.[Symbol.iterator] == "function", ae = `[ 	
 \f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Se = /-->/g, Ce = />/g, A = RegExp(`>|${ae}(?:([^\\s"'>=/]+)(${ae}*=${ae}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Ee = /'/g, Te = /"/g, Ie = /^(?:script|style|textarea|title)$/i, Ue = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), c = Ue(1), oe = Ue(2), M = /* @__PURE__ */ Symbol.for("lit-noChange"), p = /* @__PURE__ */ Symbol.for("lit-nothing"), Re = /* @__PURE__ */ new WeakMap(), S = C.createTreeWalker(C, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Ee = /'/g, Re = /"/g, Ie = /^(?:script|style|textarea|title)$/i, Ue = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), c = Ue(1), oe = Ue(2), M = /* @__PURE__ */ Symbol.for("lit-noChange"), p = /* @__PURE__ */ Symbol.for("lit-nothing"), Te = /* @__PURE__ */ new WeakMap(), S = C.createTreeWalker(C, 129);
 function He(t, e) {
   if (!ge(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Ae !== void 0 ? Ae.createHTML(e) : e;
@@ -260,7 +260,7 @@ const ft = (t, e) => {
   for (let n = 0; n < i; n++) {
     const d = t[n];
     let f, v, u = -1, h = 0;
-    for (; h < d.length && (o.lastIndex = h, v = o.exec(d), v !== null); ) h = o.lastIndex, o === z ? v[1] === "!--" ? o = Se : v[1] !== void 0 ? o = Ce : v[2] !== void 0 ? (Ie.test(v[2]) && (a = RegExp("</" + v[2], "g")), o = A) : v[3] !== void 0 && (o = A) : o === A ? v[0] === ">" ? (o = a ?? z, u = -1) : v[1] === void 0 ? u = -2 : (u = o.lastIndex - v[2].length, f = v[1], o = v[3] === void 0 ? A : v[3] === '"' ? Te : Ee) : o === Te || o === Ee ? o = A : o === Se || o === Ce ? o = z : (o = A, a = void 0);
+    for (; h < d.length && (o.lastIndex = h, v = o.exec(d), v !== null); ) h = o.lastIndex, o === z ? v[1] === "!--" ? o = Se : v[1] !== void 0 ? o = Ce : v[2] !== void 0 ? (Ie.test(v[2]) && (a = RegExp("</" + v[2], "g")), o = A) : v[3] !== void 0 && (o = A) : o === A ? v[0] === ">" ? (o = a ?? z, u = -1) : v[1] === void 0 ? u = -2 : (u = o.lastIndex - v[2].length, f = v[1], o = v[3] === void 0 ? A : v[3] === '"' ? Re : Ee) : o === Re || o === Ee ? o = A : o === Se || o === Ce ? o = z : (o = A, a = void 0);
     const y = o === A && t[n + 1].startsWith("/>") ? " " : "";
     r += o === z ? d + gt : u >= 0 ? (s.push(f), d.slice(0, u) + De + d.slice(u) + $ + y) : d + $ + (u === -2 ? n : y);
   }
@@ -376,8 +376,8 @@ class F {
     }
   }
   _$AC(e) {
-    let i = Re.get(e.strings);
-    return i === void 0 && Re.set(e.strings, i = new U(e)), i;
+    let i = Te.get(e.strings);
+    return i === void 0 && Te.set(e.strings, i = new U(e)), i;
   }
   k(e) {
     ge(this._$AH) || (this._$AH = [], this._$AR());
@@ -473,7 +473,7 @@ const wt = (t, e, i) => {
   return a._$AI(t), a;
 };
 const me = globalThis;
-class x extends R {
+class x extends T {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -531,7 +531,7 @@ function V(t) {
     return a.constructor.createProperty(r, s), o ? Object.getOwnPropertyDescriptor(a, r) : void 0;
   })(t, e, i);
 }
-function T(t) {
+function R(t) {
   return V({ ...t, state: !0, attribute: !1 });
 }
 const Le = he`
@@ -661,14 +661,14 @@ function Et(t, e) {
   const i = (e ?? "s").trim().toLowerCase();
   return ["ms", "millisecond", "milliseconds"].includes(i) ? t / 1e3 : ["min", "minute", "minutes"].includes(i) ? t * 60 : ["h", "hr", "hour", "hours"].includes(i) ? t * 3600 : ["d", "day", "days"].includes(i) ? t * 86400 : t;
 }
-function Tt(t, e) {
+function Rt(t, e) {
   const i = Math.max(
     0,
     Math.round(Et(t, e))
   ), s = Math.floor(i / 86400), a = Math.floor(i % 86400 / 3600), r = Math.floor(i % 3600 / 60), o = i % 60, n = [];
   return s > 0 && n.push(`${s} j`), a > 0 && n.push(`${a} h`), r > 0 && n.push(`${r} min`), o > 0 && s === 0 && a === 0 && n.push(`${o} s`), n.length > 0 ? n.join(" ") : "0 s";
 }
-function Rt(t) {
+function Tt(t) {
   const e = Fe[t];
   if (e)
     return e;
@@ -722,10 +722,10 @@ function _(t, e, i = "—") {
   if (Mt(e)) {
     const s = Number(e.state);
     if (Number.isFinite(s))
-      return Tt(s, e.attributes.unit_of_measurement);
+      return Rt(s, e.attributes.unit_of_measurement);
   }
   if (Ot(e))
-    return Rt(e.state);
+    return Tt(e.state);
   try {
     return t.formatEntityState?.(e) ?? `${e.state}${e.attributes.unit_of_measurement ? ` ${e.attributes.unit_of_measurement}` : ""}`;
   } catch {
@@ -936,6 +936,10 @@ function l(t, e, i = {}) {
   return s;
 }
 const jt = {
+  overview: "Vue d’ensemble",
+  training_load: "Charge d’entraînement",
+  sleep: "Sommeil",
+  sport_mix: "Répartition des sports",
   moderate: "Modérée",
   low: "Faible",
   very_low: "Très faible",
@@ -1367,7 +1371,7 @@ fe([
   V({ attribute: !1 })
 ], L.prototype, "hass", 2);
 fe([
-  T()
+  R()
 ], L.prototype, "config", 2);
 L = fe([
   ee("ha-intervals-icu-card-editor")
@@ -1815,10 +1819,10 @@ ie([
   V({ attribute: !1 })
 ], P.prototype, "hass", 2);
 ie([
-  T()
+  R()
 ], P.prototype, "config", 2);
 ie([
-  T()
+  R()
 ], P.prototype, "refreshing", 2);
 P = ie([
   ee("ha-intervals-icu-card")
@@ -1986,7 +1990,7 @@ w([
   V({ attribute: !1 })
 ], q.prototype, "hass", 2);
 w([
-  T()
+  R()
 ], q.prototype, "config", 2);
 q = w([
   ee("ha-intervals-icu-statistics-card-editor")
@@ -2095,13 +2099,13 @@ w([
   V({ attribute: !1 })
 ], E.prototype, "hass", 2);
 w([
-  T()
+  R()
 ], E.prototype, "config", 2);
 w([
-  T()
+  R()
 ], E.prototype, "period", 2);
 w([
-  T()
+  R()
 ], E.prototype, "section", 2);
 E = w([
   ee("ha-intervals-icu-statistics-card")
