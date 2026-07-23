@@ -19,8 +19,8 @@ def test_atlas_dashboard_is_enabled_and_discoverable() -> None:
     assert 't(hass, "atlas_coach")' in card
 
     # English fallback translations must remain available.
-    assert 'atlas_readiness:"Atlas Readiness"' in translations
-    assert 'atlas_coach:"Atlas Coach"' in translations
+    assert 'atlas_readiness: "Atlas Readiness"' in translations
+    assert 'atlas_coach: "Atlas Coach"' in translations
 
     # Atlas entities must still be exposed.
     assert "readinessScore" in entities

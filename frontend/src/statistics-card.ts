@@ -15,13 +15,13 @@ type Dict = Record<string, any>;
 @customElement("ha-intervals-icu-statistics-card-editor")
 export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
-  @state() private config?: StatsConfig;
+  @state() private config?: StatistiquesConfig;
 
-  public setConfig(config: StatsConfig): void {
+  public setConfig(config: StatistiquesConfig): void {
     this.config = { ...config };
   }
 
-  private emitConfig(config: StatsConfig): void {
+  private emitConfig(config: StatistiquesConfig): void {
     this.config = config;
 
     this.dispatchEvent(
@@ -34,7 +34,7 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
   }
 
   private change(
-    field: keyof StatsConfig,
+    field: keyof StatistiquesConfig,
     value: string
   ): void {
     const config = { ...this.config! };
@@ -99,7 +99,7 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
     return html`
       <div class="statistics-editor">
         <label>
-          <span>Athlète / appareil</span>
+          <span>${t(this.hass, "athlete_device")}</span>
 
           <select
             .value=${selectedDeviceId}
@@ -108,7 +108,7 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
                 (event.target as HTMLSelectElement).value
               )}
           >
-            <option value="">Sélectionner un athlète</option>
+            <option value="">${t(this.hass, "select_athlete")}</option>
 
             ${devices.map(
               (device) => html`
@@ -122,15 +122,12 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
 
         ${devices.length === 0
           ? html`
-              <p>
-                Aucun appareil Intervals.icu détecté. Recharge Home
-                Assistant après avoir configuré l’intégration.
-              </p>
+              <p>${t(this.hass, "no_intervals_device")}</p>
             `
           : nothing}
 
         <label>
-          <span>Titre</span>
+          <span>${t(this.hass, "title")}</span>
 
           <input
             type="text"
@@ -144,7 +141,7 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
         </label>
 
         <label>
-          <span>Période par défaut</span>
+          <span>${t(this.hass, "default_period")}</span>
 
           <select
             .value=${this.config.default_period ?? "30_days"}
@@ -154,15 +151,15 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
                 (event.target as HTMLSelectElement).value
               )}
           >
-            <option value="7_days">7 jours</option>
-            <option value="30_days">30 jours</option>
-            <option value="90_days">90 jours</option>
-            <option value="365_days">365 jours</option>
+            <option value="7_days">${t(this.hass, "period_7_days")}</option>
+            <option value="30_days">${t(this.hass, "period_30_days")}</option>
+            <option value="90_days">${t(this.hass, "period_90_days")}</option>
+            <option value="365_days">${t(this.hass, "period_365_days")}</option>
           </select>
         </label>
 
         <label>
-          <span>Entité Statistiques</span>
+          <span>${t(this.hass, "statistics_entity")}</span>
 
           <select
             .value=${this.config.entity ?? ""}
@@ -173,7 +170,7 @@ export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
               )}
           >
             <option value="">
-              Détection automatique pour cet athlète
+              ${t(this.hass, "automatic_athlete_detection")}
             </option>
 
             ${dashboardEntities.map(
@@ -305,7 +302,7 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
   private sports(data: Dict) {
     const sports = data.sports?.[this.period] ?? {};
     return html`<div class="table">${Object.entries(sports).map(([sport, row]: [string, any]) => html`
-      <div class="row"><strong>${translateSportName(this.hass, sport)}</strong><span>${this.number(row.activities, 0)} act.</span><span>${this.number(row.duration_hours)} h</span><span>${this.number(row.distance_km)} km</span><span>${t(this.hass, "load")} ${this.number(row.load)}</span></div>`)}
+      <div class="row"><strong>${translateSportName(this.hass, sport)}</strong><span>${this.number(row.activities, 0)} ${t(this.hass, "activity_short")}</span><span>${this.number(row.duration_hours)} h</span><span>${this.number(row.distance_km)} km</span><span>${t(this.hass, "load")} ${this.number(row.load)}</span></div>`)}
       ${Object.keys(sports).length ? nothing : html`<div class="empty">${t(this.hass, "no_sport_data")}</div>`}
     </div>`;
   }
@@ -339,7 +336,7 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     if (!this.hass || !this.config) return nothing;
     const data = this.attrs();
     const content = this.section === "sports" ? this.sports(data) : this.section === "records" ? this.records(data) : this.section === "trends" ? this.trends(data) : this.section === "quality" ? this.quality(data) : this.overview(data);
-    return html`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${t(this.hass, "statistics_trends")}</span></div></div><nav>${(["7_days","30_days","90_days","365_days"] as Period[]).map(p => html`<button class=${this.period === p ? "active" : ""} @click=${() => this.period = p}>${p.replace("_days", "d")}</button>`)}</nav></header>
+    return html`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${t(this.hass, "statistics_trends")}</span></div></div><nav>${(["7_days","30_days","90_days","365_days"] as Period[]).map(p => html`<button class=${this.period === p ? "active" : ""} @click=${() => this.period = p}>${p.replace("_days", t(this.hass, "day_short"))}</button>`)}</nav></header>
       <div class="tabs">${["overview","sports","records","trends","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${t(this.hass, tab)}</button>`)}</div>
       <section>${content}</section></div></ha-card>`;
   }
