@@ -927,7 +927,7 @@ const Dt = {
   day_short: "d"
 };
 function te(t) {
-  return (t?.locale?.language ?? "en").toLowerCase().startsWith("fr") ? "fr" : "en";
+  return (t?.locale?.language ?? t?.language ?? navigator.language ?? "en").toLowerCase().startsWith("fr") ? "fr" : "en";
 }
 function l(t, e, i = {}) {
   let s = (te(t) === "fr" ? Dt : Pe)[e] ?? Pe[e] ?? e;

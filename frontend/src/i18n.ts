@@ -167,9 +167,13 @@ const EN: Record<string, string> = {
 };
 
 export function locale(hass?: HomeAssistant): "fr" | "en" {
-  return (hass?.locale?.language ?? "en").toLowerCase().startsWith("fr")
-    ? "fr"
-    : "en";
+  const language =
+    hass?.locale?.language ??
+    (hass as (HomeAssistant & { language?: string }) | undefined)?.language ??
+    navigator.language ??
+    "en";
+
+  return language.toLowerCase().startsWith("fr") ? "fr" : "en";
 }
 
 export function t(
