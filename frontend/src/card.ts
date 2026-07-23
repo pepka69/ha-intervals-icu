@@ -8,10 +8,10 @@ import {
   getState,
   historyValues,
   numericValue,
-  relativeTime
 } from "./entities";
 import { gauge, historyChart } from "./graph";
 import { translateSportType } from "./sport-translations";
+import { relativeTimeLocalized, t, translateDynamicText, translateValue } from "./i18n";
 import type {
   CardConfig,
   HassEntity,
@@ -26,23 +26,23 @@ const HEALTH_METRICS: Array<{
   icon: string;
   defaultShow: boolean;
 }> = [
-  { key: "weight", label: "Poids", icon: "mdi:scale-bathroom", defaultShow: true },
-  { key: "body_fat", label: "Graisse corporelle", icon: "mdi:percent-outline", defaultShow: false },
-  { key: "muscle_mass", label: "Masse musculaire", icon: "mdi:arm-flex", defaultShow: false },
-  { key: "bone_mass", label: "Masse osseuse", icon: "mdi:bone", defaultShow: false },
-  { key: "body_water", label: "Eau corporelle", icon: "mdi:water-percent", defaultShow: false },
-  { key: "visceral_fat", label: "Graisse viscérale", icon: "mdi:human-male", defaultShow: false },
-  { key: "bmi", label: "IMC", icon: "mdi:human", defaultShow: false },
-  { key: "metabolic_age", label: "Âge métabolique", icon: "mdi:calendar-heart", defaultShow: false },
-  { key: "resting_hr", label: "FC au repos", icon: "mdi:heart-pulse", defaultShow: false },
+  { key: "weight", label: "weight", icon: "mdi:scale-bathroom", defaultShow: true },
+  { key: "body_fat", label: "body_fat", icon: "mdi:percent-outline", defaultShow: false },
+  { key: "muscle_mass", label: "muscle_mass", icon: "mdi:arm-flex", defaultShow: false },
+  { key: "bone_mass", label: "bone_mass", icon: "mdi:bone", defaultShow: false },
+  { key: "body_water", label: "body_water", icon: "mdi:water-percent", defaultShow: false },
+  { key: "visceral_fat", label: "visceral_fat", icon: "mdi:human-male", defaultShow: false },
+  { key: "bmi", label: "bmi", icon: "mdi:human", defaultShow: false },
+  { key: "metabolic_age", label: "metabolic_age", icon: "mdi:calendar-heart", defaultShow: false },
+  { key: "resting_hr", label: "resting_hr", icon: "mdi:heart-pulse", defaultShow: false },
   { key: "hrv", label: "HRV", icon: "mdi:heart-flash", defaultShow: false },
-  { key: "sleep", label: "Sommeil", icon: "mdi:sleep", defaultShow: false },
+  { key: "sleep", label: "sleep", icon: "mdi:sleep", defaultShow: false },
   { key: "vo2max", label: "VO₂max", icon: "mdi:lungs", defaultShow: false },
-  { key: "blood_oxygen", label: "Oxygène sanguin", icon: "mdi:water-plus-outline", defaultShow: false },
-  { key: "respiration_rate", label: "Respiration", icon: "mdi:weather-windy", defaultShow: false },
-  { key: "body_temperature", label: "Température", icon: "mdi:thermometer", defaultShow: false },
+  { key: "blood_oxygen", label: "blood_oxygen", icon: "mdi:water-plus-outline", defaultShow: false },
+  { key: "respiration_rate", label: "respiration_rate", icon: "mdi:weather-windy", defaultShow: false },
+  { key: "body_temperature", label: "body_temperature", icon: "mdi:thermometer", defaultShow: false },
   { key: "stress", label: "Stress", icon: "mdi:head-heart-outline", defaultShow: false },
-  { key: "daily_calories", label: "Calories quotidiennes", icon: "mdi:fire", defaultShow: false }
+  { key: "daily_calories", label: "daily_calories", icon: "mdi:fire", defaultShow: false }
 ];
 
 @customElement("ha-intervals-icu-card")
@@ -337,9 +337,10 @@ export class HaIntervalsIcuCard extends LitElement {
     );
 
     const lastNameText = formatState(hass, last);
-    const lastTypeText = translateSportType(formatState(hass, lastType, "Activité"));
+    const activityFallback = t(hass, "activity");
+    const lastTypeText = translateSportType(formatState(hass, lastType, activityFallback), activityFallback, hass);
     const showLastType =
-      lastTypeText !== "Activité" &&
+      lastTypeText !== activityFallback &&
       lastTypeText.trim().toLowerCase() !==
         lastNameText.trim().toLowerCase();
 
@@ -349,7 +350,7 @@ export class HaIntervalsIcuCard extends LitElement {
       visible: this.healthVisible(metric.key, metric.defaultShow)
     })).filter((metric) => metric.visible && metric.state);
 
-    const sync = relativeTime(
+    const sync = relativeTimeLocalized(hass, 
       fitness?.last_updated ?? fitness?.last_changed
     );
 
@@ -374,7 +375,7 @@ export class HaIntervalsIcuCard extends LitElement {
               ? html`<div class="sync"><span class="dot ${sync.level}"></span>${sync.label}</div>`
               : nothing}
             ${this.config.show_refresh_button !== false
-              ? html`<button class="refresh" title="Actualiser" @click=${() => this.refresh()}>
+              ? html`<button class="refresh" title=${t(hass, "refresh")} @click=${() => this.refresh()}>
                   <ha-icon class=${this.refreshing ? "spinning" : ""} icon="mdi:refresh"></ha-icon>
                 </button>`
               : nothing}
@@ -385,28 +386,28 @@ export class HaIntervalsIcuCard extends LitElement {
           ? html`<section class="atlas-panel">
               <article class="atlas-readiness">
                 <div class="section-title">
-                  <ha-icon icon="mdi:gauge"></ha-icon><span>Atlas Readiness</span>
+                  <ha-icon icon="mdi:gauge"></ha-icon><span>${t(hass, "atlas_readiness")}</span>
                 </div>
                 <div class="atlas-score">
                   <strong>${formatState(hass, readinessScore)}</strong>
-                  <span>${formatState(hass, readinessLevel, "Indisponible")}</span>
+                  <span>${translateValue(hass, formatState(hass, readinessLevel, t(hass, "unavailable")))}</span>
                 </div>
                 <div class="atlas-meta">
-                  <span><ha-icon icon="mdi:timer-sand"></ha-icon>Récupération ${formatState(hass, readinessRecovery)}</span>
-                  <span><ha-icon icon=${trainingStatus?.attributes.icon as string || "mdi:chart-timeline-variant-shimmer"}></ha-icon>${formatState(hass, trainingStatus, "Statut inconnu")}</span>
+                  <span><ha-icon icon="mdi:timer-sand"></ha-icon>${t(hass, "recovery")} ${formatState(hass, readinessRecovery)}</span>
+                  <span><ha-icon icon=${trainingStatus?.attributes.icon as string || "mdi:chart-timeline-variant-shimmer"}></ha-icon>${translateValue(hass, formatState(hass, trainingStatus, t(hass, "unknown_status")))}</span>
                 </div>
               </article>
               <article class="atlas-coach">
                 <div class="section-title">
-                  <ha-icon icon="mdi:account-heart-outline"></ha-icon><span>Atlas Coach</span>
+                  <ha-icon icon="mdi:account-heart-outline"></ha-icon><span>${t(hass, "atlas_coach")}</span>
                 </div>
-                <h3>${formatState(hass, atlasCoach, "Aucune recommandation")}</h3>
+                <h3>${translateValue(hass, formatState(hass, atlasCoach, t(hass, "no_recommendation")))}</h3>
                 ${atlasCoach?.attributes.recommendation
-                  ? html`<p>${String(atlasCoach.attributes.recommendation)}</p>`
+                  ? html`<p>${translateDynamicText(hass, atlasCoach.attributes.recommendation)}</p>`
                   : nothing}
                 <div class="atlas-chips">
                   ${atlasCoach?.attributes.intensity
-                    ? html`<span>${String(atlasCoach.attributes.intensity)}</span>`
+                    ? html`<span>${translateValue(hass, atlasCoach.attributes.intensity)}</span>`
                     : nothing}
                   ${atlasCoach?.attributes.duration_minutes
                     ? html`<span>${String(atlasCoach.attributes.duration_minutes)} min</span>`
@@ -420,36 +421,36 @@ export class HaIntervalsIcuCard extends LitElement {
           : nothing}
 
         <section class="metrics">
-          ${this.metric("FITNESS", "CTL", "fitness", fitness)}
-          ${this.metric("FATIGUE", "ATL", "fatigue", fatigue)}
-          ${this.metric("FORME", "TSB", "form", form)}
+          ${this.metric(t(hass, "fitness"), "CTL", "fitness", fitness)}
+          ${this.metric(t(hass, "fatigue"), "ATL", "fatigue", fatigue)}
+          ${this.metric(t(hass, "form"), "TSB", "form", form)}
         </section>
 
         <section class="quick-stats">
           ${this.quickStat("mdi:bike-fast", "FTP", ftp)}
-          ${this.quickStat("mdi:chart-areaspline", "Charge 7 j", weeklyLoad)}
-          ${this.quickStat("mdi:calendar-check", "Activités 7 j", weeklyActivities)}
+          ${this.quickStat("mdi:chart-areaspline", t(hass, "load_7d"), weeklyLoad)}
+          ${this.quickStat("mdi:calendar-check", t(hass, "activities_7d"), weeklyActivities)}
         </section>
 
         ${this.config.show_history !== false
           ? html`<section class="section chart-section">
               <div class="section-title">
                 <ha-icon icon="mdi:chart-line"></ha-icon
-                ><span>Évolution</span>
+                ><span>${t(hass, "evolution")}</span>
               </div>
               ${historyChart([
                 {
-                  label: "Fitness",
+                  label: t(hass, "fitness"),
                   values: historyValues(fitness),
                   className: "fitness-line"
                 },
                 {
-                  label: "Fatigue",
+                  label: t(hass, "fatigue"),
                   values: historyValues(fatigue),
                   className: "fatigue-line"
                 },
                 {
-                  label: "Forme",
+                  label: t(hass, "form"),
                   values: historyValues(form),
                   className: "form-line"
                 }
@@ -461,7 +462,7 @@ export class HaIntervalsIcuCard extends LitElement {
           ? html`<section class="section health-section">
               <div class="section-title">
                 <ha-icon icon="mdi:heart-pulse"></ha-icon>
-                <span>Santé et composition corporelle</span>
+                <span>${t(hass, "health")}</span>
               </div>
               <div class="health-grid">
                 ${healthItems.map(
@@ -469,7 +470,7 @@ export class HaIntervalsIcuCard extends LitElement {
                     <div class="health-item">
                       <ha-icon icon=${metric.icon}></ha-icon>
                       <div>
-                        <span>${metric.label}</span>
+                        <span>${t(hass, metric.label)}</span>
                         <strong>${formatState(hass, metric.state)}</strong>
                       </div>
                     </div>
@@ -484,24 +485,24 @@ export class HaIntervalsIcuCard extends LitElement {
             ? html`<article class="feature workout spotlight">
                 <div class="section-title">
                   <ha-icon icon="mdi:calendar-today"></ha-icon
-                  ><span>Aujourd’hui</span>
+                  ><span>${t(hass, "today")}</span>
                 </div>
                 <h3>
                   ${formatState(
                     hass,
                     workout,
-                    "Aucun entraînement planifié"
+                    t(hass, "no_workout")
                   )}
                 </h3>
                 <div class="pill">
-                  ${translateSportType(formatState(hass, workoutSport, "Entraînement"), "Entraînement")}
+                  ${translateSportType(formatState(hass, workoutSport, t(hass, "workout")), t(hass, "workout"), hass)}
                 </div>
                 <div class="feature-meta">
                   <span
                     ><ha-icon icon="mdi:clock-outline"></ha-icon
                     >${formatState(hass, workoutDuration)}</span
                   ><span
-                    ><ha-icon icon="mdi:chart-bar"></ha-icon>Charge
+                    ><ha-icon icon="mdi:chart-bar"></ha-icon>${t(hass, "load")}
                     ${formatState(hass, workoutLoad)}</span
                   >
                 </div>
@@ -512,7 +513,7 @@ export class HaIntervalsIcuCard extends LitElement {
             ? html`<article class="feature records-card">
                 <div class="section-title">
                   <ha-icon icon="mdi:trophy-outline"></ha-icon
-                  ><span>Records</span>
+                  ><span>${t(hass, "records")}</span>
                 </div>
                 ${this.infoRow(
                   "mdi:bike-fast",
@@ -526,7 +527,7 @@ export class HaIntervalsIcuCard extends LitElement {
                 )}
                 ${this.infoRow(
                   "mdi:map-marker-distance",
-                  "Distance",
+                  t(hass, "distance"),
                   getState(
                     hass,
                     undefined,
@@ -536,7 +537,7 @@ export class HaIntervalsIcuCard extends LitElement {
                 )}
                 ${this.infoRow(
                   "mdi:image-filter-hdr",
-                  "Dénivelé",
+                  t(hass, "elevation"),
                   getState(
                     hass,
                     undefined,
@@ -546,7 +547,7 @@ export class HaIntervalsIcuCard extends LitElement {
                 )}
                 ${this.infoRow(
                   "mdi:flash",
-                  "Puissance max",
+                  t(hass, "max_power"),
                   getState(
                     hass,
                     undefined,
@@ -561,7 +562,7 @@ export class HaIntervalsIcuCard extends LitElement {
             ? html`<article class="feature last-activity spotlight">
                 <div class="section-title">
                   <ha-icon icon=${this.sportIcon(lastTypeText)}></ha-icon
-                  ><span>Dernière activité</span>
+                  ><span>${t(hass, "last_activity")}</span>
                 </div>
                 <h3>${lastNameText}</h3>
                 ${showLastType
@@ -583,7 +584,7 @@ export class HaIntervalsIcuCard extends LitElement {
                     >${formatState(hass, lastCalories)}</span
                   >
                   <span
-                    ><ha-icon icon="mdi:chart-bar"></ha-icon>Charge
+                    ><ha-icon icon="mdi:chart-bar"></ha-icon>${t(hass, "load")}
                     ${formatState(hass, lastLoad)}</span
                   >
                 </div>

@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { getState } from "./entities";
 import type { HomeAssistant } from "./types";
+import { t, translateDynamicText, translateSportName, translateValue } from "./i18n";
 
 type Period = "7_days" | "30_days" | "90_days" | "365_days";
 type StatsConfig = { type: string; title?: string; entity?: string; device_id?: string; default_period?: Period };
@@ -34,7 +35,7 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
 
   private number(value: unknown, digits = 1): string {
     const n = Number(value);
-    return Number.isFinite(n) ? n.toLocaleString(undefined, { maximumFractionDigits: digits }) : "—";
+    return Number.isFinite(n) ? n.toLocaleString(this.hass?.locale?.language, { maximumFractionDigits: digits }) : "—";
   }
 
   private change(value: unknown): unknown {
@@ -48,31 +49,35 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     return html`<article class="tile"><ha-icon icon=${icon}></ha-icon><div><span>${label}</span><strong>${this.number(value)}${unit}</strong>${change !== undefined ? this.change(change) : nothing}</div></article>`;
   }
 
+  private label(key: string): string { return t(this.hass, key); }
+
+  private name(value: string): string { return translateDynamicText(this.hass, value.replaceAll("_", " ")); }
+
   private overview(data: Dict) {
     const block = data.periods?.[this.period] ?? {};
     const current = block.current ?? {};
     const comparison = block.comparison ?? {};
     return html`
       <div class="tiles">
-        ${this.tile("mdi:calendar-check", "Activities", current.activities, "", comparison.activities_change_percent)}
-        ${this.tile("mdi:clock-outline", "Duration", current.duration_hours, " h", comparison.duration_hours_change_percent)}
-        ${this.tile("mdi:map-marker-distance", "Distance", current.distance_km, " km", comparison.distance_km_change_percent)}
-        ${this.tile("mdi:chart-bell-curve", "Load", current.load, "", comparison.load_change_percent)}
-        ${this.tile("mdi:image-filter-hdr", "Elevation", current.elevation_m, " m", comparison.elevation_m_change_percent)}
-        ${this.tile("mdi:fire", "Calories", current.calories, " kcal", comparison.calories_change_percent)}
+        ${this.tile("mdi:calendar-check", this.label("activities"), current.activities, "", comparison.activities_change_percent)}
+        ${this.tile("mdi:clock-outline", this.label("duration"), current.duration_hours, " h", comparison.duration_hours_change_percent)}
+        ${this.tile("mdi:map-marker-distance", this.label("distance"), current.distance_km, " km", comparison.distance_km_change_percent)}
+        ${this.tile("mdi:chart-bell-curve", this.label("load"), current.load, "", comparison.load_change_percent)}
+        ${this.tile("mdi:image-filter-hdr", this.label("elevation"), current.elevation_m, " m", comparison.elevation_m_change_percent)}
+        ${this.tile("mdi:fire", this.label("calories"), current.calories, " kcal", comparison.calories_change_percent)}
         ${this.tile("mdi:heart-pulse", "HRSS", current.hrss, "", comparison.hrss_change_percent)}
         ${this.tile("mdi:chart-timeline-variant", "TRIMP", current.trimp, "", comparison.trimp_change_percent)}
       </div>
       <div class="insights">
-        ${(data.insights ?? []).map((item: Dict) => html`<div class="insight ${item.type ?? "info"}"><ha-icon icon=${item.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${item.title}</strong><span>${item.message}</span></div></div>`)}
+        ${(data.insights ?? []).map((item: Dict) => html`<div class="insight ${item.type ?? "info"}"><ha-icon icon=${item.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${translateDynamicText(this.hass, item.title)}</strong><span>${translateDynamicText(this.hass, item.message)}</span></div></div>`)}
       </div>`;
   }
 
   private sports(data: Dict) {
     const sports = data.sports?.[this.period] ?? {};
     return html`<div class="table">${Object.entries(sports).map(([sport, row]: [string, any]) => html`
-      <div class="row"><strong>${sport}</strong><span>${this.number(row.activities, 0)} act.</span><span>${this.number(row.duration_hours)} h</span><span>${this.number(row.distance_km)} km</span><span>Load ${this.number(row.load)}</span></div>`)}
-      ${Object.keys(sports).length ? nothing : html`<div class="empty">No sport data</div>`}
+      <div class="row"><strong>${translateSportName(this.hass, sport)}</strong><span>${this.number(row.activities, 0)} act.</span><span>${this.number(row.duration_hours)} h</span><span>${this.number(row.distance_km)} km</span><span>${t(this.hass, "load")} ${this.number(row.load)}</span></div>`)}
+      ${Object.keys(sports).length ? nothing : html`<div class="empty">${t(this.hass, "no_sport_data")}</div>`}
     </div>`;
   }
 
@@ -81,32 +86,32 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     const sports = data.records_by_sport ?? {};
     return html`
       <div class="record-grid">
-        ${Object.entries(period).map(([name, row]: [string, any]) => row ? html`<article class="record"><span>${name.replaceAll("_", " ")}</span><strong>${row.period}</strong><small>${this.number(row.load)} load · ${this.number(row.duration_hours)} h</small></article>` : nothing)}
+        ${Object.entries(period).map(([name, row]: [string, any]) => row ? html`<article class="record"><span>${this.name(name)}</span><strong>${row.period}</strong><small>${this.number(row.load)} ${t(this.hass, "load").toLowerCase()} · ${this.number(row.duration_hours)} h</small></article>` : nothing)}
       </div>
-      ${Object.entries(sports).map(([sport, rows]: [string, any]) => html`<details><summary>${sport}</summary><div class="record-list">${Object.entries(rows).map(([name, record]: [string, any]) => html`<div><span>${name.replaceAll("_", " ")}</span><strong>${this.number(record.value)}</strong><small>${record.activity?.name ?? ""}</small></div>`)}</div></details>`)}
+      ${Object.entries(sports).map(([sport, rows]: [string, any]) => html`<details><summary>${translateSportName(this.hass, sport)}</summary><div class="record-list">${Object.entries(rows).map(([name, record]: [string, any]) => html`<div><span>${this.name(name)}</span><strong>${this.number(record.value)}</strong><small>${record.activity?.name ?? ""}</small></div>`)}</div></details>`)}
     `;
   }
 
   private trends(data: Dict) {
     const trends = data.trends ?? {};
     return html`<div class="trend-grid">${Object.entries(trends).map(([name, metric]: [string, any]) => html`
-      <article class="trend"><span>${name.replaceAll("_", " ")}</span><strong>${this.number(metric.latest)}</strong><div class="trend-changes"><small>7d ${this.number(metric.change_7_days)}</small><small>30d ${this.number(metric.change_30_days)}</small><small>90d ${this.number(metric.change_90_days)}</small><small>365d ${this.number(metric.change_365_days)}</small></div></article>`)}
+      <article class="trend"><span>${this.name(name)}</span><strong>${this.number(metric.latest)}</strong><div class="trend-changes"><small>7d ${this.number(metric.change_7_days)}</small><small>30d ${this.number(metric.change_30_days)}</small><small>90d ${this.number(metric.change_90_days)}</small><small>365d ${this.number(metric.change_365_days)}</small></div></article>`)}
     </div>`;
   }
 
   private quality(data: Dict) {
     const quality = data.data_quality ?? {};
     const coverage = quality.coverage ?? {};
-    return html`<div class="quality-head"><strong>${this.number(quality.completeness_percent)}%</strong><span>Activity data completeness · ${this.number(quality.field_count, 0)} API fields</span></div>
-      <div class="coverage">${Object.entries(coverage).map(([name, item]: [string, any]) => html`<div><span>${name.replaceAll("_", " ")}</span><progress max="100" value=${item.percent ?? 0}></progress><strong>${this.number(item.percent)}%</strong></div>`)}</div>`;
+    return html`<div class="quality-head"><strong>${this.number(quality.completeness_percent)}%</strong><span>${t(this.hass, "completeness")} · ${this.number(quality.field_count, 0)} ${t(this.hass, "api_fields")}</span></div>
+      <div class="coverage">${Object.entries(coverage).map(([name, item]: [string, any]) => html`<div><span>${this.name(name)}</span><progress max="100" value=${item.percent ?? 0}></progress><strong>${this.number(item.percent)}%</strong></div>`)}</div>`;
   }
 
   protected render() {
     if (!this.hass || !this.config) return nothing;
     const data = this.attrs();
     const content = this.section === "sports" ? this.sports(data) : this.section === "records" ? this.records(data) : this.section === "trends" ? this.trends(data) : this.section === "quality" ? this.quality(data) : this.overview(data);
-    return html`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>Statistics & Trends</span></div></div><nav>${(["7_days","30_days","90_days","365_days"] as Period[]).map(p => html`<button class=${this.period === p ? "active" : ""} @click=${() => this.period = p}>${p.replace("_days", "d")}</button>`)}</nav></header>
-      <div class="tabs">${["overview","sports","records","trends","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${tab}</button>`)}</div>
+    return html`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${t(this.hass, "statistics_trends")}</span></div></div><nav>${(["7_days","30_days","90_days","365_days"] as Period[]).map(p => html`<button class=${this.period === p ? "active" : ""} @click=${() => this.period = p}>${p.replace("_days", "d")}</button>`)}</nav></header>
+      <div class="tabs">${["overview","sports","records","trends","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${t(this.hass, tab)}</button>`)}</div>
       <section>${content}</section></div></ha-card>`;
   }
 
