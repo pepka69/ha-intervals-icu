@@ -1,25 +1,254 @@
 import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { getState } from "./entities";
+import {
+  deviceName,
+  getState,
+  integrationDevices
+} from "./entities";
 import type { HomeAssistant } from "./types";
 import { t, translateDynamicText, translateSportName, translateValue } from "./i18n";
 
 type Period = "7_days" | "30_days" | "90_days" | "365_days";
-type StatsConfig = { type: string; title?: string; entity?: string; device_id?: string; default_period?: Period };
+type StatistiquesConfig = { type: string; title?: string; entity?: string; device_id?: string; default_period?: Period };
 type Dict = Record<string, any>;
+
+@customElement("ha-intervals-icu-statistics-card-editor")
+export class HaIntervalsIcuStatisticsCardEditor extends LitElement {
+  @property({ attribute: false }) public hass?: HomeAssistant;
+  @state() private config?: StatsConfig;
+
+  public setConfig(config: StatsConfig): void {
+    this.config = { ...config };
+  }
+
+  private emitConfig(config: StatsConfig): void {
+    this.config = config;
+
+    this.dispatchEvent(
+      new CustomEvent("config-changed", {
+        detail: { config },
+        bubbles: true,
+        composed: true
+      })
+    );
+  }
+
+  private change(
+    field: keyof StatsConfig,
+    value: string
+  ): void {
+    const config = { ...this.config! };
+
+    if (value === "") {
+      delete config[field];
+    } else {
+      Object.assign(config, { [field]: value });
+    }
+
+    this.emitConfig(config);
+  }
+
+  private changeDevice(deviceId: string): void {
+    const config = {
+      ...this.config!,
+      device_id: deviceId || undefined
+    };
+
+    // Une entité sélectionnée manuellement peut appartenir
+    // à l’ancien athlète : on repasse donc en détection automatique.
+    delete config.entity;
+
+    this.emitConfig(config);
+  }
+
+  protected render() {
+    if (!this.hass || !this.config) {
+      return html``;
+    }
+
+    const devices = integrationDevices(this.hass);
+    const selectedDeviceId =
+      this.config.device_id ??
+      (devices.length === 1 ? devices[0].id : "");
+
+    const dashboardEntities = Object.keys(this.hass.states)
+      .filter((entityId) => {
+        if (!entityId.startsWith("sensor.")) {
+          return false;
+        }
+
+        if (
+          selectedDeviceId &&
+          this.hass!.entities?.[entityId]?.device_id !== selectedDeviceId
+        ) {
+          return false;
+        }
+
+        const entry = this.hass!.entities?.[entityId];
+        const state = this.hass!.states[entityId];
+
+        return (
+          entry?.translation_key === "statistics_dashboard" ||
+          entry?.unique_id?.endsWith("_statistics_dashboard") ||
+          entityId.endsWith("_statistics_dashboard") ||
+          state?.attributes.translation_key === "statistics_dashboard"
+        );
+      })
+      .sort();
+
+    return html`
+      <div class="statistics-editor">
+        <label>
+          <span>Athlète / appareil</span>
+
+          <select
+            .value=${selectedDeviceId}
+            @change=${(event: Event) =>
+              this.changeDevice(
+                (event.target as HTMLSelectElement).value
+              )}
+          >
+            <option value="">Sélectionner un athlète</option>
+
+            ${devices.map(
+              (device) => html`
+                <option value=${device.id}>
+                  ${deviceName(device)}
+                </option>
+              `
+            )}
+          </select>
+        </label>
+
+        ${devices.length === 0
+          ? html`
+              <p>
+                Aucun appareil Intervals.icu détecté. Recharge Home
+                Assistant après avoir configuré l’intégration.
+              </p>
+            `
+          : nothing}
+
+        <label>
+          <span>Titre</span>
+
+          <input
+            type="text"
+            .value=${this.config.title ?? ""}
+            @input=${(event: Event) =>
+              this.change(
+                "title",
+                (event.target as HTMLInputElement).value
+              )}
+          />
+        </label>
+
+        <label>
+          <span>Période par défaut</span>
+
+          <select
+            .value=${this.config.default_period ?? "30_days"}
+            @change=${(event: Event) =>
+              this.change(
+                "default_period",
+                (event.target as HTMLSelectElement).value
+              )}
+          >
+            <option value="7_days">7 jours</option>
+            <option value="30_days">30 jours</option>
+            <option value="90_days">90 jours</option>
+            <option value="365_days">365 jours</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Entité Statistiques</span>
+
+          <select
+            .value=${this.config.entity ?? ""}
+            @change=${(event: Event) =>
+              this.change(
+                "entity",
+                (event.target as HTMLSelectElement).value
+              )}
+          >
+            <option value="">
+              Détection automatique pour cet athlète
+            </option>
+
+            ${dashboardEntities.map(
+              (entityId) => html`
+                <option value=${entityId}>
+                  ${this.hass!.states[entityId].attributes.friendly_name ??
+                  entityId}
+                </option>
+              `
+            )}
+          </select>
+        </label>
+      </div>
+    `;
+  }
+
+  static styles = css`
+    :host {
+      display: block;
+    }
+
+    .statistics-editor {
+      display: grid;
+      gap: 16px;
+      padding: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+    }
+
+    label > span {
+      font-weight: 600;
+    }
+
+    input,
+    select {
+      width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      color: var(--primary-text-color);
+      background: var(--card-background-color);
+      border: 1px solid var(--divider-color);
+      border-radius: 8px;
+    }
+
+    p {
+      margin: 0;
+      color: var(--secondary-text-color);
+      font-size: 0.88rem;
+    }
+  `;
+}
+
 
 @customElement("ha-intervals-icu-statistics-card")
 export class HaIntervalsIcuStatisticsCard extends LitElement {
   @property({ attribute: false }) public hass?: HomeAssistant;
-  @state() private config?: StatsConfig;
+  @state() private config?: StatistiquesConfig;
   @state() private period: Period = "30_days";
   @state() private section = "overview";
 
-  static getStubConfig(): Omit<StatsConfig, "type"> {
+  static getConfigElement() {
+    return document.createElement(
+      "ha-intervals-icu-statistics-card-editor"
+    );
+  }
+
+
+  static getStubConfig(): Omit<StatistiquesConfig, "type"> {
     return { title: "Intervals.icu Statistics", default_period: "30_days" };
   }
 
-  public setConfig(config: StatsConfig): void {
+  public setConfig(config: StatistiquesConfig): void {
     this.config = { title: "Intervals.icu Statistics", default_period: "30_days", ...config };
     this.period = this.config.default_period ?? "30_days";
   }

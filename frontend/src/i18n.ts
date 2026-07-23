@@ -1,15 +1,15 @@
 import type { HomeAssistant } from "./types";
 
 const FR: Record<string,string> = {
-  refresh:"Actualiser", atlas_readiness:"Préparation Atlas", atlas_coach:"Coach Atlas", recovery:"Récupération",
+  refresh:"Actualiser", atlas_readiness:"Préparation Atlas", atlas_coach:"Atlas Coach", recovery:"Récupération",
   unavailable:"Indisponible", unknown_status:"Statut inconnu", no_recommendation:"Aucune recommandation",
   fitness:"CONDITION", fatigue:"FATIGUE", form:"FORME", load_7d:"Charge 7 j", activities_7d:"Activités 7 j",
   evolution:"Évolution", health:"Santé et composition corporelle", today:"Aujourd’hui", no_workout:"Aucun entraînement planifié",
   workout:"Entraînement", load:"Charge", records:"Records", distance:"Distance", elevation:"Dénivelé", max_power:"Puissance max",
-  last_activity:"Dernière activité", activity:"Activité", overview:"Vue d’ensemble", sports:"Sports", trends:"Tendances",
-  quality:"Qualité", statistics_trends:"Statistiques et tendances", activities:"Activités", duration:"Durée", calories:"Calories",
+  last_activity:"Dernière activité", activity:"Activité", overview:"Overview", sports:"Sports", trends:"Tendances",
+  quality:"Quality", statistics_trends:"Statistiques et tendances", activities:"Activités", duration:"Durée", calories:"Calories",
   no_sport_data:"Aucune donnée sportive", completeness:"Complétude des données d’activité", api_fields:"champs API",
-  training_load:"Charge d’entraînement", sport_mix:"Répartition des sports", previous_period:"période précédente",
+  training_load:"Charge d’entraînement", sport_mix:"Sport mix", previous_period:"période précédente",
   higher:"supérieure", lower:"inférieure", stable:"stable", represents:"représente", training_time:"du temps d’entraînement",
   last_30_days:"sur les 30 derniers jours", sync_unknown:"Synchronisation inconnue", sync_now:"Synchronisé à l’instant",
   sync_minutes:"Synchronisé il y a {value} min", sync_hours:"Synchronisé il y a {value} h", sync_days:"Synchronisé il y a {value} j",
@@ -21,10 +21,10 @@ const FR: Record<string,string> = {
 const EN: Record<string,string> = {
   refresh:"Refresh", atlas_readiness:"Atlas Readiness", atlas_coach:"Atlas Coach", recovery:"Recovery", unavailable:"Unavailable",
   unknown_status:"Unknown status", no_recommendation:"No recommendation", fitness:"FITNESS", fatigue:"FATIGUE", form:"FORM",
-  load_7d:"7-day load", activities_7d:"7-day activities", evolution:"Trends", health:"Health and body composition", today:"Today",
+  load_7d:"7-day load", activities_7d:"7-day activities", evolution:"Evolution", health:"Health and body composition", today:"Today",
   no_workout:"No workout planned", workout:"Workout", load:"Load", records:"Records", distance:"Distance", elevation:"Elevation",
-  max_power:"Max power", last_activity:"Last activity", activity:"Activity", overview:"Overview", sports:"Sports", trends:"Trends",
-  quality:"Quality", statistics_trends:"Statistics & Trends", activities:"Activities", duration:"Duration", calories:"Calories",
+  max_power:"Max power", last_activity:"Last activity", activity:"Activity", overview:"Overview", sports:"Sports", trends:"Tendances",
+  quality:"Quality", statistics_trends:"Statistics & trends", activities:"Activities", duration:"Duration", calories:"Calories",
   no_sport_data:"No sport data", completeness:"Activity data completeness", api_fields:"API fields", training_load:"Training load",
   sport_mix:"Sport mix", previous_period:"previous period", higher:"higher", lower:"lower", stable:"stable", represents:"represents",
   training_time:"of training time", last_30_days:"over the last 30 days", sync_unknown:"Sync unknown", sync_now:"Synced just now",

@@ -40,7 +40,7 @@ const entityOverrideFields: Array<keyof CardConfig> = fields.map(
 );
 
 const toggles: Array<[keyof CardConfig, string]> = [
-  ["show_atlas", "Afficher Atlas Coach et Readiness"],
+  ["show_atlas", "Afficher Coach Atlas et Readiness"],
   ["show_workout", "Afficher l’entraînement du jour"],
   ["show_last_activity", "Afficher la dernière activité"],
   ["show_records", "Afficher les records"],

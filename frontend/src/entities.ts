@@ -104,7 +104,7 @@ const SPORT_NAMES: Record<string, string> = {
   VirtualRun: "Course virtuelle",
   Walk: "Marche",
   Walking: "Marche",
-  WeightTraining: "Musculation",
+  Musculation: "Musculation",
   Workout: "Entraînement",
   Yoga: "Yoga"
 };
