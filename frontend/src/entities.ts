@@ -139,27 +139,49 @@ function keyMatches(entry: EntityRegistryEntry, key: string): boolean {
   );
 }
 
-function formatDuration(totalSeconds: number): string {
-  const roundedSeconds = Math.max(0, Math.round(totalSeconds));
-  const hours = Math.floor(roundedSeconds / 3600);
-  const minutes = Math.floor((roundedSeconds % 3600) / 60);
-  const seconds = roundedSeconds % 60;
+function durationInSeconds(value: number, unit?: string): number {
+  const normalizedUnit = (unit ?? "s").trim().toLowerCase();
 
-  if (hours === 0) {
-    if (minutes === 0) {
-      return `${seconds} s`;
-    }
-
-    if (seconds === 0) {
-      return `${minutes} min`;
-    }
-
-    return `${minutes} min ${seconds} s`;
+  if (["ms", "millisecond", "milliseconds"].includes(normalizedUnit)) {
+    return value / 1000;
   }
 
-  return `${hours} h ${String(minutes).padStart(2, "0")} min ${String(
-    seconds
-  ).padStart(2, "0")} s`;
+  if (["min", "minute", "minutes"].includes(normalizedUnit)) {
+    return value * 60;
+  }
+
+  if (["h", "hr", "hour", "hours"].includes(normalizedUnit)) {
+    return value * 3600;
+  }
+
+  if (["d", "day", "days"].includes(normalizedUnit)) {
+    return value * 86400;
+  }
+
+  return value;
+}
+
+export function formatDuration(value: number, unit?: string): string {
+  const totalSeconds = Math.max(
+    0,
+    Math.round(durationInSeconds(value, unit))
+  );
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor((totalSeconds % 86400) / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  const parts: string[] = [];
+
+  if (days > 0) parts.push(`${days} j`);
+  if (hours > 0) parts.push(`${hours} h`);
+  if (minutes > 0) parts.push(`${minutes} min`);
+
+  // Keep seconds for short activities and when they carry useful precision.
+  if (seconds > 0 && days === 0 && hours === 0) {
+    parts.push(`${seconds} s`);
+  }
+
+  return parts.length > 0 ? parts.join(" ") : "0 s";
 }
 
 function humanizeSportName(value: string): string {
@@ -305,7 +327,7 @@ export function formatState(
     const value = Number(state.state);
 
     if (Number.isFinite(value)) {
-      return formatDuration(value);
+      return formatDuration(value, state.attributes.unit_of_measurement);
     }
   }
 
