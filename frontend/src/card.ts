@@ -11,6 +11,7 @@ import {
   relativeTime
 } from "./entities";
 import { gauge, historyChart } from "./graph";
+import { translateSportType } from "./sport-translations";
 import type {
   CardConfig,
   HassEntity,
@@ -336,7 +337,7 @@ export class HaIntervalsIcuCard extends LitElement {
     );
 
     const lastNameText = formatState(hass, last);
-    const lastTypeText = formatState(hass, lastType, "Activité");
+    const lastTypeText = translateSportType(formatState(hass, lastType, "Activité"));
     const showLastType =
       lastTypeText !== "Activité" &&
       lastTypeText.trim().toLowerCase() !==
@@ -493,7 +494,7 @@ export class HaIntervalsIcuCard extends LitElement {
                   )}
                 </h3>
                 <div class="pill">
-                  ${formatState(hass, workoutSport, "Entraînement")}
+                  ${translateSportType(formatState(hass, workoutSport, "Entraînement"), "Entraînement")}
                 </div>
                 <div class="feature-meta">
                   <span
