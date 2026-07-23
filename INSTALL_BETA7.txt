@@ -1,0 +1,7 @@
+From the repository root:
+
+unzip -o ha-intervals-icu-v2.0.0-beta7-full-i18n.zip -d /workspaces/ha-intervals-icu
+cd /workspaces/ha-intervals-icu/frontend
+npm run build
+
+Then review git status before committing.
