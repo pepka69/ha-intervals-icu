@@ -251,13 +251,21 @@ export function translateDynamicText(
   }
 
   let match = text.match(
-    /^(\d+)-day load\s+([\d.,]+)%\s+(lower|higher) than the previous period\.?$/i
+    /^(\d+)-day load\s+(?:is\s+)?([\d.,]+)%\s+(lower|higher) than the previous period\.?$/i
   );
 
   if (match) {
     return `Charge sur ${match[1]} jours ${match[2]} % ${
       match[3].toLowerCase() === "lower" ? "inférieure" : "supérieure"
     } à la période précédente`;
+  }
+
+  if (
+    /^Latest sleep is more than one hour below the value from seven days ago\.?$/i.test(
+      text
+    )
+  ) {
+    return "Le dernier sommeil est inférieur de plus d’une heure à celui d’il y a sept jours";
   }
 
   match = text.match(

@@ -259,10 +259,11 @@ def _insights(
     periods: dict[str, Any],
     trends: dict[str, Any],
     sports: dict[str, Any],
+    period_days: int = 30,
 ) -> list[dict[str, str]]:
     insights: list[dict[str, str]] = []
-    p30 = periods.get("30_days", {})
-    change = p30.get("comparison", {}).get("load_change_percent")
+    selected_period = periods.get(f"{period_days}_days", {})
+    change = selected_period.get("comparison", {}).get("load_change_percent")
     if isinstance(change, (int, float)):
         level = "warning" if change > 25 else "positive" if change > 5 else "neutral"
         direction = "higher" if change >= 0 else "lower"
@@ -271,7 +272,7 @@ def _insights(
                 "type": level,
                 "title": "Training load",
                 "message": (
-                    f"30-day load is {abs(change):.0f}% {direction} "
+                    f"{period_days}-day load is {abs(change):.0f}% {direction} "
                     "than the previous period."
                 ),
             }
@@ -302,10 +303,12 @@ def _insights(
             }
         )
 
-    sport30 = sports.get("30_days", {})
-    if sport30:
-        main, values = next(iter(sport30.items()))
-        total = sum(float(row.get("duration_hours", 0)) for row in sport30.values())
+    selected_sports = sports.get(f"{period_days}_days", {})
+    if selected_sports:
+        main, values = next(iter(selected_sports.items()))
+        total = sum(
+            float(row.get("duration_hours", 0)) for row in selected_sports.values()
+        )
         share = float(values.get("duration_hours", 0)) * 100 / total if total else 0
         insights.append(
             {
@@ -313,7 +316,7 @@ def _insights(
                 "title": "Sport mix",
                 "message": (
                     f"{main} represents {share:.0f}% of training time "
-                    "over the last 30 days."
+                    f"over the last {period_days} days."
                 ),
             }
         )
@@ -364,4 +367,7 @@ def calculate_advanced_statistics(
         "advanced_records_by_sport": _records_by_sport(recent_activities),
         "advanced_period_records": _period_records(recent_activities),
         "training_insights": _insights(periods, trends, sports),
+        "training_insights_by_period": {
+            f"{days}_days": _insights(periods, trends, sports, days) for days in PERIODS
+        },
     }

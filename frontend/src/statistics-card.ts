@@ -295,7 +295,12 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
         ${this.tile("mdi:chart-timeline-variant", "TRIMP", current.trimp, "", comparison.trimp_change_percent)}
       </div>
       <div class="insights">
-        ${(data.insights ?? []).map((item: Dict) => html`<div class="insight ${item.type ?? "info"}"><ha-icon icon=${item.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${translateDynamicText(this.hass, item.title)}</strong><span>${translateDynamicText(this.hass, item.message)}</span></div></div>`)}
+        ${(
+          data.training_insights_by_period?.[this.period] ??
+          data.insights ??
+          data.training_insights ??
+          []
+        ).map((item: Dict) => html`<div class="insight ${item.type ?? "info"}"><ha-icon icon=${item.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${translateDynamicText(this.hass, item.title)}</strong><span>${translateDynamicText(this.hass, item.message)}</span></div></div>`)}
       </div>`;
   }
 
