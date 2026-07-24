@@ -2,6 +2,7 @@ import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import {
   deviceName,
+  formatDuration,
   getState,
   integrationDevices
 } from "./entities";
@@ -275,6 +276,10 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     return html`<article class="tile"><ha-icon icon=${icon}></ha-icon><div><span>${label}</span><strong>${this.number(value)}${unit}</strong>${change !== undefined ? this.change(change) : nothing}</div></article>`;
   }
 
+  private textTile(icon: string, label: string, value: string, change?: unknown) {
+    return html`<article class="tile"><ha-icon icon=${icon}></ha-icon><div><span>${label}</span><strong>${value}</strong>${change !== undefined ? this.change(change) : nothing}</div></article>`;
+  }
+
   private label(key: string): string { return t(this.hass, key); }
 
   private name(value: string): string { return translateDynamicText(this.hass, value.replaceAll("_", " ")); }
@@ -286,7 +291,7 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     return html`
       <div class="tiles">
         ${this.tile("mdi:calendar-check", this.label("activities"), current.activities, "", comparison.activities_change_percent)}
-        ${this.tile("mdi:clock-outline", this.label("duration"), current.duration_hours, " h", comparison.duration_hours_change_percent)}
+        ${this.textTile("mdi:clock-outline", this.label("duration"), formatDuration(current.duration_hours, "h"), comparison.duration_hours_change_percent)}
         ${this.tile("mdi:map-marker-distance", this.label("distance"), current.distance_km, " km", comparison.distance_km_change_percent)}
         ${this.tile("mdi:chart-bell-curve", this.label("load"), current.load, "", comparison.load_change_percent)}
         ${this.tile("mdi:image-filter-hdr", this.label("elevation"), current.elevation_m, " m", comparison.elevation_m_change_percent)}
@@ -307,7 +312,7 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
   private sports(data: Dict) {
     const sports = data.sports?.[this.period] ?? {};
     return html`<div class="table">${Object.entries(sports).map(([sport, row]: [string, any]) => html`
-      <div class="row"><strong>${translateSportName(this.hass, sport)}</strong><span>${this.number(row.activities, 0)} ${t(this.hass, "activity_short")}</span><span>${this.number(row.duration_hours)} h</span><span>${this.number(row.distance_km)} km</span><span>${t(this.hass, "load")} ${this.number(row.load)}</span></div>`)}
+      <div class="row"><strong>${translateSportName(this.hass, sport)}</strong><span>${this.number(row.activities, 0)} ${t(this.hass, "activity_short")}</span><span>${formatDuration(row.duration_hours, "h")}</span><span>${this.number(row.distance_km)} km</span><span>${t(this.hass, "load")} ${this.number(row.load)}</span></div>`)}
       ${Object.keys(sports).length ? nothing : html`<div class="empty">${t(this.hass, "no_sport_data")}</div>`}
     </div>`;
   }
@@ -317,7 +322,7 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     const sports = data.records_by_sport ?? {};
     return html`
       <div class="record-grid">
-        ${Object.entries(period).map(([name, row]: [string, any]) => row ? html`<article class="record"><span>${this.name(name)}</span><strong>${row.period}</strong><small>${this.number(row.load)} ${t(this.hass, "load").toLowerCase()} · ${this.number(row.duration_hours)} h</small></article>` : nothing)}
+        ${Object.entries(period).map(([name, row]: [string, any]) => row ? html`<article class="record"><span>${this.name(name)}</span><strong>${row.period}</strong><small>${this.number(row.load)} ${t(this.hass, "load").toLowerCase()} · ${formatDuration(row.duration_hours, "h")}</small></article>` : nothing)}
       </div>
       ${Object.entries(sports).map(([sport, rows]: [string, any]) => html`<details><summary>${translateSportName(this.hass, sport)}</summary><div class="record-list">${Object.entries(rows).map(([name, record]: [string, any]) => html`<div><span>${this.name(name)}</span><strong>${this.number(record.value)}</strong><small>${record.activity?.name ?? ""}</small></div>`)}</div></details>`)}
     `;
