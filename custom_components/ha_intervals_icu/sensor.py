@@ -468,6 +468,10 @@ def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any
             "activity_api_coverage", {}
         ),
         "insights": data.get("training_insights", []),
+        "training_insights_by_period": data.get(
+            "training_insights_by_period",
+            {},
+        ),
     }
 
 
