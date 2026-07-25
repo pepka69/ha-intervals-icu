@@ -1,4 +1,4 @@
-import { LitElement, html, nothing } from "lit";
+import { LitElement, css, html, nothing } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { cardStyles } from "./styles";
 import {
@@ -45,13 +45,112 @@ const HEALTH_METRICS: Array<{
   { key: "daily_calories", label: "daily_calories", icon: "mdi:fire", defaultShow: false }
 ];
 
+type TooltipData = {
+  key: "fitness" | "fatigue" | "form";
+  title: string;
+  text: string;
+  x: number;
+  y: number;
+  pinned: boolean;
+};
+
 @customElement("ha-intervals-icu-card")
 export class HaIntervalsIcuCard extends LitElement {
-  static styles = cardStyles;
+  static styles = [
+    cardStyles,
+    css`
+      .metric {
+        cursor: help;
+      }
+
+      .metric:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 3px;
+      }
+
+      .metric-tooltip {
+        position: fixed;
+        z-index: 10000;
+        width: max-content;
+        max-width: min(320px, calc(100vw - 24px));
+        padding: 12px 14px;
+        color: var(--primary-text-color);
+        background: var(--card-background-color, #fff);
+        border: 1px solid var(--divider-color);
+        border-radius: 12px;
+        box-shadow:
+          0 10px 30px rgba(0, 0, 0, 0.24),
+          0 2px 8px rgba(0, 0, 0, 0.16);
+        pointer-events: none;
+        transform: translate(-50%, calc(-100% - 12px));
+        animation: tooltip-appear 120ms ease-out;
+      }
+
+      .metric-tooltip.bottom {
+        transform: translate(-50%, 12px);
+      }
+
+      .metric-tooltip strong {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 0.88rem;
+        line-height: 1.25;
+      }
+
+      .metric-tooltip span {
+        display: block;
+        color: var(--secondary-text-color);
+        font-size: 0.78rem;
+        line-height: 1.45;
+        white-space: pre-line;
+      }
+
+      @keyframes tooltip-appear {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @media (hover: none) {
+        .metric {
+          cursor: pointer;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .metric-tooltip {
+          animation: none;
+        }
+      }
+    `
+  ];
 
   @property({ attribute: false }) public hass?: HomeAssistant;
   @state() private config?: CardConfig;
   @state() private refreshing = false;
+  @state() private tooltip?: TooltipData;
+
+  private readonly closeTooltipFromDocument = (event: PointerEvent): void => {
+    const path = event.composedPath();
+
+    if (this.tooltip?.pinned && !path.includes(this)) {
+      this.tooltip = undefined;
+    }
+  };
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    document.addEventListener("pointerdown", this.closeTooltipFromDocument);
+  }
+
+  disconnectedCallback(): void {
+    document.removeEventListener("pointerdown", this.closeTooltipFromDocument);
+    super.disconnectedCallback();
+  }
 
   static getConfigElement() {
     return document.createElement("ha-intervals-icu-card-editor");
@@ -154,6 +253,119 @@ export class HaIntervalsIcuCard extends LitElement {
     return "good";
   }
 
+
+  private tooltipPosition(event: Event): { x: number; y: number } {
+    const target = event.currentTarget as HTMLElement;
+    const rect = target.getBoundingClientRect();
+    const horizontalPadding = 170;
+
+    return {
+      x: Math.max(
+        horizontalPadding,
+        Math.min(
+          rect.left + rect.width / 2,
+          window.innerWidth - horizontalPadding
+        )
+      ),
+      y: rect.top
+    };
+  }
+
+  private showMetricTooltip(
+    event: Event,
+    metric: "fitness" | "fatigue" | "form",
+    pinned = false
+  ): void {
+    if (pinned && this.tooltip?.pinned && this.tooltip.key === metric) {
+      this.tooltip = undefined;
+      return;
+    }
+
+    const content = this.metricTooltip(metric);
+    const position = this.tooltipPosition(event);
+
+    this.tooltip = {
+      key: metric,
+      title: content.title,
+      text: content.text,
+      x: position.x,
+      y: position.y,
+      pinned
+    };
+  }
+
+  private hideMetricTooltip(): void {
+    if (!this.tooltip?.pinned) {
+      this.tooltip = undefined;
+    }
+  }
+
+  private handleMetricKeydown(
+    event: KeyboardEvent,
+    metric: "fitness" | "fatigue" | "form"
+  ): void {
+    if (event.key === "Escape") {
+      this.tooltip = undefined;
+      return;
+    }
+
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      this.showMetricTooltip(event, metric, true);
+    }
+  }
+
+  private renderMetricTooltip() {
+    if (!this.tooltip) {
+      return nothing;
+    }
+
+    const showBelow = this.tooltip.y < 180;
+
+    return html`
+      <div
+        class="metric-tooltip ${showBelow ? "bottom" : ""}"
+        role="tooltip"
+        style=${`left: ${this.tooltip.x}px; top: ${this.tooltip.y}px;`}
+      >
+        <strong>${this.tooltip.title}</strong>
+        <span>${this.tooltip.text}</span>
+      </div>
+    `;
+  }
+
+  private metricTooltip(
+    metric: "fitness" | "fatigue" | "form"
+  ): { title: string; text: string } {
+    if (metric === "fitness") {
+      return {
+        title: "Fitness · CTL",
+        text:
+          "Charge d’entraînement chronique calculée sur environ 42 jours.\n\n" +
+          "Une valeur en hausse indique généralement que votre niveau " +
+          "d’entraînement progresse.",
+      };
+    }
+
+    if (metric === "fatigue") {
+      return {
+        title: "Fatigue · ATL",
+        text:
+          "Charge d’entraînement récente calculée sur environ 7 jours.\n\n" +
+          "Une valeur élevée indique une fatigue accumulée plus importante.",
+      };
+    }
+
+    return {
+      title: "Form · TSB",
+      text:
+        "Différence entre la Fitness et la Fatigue.\n\n" +
+        "Une valeur négative indique généralement de la fatigue. " +
+        "Une valeur positive indique davantage de fraîcheur.",
+    };
+  }
+
+
   private metric(
     label: string,
     shortLabel: string,
@@ -166,18 +378,36 @@ export class HaIntervalsIcuCard extends LitElement {
     const max = metric === "form" ? 30 : 100;
     const change = state?.attributes.change_7_days;
 
-    return html`<article class="metric ${metric}">
-      <div class="metric-label">${label}</div>
-      <div class="metric-value">${formatState(this.hass!, state)}</div>
-      <div class="metric-short">${shortLabel}</div>
-      ${gauge(value, status, min, max)}
-      <div class="metric-foot">
-        7 j
-        ${typeof change === "number"
-          ? `${change > 0 ? "+" : ""}${change.toFixed(1)}`
-          : "—"}
-      </div>
-    </article>`;
+    return html`
+      <article
+        class="metric ${metric}"
+        tabindex="0"
+        aria-label=${`${label} — ${this.metricTooltip(metric).title}`}
+        @mouseenter=${(event: Event) =>
+          this.showMetricTooltip(event, metric)}
+        @mouseleave=${() => this.hideMetricTooltip()}
+        @focus=${(event: Event) =>
+          this.showMetricTooltip(event, metric)}
+        @blur=${() => this.hideMetricTooltip()}
+        @click=${(event: Event) => {
+          event.stopPropagation();
+          this.showMetricTooltip(event, metric, true);
+        }}
+        @keydown=${(event: KeyboardEvent) =>
+          this.handleMetricKeydown(event, metric)}
+      >
+        <div class="metric-label">${label}</div>
+        <div class="metric-value">${formatState(this.hass!, state)}</div>
+        <div class="metric-short">${shortLabel}</div>
+        ${gauge(value, status, min, max)}
+        <div class="metric-foot">
+          7 j
+          ${typeof change === "number"
+            ? `${change > 0 ? "+" : ""}${change.toFixed(1)}`
+            : "—"}
+        </div>
+      </article>
+    `;
   }
 
   private infoRow(icon: string, label: string, state?: HassEntity) {
@@ -591,6 +821,8 @@ export class HaIntervalsIcuCard extends LitElement {
               </article>`
             : nothing}
         </section>
+
+        ${this.renderMetricTooltip()}
       </div>
     </ha-card>`;
   }
