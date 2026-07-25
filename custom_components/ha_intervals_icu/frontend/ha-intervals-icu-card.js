@@ -2304,7 +2304,7 @@ window.customCards.some(
   documentationURL: "https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/lovelace-card.md"
 });
 console.info(
-  "%c HA Intervals.icu Card %c 2.0.0-beta10 ",
+  "%c HA Intervals.icu Card %c 2.0.0-beta14 ",
   "color:white;background:#1976d2;font-weight:700",
   "color:#1976d2;background:white"
 );
