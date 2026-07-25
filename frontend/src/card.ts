@@ -59,7 +59,18 @@ export class HaIntervalsIcuCard extends LitElement {
   static styles = [
     cardStyles,
     css`
+      :host {
+        overflow: visible;
+      }
+
+      ha-card {
+        position: relative;
+        overflow: visible;
+      }
+
       .metric {
+        position: relative;
+        overflow: visible;
         cursor: help;
       }
 
@@ -69,7 +80,7 @@ export class HaIntervalsIcuCard extends LitElement {
       }
 
       .metric-tooltip {
-        position: fixed;
+        position: absolute;
         z-index: 10000;
         width: max-content;
         max-width: min(320px, calc(100vw - 24px));
@@ -82,7 +93,7 @@ export class HaIntervalsIcuCard extends LitElement {
           0 10px 30px rgba(0, 0, 0, 0.24),
           0 2px 8px rgba(0, 0, 0, 0.16);
         pointer-events: none;
-        transform: translate(-50%, calc(-100% - 12px));
+        transform: translate(-50%, 12px);
         animation: tooltip-appear 120ms ease-out;
       }
 
@@ -256,18 +267,20 @@ export class HaIntervalsIcuCard extends LitElement {
 
   private tooltipPosition(event: Event): { x: number; y: number } {
     const target = event.currentTarget as HTMLElement;
-    const rect = target.getBoundingClientRect();
-    const horizontalPadding = 170;
+    const targetRect = target.getBoundingClientRect();
+    const card = this.renderRoot.querySelector("ha-card");
+    const cardRect = card?.getBoundingClientRect() ?? this.getBoundingClientRect();
+
+    const tooltipHalfWidth = 160;
+    const relativeCenter =
+      targetRect.left - cardRect.left + targetRect.width / 2;
 
     return {
       x: Math.max(
-        horizontalPadding,
-        Math.min(
-          rect.left + rect.width / 2,
-          window.innerWidth - horizontalPadding
-        )
+        tooltipHalfWidth,
+        Math.min(relativeCenter, cardRect.width - tooltipHalfWidth)
       ),
-      y: rect.top
+      y: targetRect.bottom - cardRect.top
     };
   }
 
@@ -320,11 +333,9 @@ export class HaIntervalsIcuCard extends LitElement {
       return nothing;
     }
 
-    const showBelow = this.tooltip.y < 180;
-
     return html`
       <div
-        class="metric-tooltip ${showBelow ? "bottom" : ""}"
+        class="metric-tooltip bottom"
         role="tooltip"
         style=${`left: ${this.tooltip.x}px; top: ${this.tooltip.y}px;`}
       >

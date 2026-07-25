@@ -250,7 +250,7 @@ R.elementStyles = [], R.shadowRootOptions = { mode: "open" }, R[D("elementProper
 const ge = globalThis, Ae = (t) => t, Q = ge.trustedTypes, Se = Q ? Q.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, je = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, Ue = "?" + x, mt = `<${Ue}>`, E = document, j = () => E.createComment(""), U = (t) => t === null || typeof t != "object" && typeof t != "function", me = Array.isArray, ft = (t) => me(t) || typeof t?.[Symbol.iterator] == "function", oe = `[ 	
 \f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ce = /-->/g, Ee = />/g, S = RegExp(`>|${oe}(?:([^\\s"'>=/]+)(${oe}*=${oe}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Te = /'/g, Me = /"/g, Ie = /^(?:script|style|textarea|title)$/i, He = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), c = He(1), le = He(2), P = /* @__PURE__ */ Symbol.for("lit-noChange"), h = /* @__PURE__ */ Symbol.for("lit-nothing"), Re = /* @__PURE__ */ new WeakMap(), C = E.createTreeWalker(E, 129);
-function Le(t, e) {
+function qe(t, e) {
   if (!me(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return Se !== void 0 ? Se.createHTML(e) : e;
 }
@@ -264,7 +264,7 @@ const vt = (t, e) => {
     const _ = o === S && t[n + 1].startsWith("/>") ? " " : "";
     a += o === z ? d + mt : u >= 0 ? (r.push(m), d.slice(0, u) + je + d.slice(u) + x + _) : d + x + (u === -2 ? n : _);
   }
-  return [Le(t, a + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), r];
+  return [qe(t, a + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), r];
 };
 class I {
   constructor({ strings: e, _$litType$: i }, r) {
@@ -368,7 +368,7 @@ class F {
     this._$AH !== h && U(this._$AH) ? this._$AA.nextSibling.data = e : this.T(E.createTextNode(e)), this._$AH = e;
   }
   $(e) {
-    const { values: i, _$litType$: r } = e, s = typeof r == "number" ? this._$AC(e) : (r.el === void 0 && (r.el = I.createElement(Le(r.h, r.h[0]), this.options)), r);
+    const { values: i, _$litType$: r } = e, s = typeof r == "number" ? this._$AC(e) : (r.el === void 0 && (r.el = I.createElement(qe(r.h, r.h[0]), this.options)), r);
     if (this._$AH?._$AD === s) this._$AH.p(i);
     else {
       const a = new yt(s, this), o = a.u(this.options);
@@ -534,7 +534,7 @@ function V(t) {
 function w(t) {
   return V({ ...t, state: !0, attribute: !1 });
 }
-const qe = ee`
+const Le = ee`
   :host{display:block;--icu-green:#6fe04f;--icu-orange:#ff9f2f;--icu-blue:#4c9fff;--icu-purple:#a579ff;--icu-pink:#ff6fae}
   *{box-sizing:border-box}
   ha-card{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 96%,#0b1830),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#12305a));box-shadow:0 18px 55px rgba(0,0,0,.16)}
@@ -1051,12 +1051,12 @@ function It(t, e) {
 function Ne(t, e = "Activity", i) {
   return X(i, t, e);
 }
-var Ht = Object.defineProperty, Lt = Object.getOwnPropertyDescriptor, ve = (t, e, i, r) => {
-  for (var s = r > 1 ? void 0 : r ? Lt(e, i) : e, a = t.length - 1, o; a >= 0; a--)
+var Ht = Object.defineProperty, qt = Object.getOwnPropertyDescriptor, ve = (t, e, i, r) => {
+  for (var s = r > 1 ? void 0 : r ? qt(e, i) : e, a = t.length - 1, o; a >= 0; a--)
     (o = t[a]) && (s = (r ? o(e, i, s) : o(s)) || s);
   return r && s && Ht(e, i, s), s;
 };
-const B = "https://github.com/pepka69/ha-intervals-icu", qt = `${B}/blob/develop/README.fr.md`, Ft = `${B}/issues`, Vt = `${B}/issues/new/choose`, Bt = "https://buymeacoffee.com/pep_ka", Wt = `${B}/raw/develop/.github/assets/buy-me-a-beer-en.png`, Ge = [
+const B = "https://github.com/pepka69/ha-intervals-icu", Lt = `${B}/blob/develop/README.fr.md`, Ft = `${B}/issues`, Vt = `${B}/issues/new/choose`, Bt = "https://buymeacoffee.com/pep_ka", Wt = `${B}/raw/develop/.github/assets/buy-me-a-beer-en.png`, Ge = [
   ["fitness_entity", "Fitness", g.fitness],
   ["fatigue_entity", "Fatigue", g.fatigue],
   ["form_entity", "Forme", g.form],
@@ -1098,7 +1098,7 @@ const B = "https://github.com/pepka69/ha-intervals-icu", qt = `${B}/blob/develop
   { key: "stress", label: "Stress" },
   { key: "daily_calories", label: "Calories quotidiennes" }
 ];
-let L = class extends $ {
+let q = class extends $ {
   setConfig(t) {
     this.config = { ...t };
   }
@@ -1331,7 +1331,7 @@ let L = class extends $ {
             </div>
 
             <div class="about-links">
-              <a href=${qt} target="_blank" rel="noopener noreferrer">
+              <a href=${Lt} target="_blank" rel="noopener noreferrer">
                 <ha-icon icon="mdi:book-open-page-variant-outline"></ha-icon>
                 Documentation
               </a>
@@ -1368,16 +1368,16 @@ let L = class extends $ {
     `;
   }
 };
-L.styles = qe;
+q.styles = Le;
 ve([
   V({ attribute: !1 })
-], L.prototype, "hass", 2);
+], q.prototype, "hass", 2);
 ve([
   w()
-], L.prototype, "config", 2);
-L = ve([
+], q.prototype, "config", 2);
+q = ve([
   re("ha-intervals-icu-card-editor")
-], L);
+], q);
 var Yt = Object.defineProperty, Jt = Object.getOwnPropertyDescriptor, W = (t, e, i, r) => {
   for (var s = r > 1 ? void 0 : r ? Jt(e, i) : e, a = t.length - 1, o; a >= 0; a--)
     (o = t[a]) && (s = (r ? o(e, i, s) : o(s)) || s);
@@ -1488,16 +1488,13 @@ let T = class extends $ {
     return i === null ? "neutral" : t === "form" ? i < -20 ? "danger" : i < -10 ? "warning" : "good" : t === "fatigue" ? i >= 80 ? "danger" : i >= 60 ? "warning" : "good" : "good";
   }
   tooltipPosition(t) {
-    const i = t.currentTarget.getBoundingClientRect(), r = 170;
+    const i = t.currentTarget.getBoundingClientRect(), s = this.renderRoot.querySelector("ha-card")?.getBoundingClientRect() ?? this.getBoundingClientRect(), a = 160, o = i.left - s.left + i.width / 2;
     return {
       x: Math.max(
-        r,
-        Math.min(
-          i.left + i.width / 2,
-          window.innerWidth - r
-        )
+        a,
+        Math.min(o, s.width - a)
       ),
-      y: i.top
+      y: i.bottom - s.top
     };
   }
   showMetricTooltip(t, e, i = !1) {
@@ -1526,19 +1523,16 @@ let T = class extends $ {
     (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.showMetricTooltip(t, e, !0));
   }
   renderMetricTooltip() {
-    if (!this.tooltip)
-      return h;
-    const t = this.tooltip.y < 180;
-    return c`
+    return this.tooltip ? c`
       <div
-        class="metric-tooltip ${t ? "bottom" : ""}"
+        class="metric-tooltip bottom"
         role="tooltip"
         style=${`left: ${this.tooltip.x}px; top: ${this.tooltip.y}px;`}
       >
         <strong>${this.tooltip.title}</strong>
         <span>${this.tooltip.text}</span>
       </div>
-    `;
+    ` : h;
   }
   metricTooltip(t) {
     return t === "fitness" ? {
@@ -1913,9 +1907,20 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
   }
 };
 T.styles = [
-  qe,
+  Le,
   ee`
+      :host {
+        overflow: visible;
+      }
+
+      ha-card {
+        position: relative;
+        overflow: visible;
+      }
+
       .metric {
+        position: relative;
+        overflow: visible;
         cursor: help;
       }
 
@@ -1925,7 +1930,7 @@ T.styles = [
       }
 
       .metric-tooltip {
-        position: fixed;
+        position: absolute;
         z-index: 10000;
         width: max-content;
         max-width: min(320px, calc(100vw - 24px));
@@ -1938,7 +1943,7 @@ T.styles = [
           0 10px 30px rgba(0, 0, 0, 0.24),
           0 2px 8px rgba(0, 0, 0, 0.16);
         pointer-events: none;
-        transform: translate(-50%, calc(-100% - 12px));
+        transform: translate(-50%, 12px);
         animation: tooltip-appear 120ms ease-out;
       }
 
@@ -2004,7 +2009,7 @@ var Xt = Object.defineProperty, ei = Object.getOwnPropertyDescriptor, k = (t, e,
     (o = t[a]) && (s = (r ? o(e, i, s) : o(s)) || s);
   return r && s && Xt(e, i, s), s;
 };
-let q = class extends $ {
+let L = class extends $ {
   setConfig(t) {
     this.config = { ...t };
   }
@@ -2121,7 +2126,7 @@ let q = class extends $ {
     `;
   }
 };
-q.styles = ee`
+L.styles = ee`
     :host {
       display: block;
     }
@@ -2160,13 +2165,13 @@ q.styles = ee`
   `;
 k([
   V({ attribute: !1 })
-], q.prototype, "hass", 2);
+], L.prototype, "hass", 2);
 k([
   w()
-], q.prototype, "config", 2);
-q = k([
+], L.prototype, "config", 2);
+L = k([
   re("ha-intervals-icu-statistics-card-editor")
-], q);
+], L);
 let M = class extends $ {
   constructor() {
     super(...arguments), this.period = "30_days", this.section = "overview";
@@ -2304,7 +2309,7 @@ window.customCards.some(
   documentationURL: "https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/lovelace-card.md"
 });
 console.info(
-  "%c HA Intervals.icu Card %c 2.0.0-beta14 ",
+  "%c HA Intervals.icu Card %c 2.0.0-beta15 ",
   "color:white;background:#1976d2;font-weight:700",
   "color:#1976d2;background:white"
 );
