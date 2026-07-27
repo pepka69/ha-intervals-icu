@@ -464,6 +464,11 @@ def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any
         "period_records": data.get("advanced_period_records", {}),
         "records": build_dashboard_attributes(data).get("records", {}),
         "zones": build_dashboard_attributes(data).get("zones_60_days", {}),
+        "wellness": {
+            key: value
+            for key, value in data.items()
+            if key.startswith("wellness_")
+        },
         "data_quality": build_dashboard_attributes(data).get(
             "activity_api_coverage", {}
         ),

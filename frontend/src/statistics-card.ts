@@ -317,6 +317,161 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     </div>`;
   }
 
+  private wellness(data: Dict) {
+    const wellness = data.wellness ?? {};
+
+    const metrics = [
+      {
+        key: "wellness_sleep",
+        label: t(this.hass, "sleep"),
+        icon: "mdi:sleep",
+        format: "duration"
+      },
+      {
+        key: "wellness_sleep_score",
+        label: this.hass?.locale?.language?.startsWith("fr")
+          ? "Score de sommeil"
+          : "Sleep score",
+        icon: "mdi:sleep-off",
+        format: "number"
+      },
+      {
+        key: "wellness_hrv",
+        label: "HRV",
+        icon: "mdi:heart-flash",
+        format: "number"
+      },
+      {
+        key: "wellness_resting_hr",
+        label: t(this.hass, "resting_hr"),
+        icon: "mdi:heart-pulse",
+        format: "number"
+      },
+      {
+        key: "wellness_readiness",
+        label: this.hass?.locale?.language?.startsWith("fr")
+          ? "Préparation"
+          : "Readiness",
+        icon: "mdi:battery-heart-variant",
+        format: "number"
+      },
+      {
+        key: "wellness_vo2max",
+        label: "VO₂max",
+        icon: "mdi:lungs",
+        format: "number"
+      }
+    ];
+
+    const available = metrics.filter(
+      (metric) =>
+        wellness[metric.key] !== undefined &&
+        wellness[metric.key] !== null
+    );
+
+    if (!available.length) {
+      return html`
+        <div class="empty">
+          ${this.hass?.locale?.language?.startsWith("fr")
+            ? "Aucune donnée de bien-être disponible."
+            : "No wellness data available."}
+        </div>
+      `;
+    }
+
+    const selectedDays =
+      this.period === "7_days"
+        ? 7
+        : this.period === "30_days"
+          ? 30
+          : null;
+
+    const displayValue = (
+      value: unknown,
+      format: string
+    ): string => {
+      if (format === "duration") {
+        const seconds = Number(value);
+        return Number.isFinite(seconds)
+          ? formatDuration(seconds, "s")
+          : "—";
+      }
+
+      return this.number(value);
+    };
+
+    return html`
+      <div class="wellness-grid">
+        ${available.map((metric) => {
+          const averageKey = selectedDays
+            ? `${metric.key}_average_${selectedDays}_days`
+            : undefined;
+
+          const minimumKey =
+            this.period === "30_days"
+              ? `${metric.key}_minimum_30_days`
+              : undefined;
+
+          const maximumKey =
+            this.period === "30_days"
+              ? `${metric.key}_maximum_30_days`
+              : undefined;
+
+          const average = averageKey
+            ? wellness[averageKey]
+            : undefined;
+
+          const minimum = minimumKey
+            ? wellness[minimumKey]
+            : undefined;
+
+          const maximum = maximumKey
+            ? wellness[maximumKey]
+            : undefined;
+
+          return html`
+            <article class="wellness-card">
+              <div class="wellness-title">
+                <ha-icon icon=${metric.icon}></ha-icon>
+                <span>${metric.label}</span>
+              </div>
+
+              <strong>
+                ${displayValue(wellness[metric.key], metric.format)}
+              </strong>
+
+              ${average !== undefined && average !== null
+                ? html`
+                    <small>
+                      ${this.hass?.locale?.language?.startsWith("fr")
+                        ? "Moyenne"
+                        : "Average"}
+                      ${selectedDays} j :
+                      ${displayValue(average, metric.format)}
+                    </small>
+                  `
+                : nothing}
+
+              ${minimum !== undefined &&
+              minimum !== null &&
+              maximum !== undefined &&
+              maximum !== null
+                ? html`
+                    <small>
+                      Min :
+                      ${displayValue(minimum, metric.format)}
+                      · Max :
+                      ${displayValue(maximum, metric.format)}
+                    </small>
+                  `
+                : nothing}
+            </article>
+          `;
+        })}
+      </div>
+    `;
+  }
+
   private records(data: Dict) {
     const period = data.period_records ?? {};
     const sports = data.records_by_sport ?? {};
@@ -345,15 +500,26 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
   protected render() {
     if (!this.hass || !this.config) return nothing;
     const data = this.attrs();
-    const content = this.section === "sports" ? this.sports(data) : this.section === "records" ? this.records(data) : this.section === "trends" ? this.trends(data) : this.section === "quality" ? this.quality(data) : this.overview(data);
+    const content =
+      this.section === "sports"
+        ? this.sports(data)
+        : this.section === "records"
+          ? this.records(data)
+          : this.section === "trends"
+            ? this.trends(data)
+            : this.section === "wellness"
+              ? this.wellness(data)
+              : this.section === "quality"
+                ? this.quality(data)
+                : this.overview(data);
     return html`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${t(this.hass, "statistics_trends")}</span></div></div><nav>${(["7_days","30_days","90_days","365_days"] as Period[]).map(p => html`<button class=${this.period === p ? "active" : ""} @click=${() => this.period = p}>${p.replace("_days", t(this.hass, "day_short"))}</button>`)}</nav></header>
-      <div class="tabs">${["overview","sports","records","trends","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${t(this.hass, tab)}</button>`)}</div>
+      <div class="tabs">${["overview","sports","records","trends","wellness","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${tab === "wellness" ? (this.hass?.locale?.language?.startsWith("fr") ? "Bien-être" : "Wellness") : t(this.hass, tab)}</button>`)}</div>
       <section>${content}</section></div></ha-card>`;
   }
 
   static styles = css`
-    :host{display:block}*{box-sizing:border-box}ha-card{border-radius:24px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 95%,#10233f),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#19385f))}.shell{padding:20px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}header>div{display:flex;gap:12px;align-items:center}header ha-icon{--mdc-icon-size:32px;color:var(--primary-color)}h2{margin:0;font-size:1.3rem}header span{color:var(--secondary-text-color);font-size:.82rem}nav,.tabs{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:8px 11px;background:color-mix(in srgb,var(--secondary-background-color) 80%,transparent);color:var(--primary-text-color);cursor:pointer;text-transform:capitalize}button.active{background:var(--primary-color);color:var(--text-primary-color,#fff)}.tabs{margin:18px 0 14px;border-bottom:1px solid var(--divider-color);padding-bottom:10px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tile{display:flex;gap:10px;align-items:center;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 75%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.tile>ha-icon{color:var(--primary-color)}.tile div{display:grid;gap:2px}.tile span,.tile small{font-size:.72rem;color:var(--secondary-text-color)}.tile strong{font-size:1.12rem}.change{width:max-content;padding:2px 6px;border-radius:999px}.change.up{color:#4caf50;background:rgba(76,175,80,.12)}.change.down{color:#ef5350;background:rgba(239,83,80,.12)}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.insight{display:flex;gap:9px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--secondary-background-color) 68%,transparent)}.insight.warning ha-icon{color:#ff9800}.insight div{display:grid}.insight span{font-size:.78rem;color:var(--secondary-text-color)}.table,.record-list{display:grid;gap:8px}.row{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;padding:12px;border-radius:13px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.row span{color:var(--secondary-text-color)}.record-grid,.trend-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record,.trend{display:grid;gap:5px;padding:14px;border-radius:15px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.record span,.trend span{text-transform:capitalize;color:var(--secondary-text-color);font-size:.76rem}.record small{color:var(--secondary-text-color)}details{margin-top:9px;padding:10px;border:1px solid var(--divider-color);border-radius:12px}summary{font-weight:700;cursor:pointer}.record-list{margin-top:10px}.record-list>div{display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--divider-color)}.trend-changes{display:grid;grid-template-columns:1fr 1fr;gap:4px;color:var(--secondary-text-color)}.quality-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}.quality-head strong{font-size:2rem;color:var(--primary-color)}.coverage{display:grid;gap:10px}.coverage>div{display:grid;grid-template-columns:160px 1fr 55px;gap:10px;align-items:center;text-transform:capitalize}progress{width:100%;accent-color:var(--primary-color)}.empty{text-align:center;padding:30px;color:var(--secondary-text-color)}
-    @media(max-width:850px){.tiles,.record-grid,.trend-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}}
-    @media(max-width:520px){.shell{padding:14px}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
+    :host{display:block}*{box-sizing:border-box}ha-card{border-radius:24px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 95%,#10233f),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#19385f))}.shell{padding:20px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}header>div{display:flex;gap:12px;align-items:center}header ha-icon{--mdc-icon-size:32px;color:var(--primary-color)}h2{margin:0;font-size:1.3rem}header span{color:var(--secondary-text-color);font-size:.82rem}nav,.tabs{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:8px 11px;background:color-mix(in srgb,var(--secondary-background-color) 80%,transparent);color:var(--primary-text-color);cursor:pointer;text-transform:capitalize}button.active{background:var(--primary-color);color:var(--text-primary-color,#fff)}.tabs{margin:18px 0 14px;border-bottom:1px solid var(--divider-color);padding-bottom:10px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tile{display:flex;gap:10px;align-items:center;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 75%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.tile>ha-icon{color:var(--primary-color)}.tile div{display:grid;gap:2px}.tile span,.tile small{font-size:.72rem;color:var(--secondary-text-color)}.tile strong{font-size:1.12rem}.change{width:max-content;padding:2px 6px;border-radius:999px}.change.up{color:#4caf50;background:rgba(76,175,80,.12)}.change.down{color:#ef5350;background:rgba(239,83,80,.12)}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.insight{display:flex;gap:9px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--secondary-background-color) 68%,transparent)}.insight.warning ha-icon{color:#ff9800}.insight div{display:grid}.insight span{font-size:.78rem;color:var(--secondary-text-color)}.table,.record-list{display:grid;gap:8px}.row{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;padding:12px;border-radius:13px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.row span{color:var(--secondary-text-color)}.record-grid,.trend-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record,.trend{display:grid;gap:5px;padding:14px;border-radius:15px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.record span,.trend span{text-transform:capitalize;color:var(--secondary-text-color);font-size:.76rem}.record small{color:var(--secondary-text-color)}details{margin-top:9px;padding:10px;border:1px solid var(--divider-color);border-radius:12px}summary{font-weight:700;cursor:pointer}.record-list{margin-top:10px}.record-list>div{display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--divider-color)}.trend-changes{display:grid;grid-template-columns:1fr 1fr;gap:4px;color:var(--secondary-text-color)}.wellness-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.wellness-card{display:grid;gap:7px;padding:15px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.wellness-title{display:flex;gap:8px;align-items:center;color:var(--secondary-text-color);font-size:.78rem}.wellness-title ha-icon{color:var(--primary-color)}.wellness-card>strong{font-size:1.25rem}.wellness-card>small{color:var(--secondary-text-color)}.quality-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}.quality-head strong{font-size:2rem;color:var(--primary-color)}.coverage{display:grid;gap:10px}.coverage>div{display:grid;grid-template-columns:160px 1fr 55px;gap:10px;align-items:center;text-transform:capitalize}progress{width:100%;accent-color:var(--primary-color)}.empty{text-align:center;padding:30px;color:var(--secondary-text-color)}
+    @media(max-width:850px){.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}}
+    @media(max-width:520px){.shell{padding:14px}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
   `;
 }

@@ -131,6 +131,7 @@ def calculate_wellness_statistics(
         "wellness_weight": ("weight",),
         "wellness_resting_hr": ("restingHR", "resting_hr"),
         "wellness_hrv": ("hrv", "hrvRMSSD", "hrvSdnn", "hrvSDNN"),
+        "wellness_sleep": ("sleepSecs", "sleep_secs"),
         "wellness_sleep_score": ("sleepScore", "sleep_score"),
         "wellness_readiness": (
             "readiness",
