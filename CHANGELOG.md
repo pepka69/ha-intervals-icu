@@ -1,5 +1,23 @@
 # Changelog
 
+## v2.0.0-beta17 — Sports translations
+
+### Frontend
+
+- Traduction de `HighIntensityIntervalTraining` en `CrossFit`.
+- Traduction de `HIIT` en `CrossFit`.
+- Harmonisation de `StrengthTraining` et `WeightTraining` en `Musculation`.
+- Traduction de `VirtualRow` et `VirtualRowing` en `Rameur virtuel`.
+- Traduction de `StairClimber` et `StairStepper` en `Stepper`.
+- Utilisation des traductions sportives dans les textes dynamiques de la carte Statistics.
+- Reconstruction du bundle Lovelace.
+
+### Validation
+
+- TypeScript : `tsc --noEmit` validé.
+- Frontend : build Vite validé.
+- Python : 52 tests réussis.
+
 ## v2.0.0-beta2
 
 - Added the Atlas dashboard section to the official Lovelace card.

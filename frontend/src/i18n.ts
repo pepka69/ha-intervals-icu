@@ -278,6 +278,12 @@ export function translateDynamicText(
     } % du temps d’entraînement sur les ${match[3]} derniers jours`;
   }
 
+  const sport = translateSportName(hass, text);
+
+  if (sport !== text) {
+    return sport;
+  }
+
   return translateValue(hass, text);
 }
 
@@ -298,6 +304,7 @@ const SPORTS_FR: Record<string, string> = {
   weighttraining: "Musculation",
   strengthtraining: "Musculation",
   crossfit: "CrossFit",
+  highintensityintervaltraining: "CrossFit",
   hiit: "CrossFit",
   workout: "Entraînement",
   yoga: "Yoga",

@@ -15,7 +15,7 @@ Dernière mise à jour : 27 juillet 2026
 
 ## Version actuelle
 
-- Version actuelle : v2.0.0-beta16
+- Version actuelle : v2.0.0-beta17
 - Build frontend : réussi
 - Tests Python : 52 passed
 
@@ -99,3 +99,16 @@ Respecte notre workflow habituel :
 analyse → développement → tests → build → validation → commit → push.
 
 Ne simplifie jamais le projet.
+
+## v2.0.0-beta17 — Sports translations
+
+- Ajout de la traduction `HighIntensityIntervalTraining` → `CrossFit`.
+- Ajout et harmonisation des alias de sports français.
+- `StrengthTraining` et `WeightTraining` affichés comme `Musculation`.
+- `VirtualRow` et `VirtualRowing` affichés comme `Rameur virtuel`.
+- `StairClimber` et `StairStepper` affichés comme `Stepper`.
+- `translateDynamicText()` utilise désormais la traduction des sports.
+- TypeScript validé.
+- Build Vite validé.
+- 52 tests Python réussis.
+- Étape suivante : installation de la pré-release beta17 via HACS et validation dans Home Assistant.

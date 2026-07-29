@@ -1,4 +1,4 @@
-const Z = globalThis, he = Z.ShadowRoot && (Z.ShadyCSS === void 0 || Z.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, pe = /* @__PURE__ */ Symbol(), xe = /* @__PURE__ */ new WeakMap();
+const Y = globalThis, he = Y.ShadowRoot && (Y.ShadyCSS === void 0 || Y.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, pe = /* @__PURE__ */ Symbol(), xe = /* @__PURE__ */ new WeakMap();
 let De = class {
   constructor(e, i, s) {
     if (this._$cssResult$ = !0, s !== pe) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -27,7 +27,7 @@ const at = (t) => new De(typeof t == "string" ? t : t + "", void 0, pe), ee = (t
 }, ot = (t, e) => {
   if (he) t.adoptedStyleSheets = e.map((i) => i instanceof CSSStyleSheet ? i : i.styleSheet);
   else for (const i of e) {
-    const s = document.createElement("style"), r = Z.litNonce;
+    const s = document.createElement("style"), r = Y.litNonce;
     r !== void 0 && s.setAttribute("nonce", r), s.textContent = i.cssText, t.appendChild(s);
   }
 }, $e = he ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((e) => {
@@ -35,7 +35,7 @@ const at = (t) => new De(typeof t == "string" ? t : t + "", void 0, pe), ee = (t
   for (const s of e.cssRules) i += s.cssText;
   return at(i);
 })(t) : t;
-const { is: nt, defineProperty: lt, getOwnPropertyDescriptor: ct, getOwnPropertyNames: dt, getOwnPropertySymbols: ht, getPrototypeOf: pt } = Object, te = globalThis, we = te.trustedTypes, ut = we ? we.emptyScript : "", gt = te.reactiveElementPolyfillSupport, j = (t, e) => t, J = { toAttribute(t, e) {
+const { is: nt, defineProperty: lt, getOwnPropertyDescriptor: ct, getOwnPropertyNames: dt, getOwnPropertySymbols: ht, getPrototypeOf: pt } = Object, te = globalThis, we = te.trustedTypes, ut = we ? we.emptyScript : "", gt = te.reactiveElementPolyfillSupport, j = (t, e) => t, Q = { toAttribute(t, e) {
   switch (e) {
     case Boolean:
       t = t ? ut : null;
@@ -63,7 +63,7 @@ const { is: nt, defineProperty: lt, getOwnPropertyDescriptor: ct, getOwnProperty
       }
   }
   return i;
-} }, ue = (t, e) => !nt(t, e), ke = { attribute: !0, type: String, converter: J, reflect: !1, useDefault: !1, hasChanged: ue };
+} }, ue = (t, e) => !nt(t, e), ke = { attribute: !0, type: String, converter: Q, reflect: !1, useDefault: !1, hasChanged: ue };
 Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), te.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
 let R = class extends HTMLElement {
   static addInitializer(e) {
@@ -162,14 +162,14 @@ let R = class extends HTMLElement {
   _$ET(e, i) {
     const s = this.constructor.elementProperties.get(e), r = this.constructor._$Eu(e, s);
     if (r !== void 0 && s.reflect === !0) {
-      const o = (s.converter?.toAttribute !== void 0 ? s.converter : J).toAttribute(i, s.type);
+      const o = (s.converter?.toAttribute !== void 0 ? s.converter : Q).toAttribute(i, s.type);
       this._$Em = e, o == null ? this.removeAttribute(r) : this.setAttribute(r, o), this._$Em = null;
     }
   }
   _$AK(e, i) {
     const s = this.constructor, r = s._$Eh.get(e);
     if (r !== void 0 && this._$Em !== r) {
-      const o = s.getPropertyOptions(r), a = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : J;
+      const o = s.getPropertyOptions(r), a = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : Q;
       this._$Em = r;
       const n = a.fromAttribute(i, o.type);
       this[r] = n ?? this._$Ej?.get(r) ?? n, this._$Em = null;
@@ -247,7 +247,7 @@ let R = class extends HTMLElement {
   }
 };
 R.elementStyles = [], R.shadowRootOptions = { mode: "open" }, R[j("elementProperties")] = /* @__PURE__ */ new Map(), R[j("finalized")] = /* @__PURE__ */ new Map(), gt?.({ ReactiveElement: R }), (te.reactiveElementVersions ??= []).push("2.1.2");
-const ge = globalThis, Se = (t) => t, Q = ge.trustedTypes, Ae = Q ? Q.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, je = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, Ue = "?" + x, mt = `<${Ue}>`, E = document, U = () => E.createComment(""), H = (t) => t === null || typeof t != "object" && typeof t != "function", me = Array.isArray, ft = (t) => me(t) || typeof t?.[Symbol.iterator] == "function", oe = `[ 	
+const ge = globalThis, Se = (t) => t, X = ge.trustedTypes, Ae = X ? X.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, je = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, Ue = "?" + x, mt = `<${Ue}>`, E = document, U = () => E.createComment(""), H = (t) => t === null || typeof t != "object" && typeof t != "function", me = Array.isArray, ft = (t) => me(t) || typeof t?.[Symbol.iterator] == "function", oe = `[ 	
 \f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ce = /-->/g, Ee = />/g, A = RegExp(`>|${oe}(?:([^\\s"'>=/]+)(${oe}*=${oe}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Te = /'/g, Me = /"/g, He = /^(?:script|style|textarea|title)$/i, Ie = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), l = Ie(1), le = Ie(2), P = /* @__PURE__ */ Symbol.for("lit-noChange"), p = /* @__PURE__ */ Symbol.for("lit-nothing"), Re = /* @__PURE__ */ new WeakMap(), C = E.createTreeWalker(E, 129);
 function qe(t, e) {
@@ -285,7 +285,7 @@ class I {
         if (He.test(r.tagName)) {
           const u = r.textContent.split(x), h = u.length - 1;
           if (h > 0) {
-            r.textContent = Q ? Q.emptyScript : "";
+            r.textContent = X ? X.emptyScript : "";
             for (let _ = 0; _ < h; _++) r.append(u[_], U()), C.nextNode(), d.push({ type: 2, index: ++o });
             r.append(u[h], U());
           }
@@ -326,7 +326,7 @@ class yt {
     for (; d !== void 0; ) {
       if (a === d.index) {
         let g;
-        d.type === 2 ? g = new V(o, o.nextSibling, this, e) : d.type === 1 ? g = new d.ctor(o, d.name, d.strings, this, e) : d.type === 6 && (g = new $t(o, this, e)), this._$AV.push(g), d = s[++n];
+        d.type === 2 ? g = new B(o, o.nextSibling, this, e) : d.type === 1 ? g = new d.ctor(o, d.name, d.strings, this, e) : d.type === 6 && (g = new $t(o, this, e)), this._$AV.push(g), d = s[++n];
       }
       a !== d?.index && (o = C.nextNode(), a++);
     }
@@ -337,7 +337,7 @@ class yt {
     for (const s of this._$AV) s !== void 0 && (s.strings !== void 0 ? (s._$AI(e, s, i), i += s.strings.length - 2) : s._$AI(e[i])), i++;
   }
 }
-class V {
+class B {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
@@ -383,7 +383,7 @@ class V {
     me(this._$AH) || (this._$AH = [], this._$AR());
     const i = this._$AH;
     let s, r = 0;
-    for (const o of e) r === i.length ? i.push(s = new V(this.O(U()), this.O(U()), this, this.options)) : s = i[r], s._$AI(o), r++;
+    for (const o of e) r === i.length ? i.push(s = new B(this.O(U()), this.O(U()), this, this.options)) : s = i[r], s._$AI(o), r++;
     r < i.length && (this._$AR(s && s._$AB.nextSibling, r), i.length = r);
   }
   _$AR(e = this._$AA.nextSibling, i) {
@@ -462,13 +462,13 @@ class $t {
   }
 }
 const wt = ge.litHtmlPolyfillSupport;
-wt?.(I, V), (ge.litHtmlVersions ??= []).push("3.3.3");
+wt?.(I, B), (ge.litHtmlVersions ??= []).push("3.3.3");
 const kt = (t, e, i) => {
   const s = i?.renderBefore ?? e;
   let r = s._$litPart$;
   if (r === void 0) {
     const o = i?.renderBefore ?? null;
-    s._$litPart$ = r = new V(e.insertBefore(U(), o), o, void 0, i ?? {});
+    s._$litPart$ = r = new B(e.insertBefore(U(), o), o, void 0, i ?? {});
   }
   return r._$AI(t), r;
 };
@@ -504,7 +504,7 @@ const se = (t) => (e, i) => {
     customElements.define(t, e);
   }) : customElements.define(t, e);
 };
-const At = { attribute: !0, type: String, converter: J, reflect: !1, hasChanged: ue }, Ct = (t = At, e, i) => {
+const At = { attribute: !0, type: String, converter: Q, reflect: !1, hasChanged: ue }, Ct = (t = At, e, i) => {
   const { kind: s, metadata: r } = i;
   let o = globalThis.litPropertyMetadata.get(r);
   if (o === void 0 && globalThis.litPropertyMetadata.set(r, o = /* @__PURE__ */ new Map()), s === "setter" && ((t = Object.create(t)).wrapped = !0), o.set(i.name, t), s === "accessor") {
@@ -525,14 +525,14 @@ const At = { attribute: !0, type: String, converter: J, reflect: !1, hasChanged:
   }
   throw Error("Unsupported decorator location: " + s);
 };
-function B(t) {
+function W(t) {
   return (e, i) => typeof i == "object" ? Ct(t, e, i) : ((s, r, o) => {
     const a = r.hasOwnProperty(o);
     return r.constructor.createProperty(o, s), a ? Object.getOwnPropertyDescriptor(r, o) : void 0;
   })(t, e, i);
 }
 function w(t) {
-  return B({ ...t, state: !0, attribute: !1 });
+  return W({ ...t, state: !0, attribute: !1 });
 }
 const Le = ee`
   :host{display:block;--icu-green:#6fe04f;--icu-orange:#ff9f2f;--icu-blue:#4c9fff;--icu-purple:#a579ff;--icu-pink:#ff6fae}
@@ -974,18 +974,25 @@ function D(t, e) {
   const s = i.toLowerCase().replace(/[\s-]+/g, "_");
   return jt[s] ?? i.replace(/_/g, " ").replace(/^./, (r) => r.toUpperCase());
 }
-function Y(t, e) {
+function J(t, e) {
   const i = String(e ?? "").trim();
   if (!i || re(t) !== "fr")
     return i;
   let s = i.match(
     /^(\d+)-day load\s+(?:is\s+)?([\d.,]+)%\s+(lower|higher) than the previous period\.?$/i
   );
-  return s ? `Charge sur ${s[1]} jours ${s[2]} % ${s[3].toLowerCase() === "lower" ? "inférieure" : "supérieure"} à la période précédente` : /^Latest sleep is more than one hour below the value from seven days ago\.?$/i.test(
+  if (s)
+    return `Charge sur ${s[1]} jours ${s[2]} % ${s[3].toLowerCase() === "lower" ? "inférieure" : "supérieure"} à la période précédente`;
+  if (/^Latest sleep is more than one hour below the value from seven days ago\.?$/i.test(
     i
-  ) ? "Le dernier sommeil est inférieur de plus d’une heure à celui d’il y a sept jours" : (s = i.match(
+  ))
+    return "Le dernier sommeil est inférieur de plus d’une heure à celui d’il y a sept jours";
+  if (s = i.match(
     /^(.+?) represents\s+([\d.,]+)% of training time over the last\s+(\d+) days\.?$/i
-  ), s ? `${X(t, s[1])} représente ${s[2]} % du temps d’entraînement sur les ${s[3]} derniers jours` : D(t, i));
+  ), s)
+    return `${L(t, s[1])} représente ${s[2]} % du temps d’entraînement sur les ${s[3]} derniers jours`;
+  const r = L(t, i);
+  return r !== i ? r : D(t, i);
 }
 const Ut = {
   ride: "Vélo",
@@ -1004,6 +1011,7 @@ const Ut = {
   weighttraining: "Musculation",
   strengthtraining: "Musculation",
   crossfit: "CrossFit",
+  highintensityintervaltraining: "CrossFit",
   hiit: "CrossFit",
   workout: "Entraînement",
   yoga: "Yoga",
@@ -1022,7 +1030,7 @@ const Ut = {
   snowboard: "Snowboard",
   other: "Autre activité"
 };
-function X(t, e, i) {
+function L(t, e, i) {
   const s = String(e ?? "").trim();
   if (!s)
     return i ?? c(t, "activity");
@@ -1055,14 +1063,14 @@ function Ht(t, e) {
   };
 }
 function Ne(t, e = "Activity", i) {
-  return X(i, t, e);
+  return L(i, t, e);
 }
 var It = Object.defineProperty, qt = Object.getOwnPropertyDescriptor, ve = (t, e, i, s) => {
   for (var r = s > 1 ? void 0 : s ? qt(e, i) : e, o = t.length - 1, a; o >= 0; o--)
     (a = t[o]) && (r = (s ? a(e, i, r) : a(r)) || r);
   return s && r && It(e, i, r), r;
 };
-const W = "https://github.com/pepka69/ha-intervals-icu", Lt = `${W}/blob/develop/README.fr.md`, Ft = `${W}/issues`, Vt = `${W}/issues/new/choose`, Bt = "https://buymeacoffee.com/pep_ka", Wt = `${W}/raw/develop/.github/assets/buy-me-a-beer-en.png`, Ge = [
+const G = "https://github.com/pepka69/ha-intervals-icu", Lt = `${G}/blob/develop/README.fr.md`, Ft = `${G}/issues`, Vt = `${G}/issues/new/choose`, Bt = "https://buymeacoffee.com/pep_ka", Wt = `${G}/raw/develop/.github/assets/buy-me-a-beer-en.png`, Ge = [
   ["fitness_entity", "Fitness", m.fitness],
   ["fatigue_entity", "Fatigue", m.fatigue],
   ["form_entity", "Forme", m.form],
@@ -1104,7 +1112,7 @@ const W = "https://github.com/pepka69/ha-intervals-icu", Lt = `${W}/blob/develop
   { key: "stress", label: "Stress" },
   { key: "daily_calories", label: "Calories quotidiennes" }
 ];
-let L = class extends $ {
+let F = class extends $ {
   setConfig(t) {
     this.config = { ...t };
   }
@@ -1349,7 +1357,7 @@ let L = class extends $ {
                 <ha-icon icon="mdi:lightbulb-on-outline"></ha-icon>
                 Proposer une fonctionnalité
               </a>
-              <a href=${W} target="_blank" rel="noopener noreferrer">
+              <a href=${G} target="_blank" rel="noopener noreferrer">
                 <ha-icon icon="mdi:github"></ha-icon>
                 Dépôt GitHub
               </a>
@@ -1374,17 +1382,17 @@ let L = class extends $ {
     `;
   }
 };
-L.styles = Le;
+F.styles = Le;
 ve([
-  B({ attribute: !1 })
-], L.prototype, "hass", 2);
+  W({ attribute: !1 })
+], F.prototype, "hass", 2);
 ve([
   w()
-], L.prototype, "config", 2);
-L = ve([
+], F.prototype, "config", 2);
+F = ve([
   se("ha-intervals-icu-card-editor")
-], L);
-var Yt = Object.defineProperty, Jt = Object.getOwnPropertyDescriptor, G = (t, e, i, s) => {
+], F);
+var Yt = Object.defineProperty, Jt = Object.getOwnPropertyDescriptor, K = (t, e, i, s) => {
   for (var r = s > 1 ? void 0 : s ? Jt(e, i) : e, o = t.length - 1, a; o >= 0; o--)
     (a = t[o]) && (r = (s ? a(e, i, r) : a(r)) || r);
   return s && r && Yt(e, i, r), r;
@@ -1689,7 +1697,7 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
       void 0,
       m.lastActivityCalories,
       h
-    ), ye = y(t, Qe), ae = c(t, "activity"), K = Ne(y(t, Xe, ae), ae, t), rt = K !== ae && K.trim().toLowerCase() !== ye.trim().toLowerCase(), _e = Qt.map((b) => ({
+    ), ye = y(t, Qe), ae = c(t, "activity"), Z = Ne(y(t, Xe, ae), ae, t), rt = Z !== ae && Z.trim().toLowerCase() !== ye.trim().toLowerCase(), _e = Qt.map((b) => ({
       ...b,
       state: this.healthState(b.key),
       visible: this.healthVisible(b.key, b.defaultShow)
@@ -1738,7 +1746,7 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
                   <ha-icon icon="mdi:account-heart-outline"></ha-icon><span>${c(t, "atlas_coach")}</span>
                 </div>
                 <h3>${D(t, y(t, u, c(t, "no_recommendation")))}</h3>
-                ${u?.attributes.recommendation ? l`<p>${Y(t, u.attributes.recommendation)}</p>` : p}
+                ${u?.attributes.recommendation ? l`<p>${J(t, u.attributes.recommendation)}</p>` : p}
                 <div class="atlas-chips">
                   ${u?.attributes.intensity ? l`<span>${D(t, u.attributes.intensity)}</span>` : p}
                   ${u?.attributes.duration_minutes ? l`<span>${String(u.attributes.duration_minutes)} min</span>` : p}
@@ -1879,11 +1887,11 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
 
           ${this.config.show_last_activity !== !1 ? l`<article class="feature last-activity spotlight">
                 <div class="section-title">
-                  <ha-icon icon=${this.sportIcon(K)}></ha-icon
+                  <ha-icon icon=${this.sportIcon(Z)}></ha-icon
                   ><span>${c(t, "last_activity")}</span>
                 </div>
                 <h3>${ye}</h3>
-                ${rt ? l`<div class="pill purple">${K}</div>` : p}
+                ${rt ? l`<div class="pill purple">${Z}</div>` : p}
                 <div class="activity-details">
                   <span
                     ><ha-icon
@@ -1995,19 +2003,19 @@ T.styles = [
       }
     `
 ];
-G([
-  B({ attribute: !1 })
+K([
+  W({ attribute: !1 })
 ], T.prototype, "hass", 2);
-G([
+K([
   w()
 ], T.prototype, "config", 2);
-G([
+K([
   w()
 ], T.prototype, "refreshing", 2);
-G([
+K([
   w()
 ], T.prototype, "tooltip", 2);
-T = G([
+T = K([
   se("ha-intervals-icu-card")
 ], T);
 var Xt = Object.defineProperty, ei = Object.getOwnPropertyDescriptor, k = (t, e, i, s) => {
@@ -2015,7 +2023,7 @@ var Xt = Object.defineProperty, ei = Object.getOwnPropertyDescriptor, k = (t, e,
     (a = t[o]) && (r = (s ? a(e, i, r) : a(r)) || r);
   return s && r && Xt(e, i, r), r;
 };
-let F = class extends $ {
+let V = class extends $ {
   setConfig(t) {
     this.config = { ...t };
   }
@@ -2132,7 +2140,7 @@ let F = class extends $ {
     `;
   }
 };
-F.styles = ee`
+V.styles = ee`
     :host {
       display: block;
     }
@@ -2170,14 +2178,14 @@ F.styles = ee`
     }
   `;
 k([
-  B({ attribute: !1 })
-], F.prototype, "hass", 2);
+  W({ attribute: !1 })
+], V.prototype, "hass", 2);
 k([
   w()
-], F.prototype, "config", 2);
-F = k([
+], V.prototype, "config", 2);
+V = k([
   se("ha-intervals-icu-statistics-card-editor")
-], F);
+], V);
 let M = class extends $ {
   constructor() {
     super(...arguments), this.period = "30_days", this.section = "overview";
@@ -2222,7 +2230,7 @@ let M = class extends $ {
     return c(this.hass, t);
   }
   name(t) {
-    return Y(this.hass, t.replaceAll("_", " "));
+    return J(this.hass, t.replaceAll("_", " "));
   }
   overview(t) {
     const e = t.periods?.[this.period] ?? {}, i = e.current ?? {}, s = e.comparison ?? {};
@@ -2238,13 +2246,13 @@ let M = class extends $ {
         ${this.tile("mdi:chart-timeline-variant", "TRIMP", i.trimp, "", s.trimp_change_percent)}
       </div>
       <div class="insights">
-        ${(t.training_insights_by_period?.[this.period] ?? t.insights ?? t.training_insights ?? []).map((r) => l`<div class="insight ${r.type ?? "info"}"><ha-icon icon=${r.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${Y(this.hass, r.title)}</strong><span>${Y(this.hass, r.message)}</span></div></div>`)}
+        ${(t.training_insights_by_period?.[this.period] ?? t.insights ?? t.training_insights ?? []).map((r) => l`<div class="insight ${r.type ?? "info"}"><ha-icon icon=${r.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${J(this.hass, r.title)}</strong><span>${J(this.hass, r.message)}</span></div></div>`)}
       </div>`;
   }
   sports(t) {
     const e = t.sports?.[this.period] ?? {};
     return l`<div class="table">${Object.entries(e).map(([i, s]) => l`
-      <div class="row"><strong>${X(this.hass, i)}</strong><span>${this.number(s.activities, 0)} ${c(this.hass, "activity_short")}</span><span>${N(s.duration_hours, "h")}</span><span>${this.number(s.distance_km)} km</span><span>${c(this.hass, "load")} ${this.number(s.load)}</span></div>`)}
+      <div class="row"><strong>${L(this.hass, i)}</strong><span>${this.number(s.activities, 0)} ${c(this.hass, "activity_short")}</span><span>${N(s.duration_hours, "h")}</span><span>${this.number(s.distance_km)} km</span><span>${c(this.hass, "load")} ${this.number(s.load)}</span></div>`)}
       ${Object.keys(e).length ? p : l`<div class="empty">${c(this.hass, "no_sport_data")}</div>`}
     </div>`;
   }
@@ -2345,7 +2353,7 @@ let M = class extends $ {
       <div class="record-grid">
         ${Object.entries(e).map(([s, r]) => r ? l`<article class="record"><span>${this.name(s)}</span><strong>${r.period}</strong><small>${this.number(r.load)} ${c(this.hass, "load").toLowerCase()} · ${N(r.duration_hours, "h")}</small></article>` : p)}
       </div>
-      ${Object.entries(i).map(([s, r]) => l`<details><summary>${X(this.hass, s)}</summary><div class="record-list">${Object.entries(r).map(([o, a]) => l`<div><span>${this.name(o)}</span><strong>${this.number(a.value)}</strong><small>${a.activity?.name ?? ""}</small></div>`)}</div></details>`)}
+      ${Object.entries(i).map(([s, r]) => l`<details><summary>${L(this.hass, s)}</summary><div class="record-list">${Object.entries(r).map(([o, a]) => l`<div><span>${this.name(o)}</span><strong>${this.number(a.value)}</strong><small>${a.activity?.name ?? ""}</small></div>`)}</div></details>`)}
     `;
   }
   trends(t) {
@@ -2373,7 +2381,7 @@ M.styles = ee`
     @media(max-width:520px){.shell{padding:14px}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
   `;
 k([
-  B({ attribute: !1 })
+  W({ attribute: !1 })
 ], M.prototype, "hass", 2);
 k([
   w()
