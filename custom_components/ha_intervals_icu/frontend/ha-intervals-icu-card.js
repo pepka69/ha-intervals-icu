@@ -805,7 +805,6 @@ const jt = {
   workout: "Entraînement",
   load: "Charge",
   records: "Records",
-  distance: "Distance",
   elevation: "Dénivelé",
   max_power: "Puissance max",
   last_activity: "Dernière activité",
@@ -817,7 +816,6 @@ const jt = {
   quality: "Qualité",
   statistics_trends: "Statistiques et tendances",
   activities: "Activités",
-  duration: "Durée",
   calories: "Calories",
   no_sport_data: "Aucune donnée sportive",
   completeness: "Complétude des données d’activité",
@@ -905,7 +903,6 @@ const jt = {
   workout: "Workout",
   load: "Load",
   records: "Records",
-  distance: "Distance",
   elevation: "Elevation",
   max_power: "Max power",
   last_activity: "Last activity",
@@ -917,7 +914,6 @@ const jt = {
   quality: "Quality",
   statistics_trends: "Statistics & trends",
   activities: "Activities",
-  duration: "Duration",
   calories: "Calories",
   no_sport_data: "No sport data",
   completeness: "Activity data completeness",
@@ -2211,16 +2207,16 @@ function Ge(t, e = {}) {
   `;
 }
 function ri(t) {
-  if (!Number.isFinite(t) || Number(t) <= 0)
+  if (!Number.isFinite(t) || Number(t) < 0)
     return "";
-  const e = Math.round(Number(t) / 60), i = Math.floor(e / 60), a = e % 60;
-  return i <= 0 ? `${a} min` : a === 0 ? `${i} h` : `${i} h ${a.toString().padStart(2, "0")}`;
+  const e = Math.round(Number(t)), i = Math.floor(e / 3600), a = Math.floor(e % 3600 / 60), r = e % 60, s = [];
+  return i > 0 && s.push(`${i} h`), a > 0 && s.push(`${a} min`), (r > 0 || s.length === 0) && s.push(`${r} s`), s.join(" ");
 }
 function si(t, e) {
   if (!Number.isFinite(e) || Number(e) <= 0)
     return "";
   const i = Number(e) / 1e3;
-  return `${new Intl.NumberFormat(t.locale.language, {
+  return `${new Intl.NumberFormat(t.locale?.language ?? navigator.language, {
     maximumFractionDigits: 1
   }).format(i)} km`;
 }
@@ -2263,7 +2259,7 @@ function li(t, e, i) {
 
                 <time datetime=${a.date}>
                   ${new Date(a.date).toLocaleDateString(
-      t.locale.language,
+      t.locale?.language ?? navigator.language,
       {
         day: "2-digit",
         month: "short",

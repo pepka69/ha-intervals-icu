@@ -19,24 +19,32 @@ export interface ActivityTimelineOptions {
   loadLabel: string;
 }
 
-function formatDuration(seconds: number | undefined): string {
-  if (!Number.isFinite(seconds) || Number(seconds) <= 0) {
+function formatDuration(
+  seconds: number | undefined
+): string {
+  if (!Number.isFinite(seconds) || Number(seconds) < 0) {
     return "";
   }
 
-  const totalMinutes = Math.round(Number(seconds) / 60);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
+  const totalSeconds = Math.round(Number(seconds));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const remainingSeconds = totalSeconds % 60;
+  const parts: string[] = [];
 
-  if (hours <= 0) {
-    return `${minutes} min`;
+  if (hours > 0) {
+    parts.push(`${hours} h`);
   }
 
-  if (minutes === 0) {
-    return `${hours} h`;
+  if (minutes > 0) {
+    parts.push(`${minutes} min`);
   }
 
-  return `${hours} h ${minutes.toString().padStart(2, "0")}`;
+  if (remainingSeconds > 0 || parts.length === 0) {
+    parts.push(`${remainingSeconds} s`);
+  }
+
+  return parts.join(" ");
 }
 
 function formatDistance(
@@ -49,7 +57,7 @@ function formatDistance(
 
   const kilometers = Number(meters) / 1000;
 
-  return `${new Intl.NumberFormat(hass.locale.language, {
+  return `${new Intl.NumberFormat(hass.locale?.language ?? navigator.language, {
     maximumFractionDigits: 1
   }).format(kilometers)} km`;
 }
@@ -158,7 +166,7 @@ export function renderActivityTimeline(
 
                 <time datetime=${activity.date}>
                   ${new Date(activity.date).toLocaleDateString(
-                    hass.locale.language,
+                    hass.locale?.language ?? navigator.language,
                     {
                       day: "2-digit",
                       month: "short",
