@@ -469,6 +469,15 @@ def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any
             for key, value in data.items()
             if key.startswith("wellness_")
         },
+        "evolution": {
+            "fitness": data.get("fitness_history", []),
+            "fatigue": data.get("fatigue_history", []),
+            "form": data.get("form_history", []),
+            "sleep": data.get("wellness_sleep_history", []),
+            "hrv": data.get("wellness_hrv_history", []),
+            "resting_hr": data.get("wellness_resting_hr_history", []),
+            "readiness": data.get("wellness_readiness_history", []),
+        },
         "data_quality": build_dashboard_attributes(data).get(
             "activity_api_coverage", {}
         ),

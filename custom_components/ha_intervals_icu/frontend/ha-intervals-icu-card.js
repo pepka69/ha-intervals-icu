@@ -1,15 +1,15 @@
-const Y = globalThis, he = Y.ShadowRoot && (Y.ShadyCSS === void 0 || Y.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, pe = /* @__PURE__ */ Symbol(), xe = /* @__PURE__ */ new WeakMap();
-let De = class {
+const ee = globalThis, $e = ee.ShadowRoot && (ee.ShadyCSS === void 0 || ee.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, we = /* @__PURE__ */ Symbol(), Re = /* @__PURE__ */ new WeakMap();
+let Ke = class {
   constructor(e, i, s) {
-    if (this._$cssResult$ = !0, s !== pe) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
+    if (this._$cssResult$ = !0, s !== we) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
     this.cssText = e, this.t = i;
   }
   get styleSheet() {
     let e = this.o;
     const i = this.t;
-    if (he && e === void 0) {
+    if ($e && e === void 0) {
       const s = i !== void 0 && i.length === 1;
-      s && (e = xe.get(i)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), s && xe.set(i, e));
+      s && (e = Re.get(i)), e === void 0 && ((this.o = e = new CSSStyleSheet()).replaceSync(this.cssText), s && Re.set(i, e));
     }
     return e;
   }
@@ -17,28 +17,28 @@ let De = class {
     return this.cssText;
   }
 };
-const at = (t) => new De(typeof t == "string" ? t : t + "", void 0, pe), ee = (t, ...e) => {
-  const i = t.length === 1 ? t[0] : e.reduce((s, r, o) => s + ((a) => {
-    if (a._$cssResult$ === !0) return a.cssText;
-    if (typeof a == "number") return a;
-    throw Error("Value passed to 'css' function must be a 'css' function result: " + a + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
-  })(r) + t[o + 1], t[0]);
-  return new De(i, t, pe);
-}, ot = (t, e) => {
-  if (he) t.adoptedStyleSheets = e.map((i) => i instanceof CSSStyleSheet ? i : i.styleSheet);
+const nt = (t) => new Ke(typeof t == "string" ? t : t + "", void 0, we), ae = (t, ...e) => {
+  const i = t.length === 1 ? t[0] : e.reduce((s, a, r) => s + ((o) => {
+    if (o._$cssResult$ === !0) return o.cssText;
+    if (typeof o == "number") return o;
+    throw Error("Value passed to 'css' function must be a 'css' function result: " + o + ". Use 'unsafeCSS' to pass non-literal values, but take care to ensure page security.");
+  })(a) + t[r + 1], t[0]);
+  return new Ke(i, t, we);
+}, lt = (t, e) => {
+  if ($e) t.adoptedStyleSheets = e.map((i) => i instanceof CSSStyleSheet ? i : i.styleSheet);
   else for (const i of e) {
-    const s = document.createElement("style"), r = Y.litNonce;
-    r !== void 0 && s.setAttribute("nonce", r), s.textContent = i.cssText, t.appendChild(s);
+    const s = document.createElement("style"), a = ee.litNonce;
+    a !== void 0 && s.setAttribute("nonce", a), s.textContent = i.cssText, t.appendChild(s);
   }
-}, $e = he ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((e) => {
+}, Pe = $e ? (t) => t : (t) => t instanceof CSSStyleSheet ? ((e) => {
   let i = "";
   for (const s of e.cssRules) i += s.cssText;
-  return at(i);
+  return nt(i);
 })(t) : t;
-const { is: nt, defineProperty: lt, getOwnPropertyDescriptor: ct, getOwnPropertyNames: dt, getOwnPropertySymbols: ht, getPrototypeOf: pt } = Object, te = globalThis, we = te.trustedTypes, ut = we ? we.emptyScript : "", gt = te.reactiveElementPolyfillSupport, j = (t, e) => t, Q = { toAttribute(t, e) {
+const { is: ct, defineProperty: dt, getOwnPropertyDescriptor: ht, getOwnPropertyNames: pt, getOwnPropertySymbols: ut, getPrototypeOf: gt } = Object, re = globalThis, Ne = re.trustedTypes, mt = Ne ? Ne.emptyScript : "", ft = re.reactiveElementPolyfillSupport, H = (t, e) => t, ie = { toAttribute(t, e) {
   switch (e) {
     case Boolean:
-      t = t ? ut : null;
+      t = t ? mt : null;
       break;
     case Object:
     case Array:
@@ -63,55 +63,55 @@ const { is: nt, defineProperty: lt, getOwnPropertyDescriptor: ct, getOwnProperty
       }
   }
   return i;
-} }, ue = (t, e) => !nt(t, e), ke = { attribute: !0, type: String, converter: Q, reflect: !1, useDefault: !1, hasChanged: ue };
-Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), te.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
-let R = class extends HTMLElement {
+} }, ke = (t, e) => !ct(t, e), Oe = { attribute: !0, type: String, converter: ie, reflect: !1, useDefault: !1, hasChanged: ke };
+Symbol.metadata ??= /* @__PURE__ */ Symbol("metadata"), re.litPropertyMetadata ??= /* @__PURE__ */ new WeakMap();
+let O = class extends HTMLElement {
   static addInitializer(e) {
     this._$Ei(), (this.l ??= []).push(e);
   }
   static get observedAttributes() {
     return this.finalize(), this._$Eh && [...this._$Eh.keys()];
   }
-  static createProperty(e, i = ke) {
+  static createProperty(e, i = Oe) {
     if (i.state && (i.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(e) && ((i = Object.create(i)).wrapped = !0), this.elementProperties.set(e, i), !i.noAccessor) {
-      const s = /* @__PURE__ */ Symbol(), r = this.getPropertyDescriptor(e, s, i);
-      r !== void 0 && lt(this.prototype, e, r);
+      const s = /* @__PURE__ */ Symbol(), a = this.getPropertyDescriptor(e, s, i);
+      a !== void 0 && dt(this.prototype, e, a);
     }
   }
   static getPropertyDescriptor(e, i, s) {
-    const { get: r, set: o } = ct(this.prototype, e) ?? { get() {
+    const { get: a, set: r } = ht(this.prototype, e) ?? { get() {
       return this[i];
-    }, set(a) {
-      this[i] = a;
+    }, set(o) {
+      this[i] = o;
     } };
-    return { get: r, set(a) {
-      const n = r?.call(this);
-      o?.call(this, a), this.requestUpdate(e, n, s);
+    return { get: a, set(o) {
+      const n = a?.call(this);
+      r?.call(this, o), this.requestUpdate(e, n, s);
     }, configurable: !0, enumerable: !0 };
   }
   static getPropertyOptions(e) {
-    return this.elementProperties.get(e) ?? ke;
+    return this.elementProperties.get(e) ?? Oe;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(j("elementProperties"))) return;
-    const e = pt(this);
+    if (this.hasOwnProperty(H("elementProperties"))) return;
+    const e = gt(this);
     e.finalize(), e.l !== void 0 && (this.l = [...e.l]), this.elementProperties = new Map(e.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(j("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(j("properties"))) {
-      const i = this.properties, s = [...dt(i), ...ht(i)];
-      for (const r of s) this.createProperty(r, i[r]);
+    if (this.hasOwnProperty(H("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(H("properties"))) {
+      const i = this.properties, s = [...pt(i), ...ut(i)];
+      for (const a of s) this.createProperty(a, i[a]);
     }
     const e = this[Symbol.metadata];
     if (e !== null) {
       const i = litPropertyMetadata.get(e);
-      if (i !== void 0) for (const [s, r] of i) this.elementProperties.set(s, r);
+      if (i !== void 0) for (const [s, a] of i) this.elementProperties.set(s, a);
     }
     this._$Eh = /* @__PURE__ */ new Map();
     for (const [i, s] of this.elementProperties) {
-      const r = this._$Eu(i, s);
-      r !== void 0 && this._$Eh.set(r, i);
+      const a = this._$Eu(i, s);
+      a !== void 0 && this._$Eh.set(a, i);
     }
     this.elementStyles = this.finalizeStyles(this.styles);
   }
@@ -119,8 +119,8 @@ let R = class extends HTMLElement {
     const i = [];
     if (Array.isArray(e)) {
       const s = new Set(e.flat(1 / 0).reverse());
-      for (const r of s) i.unshift($e(r));
-    } else e !== void 0 && i.push($e(e));
+      for (const a of s) i.unshift(Pe(a));
+    } else e !== void 0 && i.push(Pe(e));
     return i;
   }
   static _$Eu(e, i) {
@@ -146,7 +146,7 @@ let R = class extends HTMLElement {
   }
   createRenderRoot() {
     const e = this.shadowRoot ?? this.attachShadow(this.constructor.shadowRootOptions);
-    return ot(e, this.constructor.elementStyles), e;
+    return lt(e, this.constructor.elementStyles), e;
   }
   connectedCallback() {
     this.renderRoot ??= this.createRenderRoot(), this.enableUpdating(!0), this._$EO?.forEach((e) => e.hostConnected?.());
@@ -160,31 +160,31 @@ let R = class extends HTMLElement {
     this._$AK(e, s);
   }
   _$ET(e, i) {
-    const s = this.constructor.elementProperties.get(e), r = this.constructor._$Eu(e, s);
-    if (r !== void 0 && s.reflect === !0) {
-      const o = (s.converter?.toAttribute !== void 0 ? s.converter : Q).toAttribute(i, s.type);
-      this._$Em = e, o == null ? this.removeAttribute(r) : this.setAttribute(r, o), this._$Em = null;
+    const s = this.constructor.elementProperties.get(e), a = this.constructor._$Eu(e, s);
+    if (a !== void 0 && s.reflect === !0) {
+      const r = (s.converter?.toAttribute !== void 0 ? s.converter : ie).toAttribute(i, s.type);
+      this._$Em = e, r == null ? this.removeAttribute(a) : this.setAttribute(a, r), this._$Em = null;
     }
   }
   _$AK(e, i) {
-    const s = this.constructor, r = s._$Eh.get(e);
-    if (r !== void 0 && this._$Em !== r) {
-      const o = s.getPropertyOptions(r), a = typeof o.converter == "function" ? { fromAttribute: o.converter } : o.converter?.fromAttribute !== void 0 ? o.converter : Q;
-      this._$Em = r;
-      const n = a.fromAttribute(i, o.type);
-      this[r] = n ?? this._$Ej?.get(r) ?? n, this._$Em = null;
+    const s = this.constructor, a = s._$Eh.get(e);
+    if (a !== void 0 && this._$Em !== a) {
+      const r = s.getPropertyOptions(a), o = typeof r.converter == "function" ? { fromAttribute: r.converter } : r.converter?.fromAttribute !== void 0 ? r.converter : ie;
+      this._$Em = a;
+      const n = o.fromAttribute(i, r.type);
+      this[a] = n ?? this._$Ej?.get(a) ?? n, this._$Em = null;
     }
   }
-  requestUpdate(e, i, s, r = !1, o) {
+  requestUpdate(e, i, s, a = !1, r) {
     if (e !== void 0) {
-      const a = this.constructor;
-      if (r === !1 && (o = this[e]), s ??= a.getPropertyOptions(e), !((s.hasChanged ?? ue)(o, i) || s.useDefault && s.reflect && o === this._$Ej?.get(e) && !this.hasAttribute(a._$Eu(e, s)))) return;
+      const o = this.constructor;
+      if (a === !1 && (r = this[e]), s ??= o.getPropertyOptions(e), !((s.hasChanged ?? ke)(r, i) || s.useDefault && s.reflect && r === this._$Ej?.get(e) && !this.hasAttribute(o._$Eu(e, s)))) return;
       this.C(e, i, s);
     }
     this.isUpdatePending === !1 && (this._$ES = this._$EP());
   }
-  C(e, i, { useDefault: s, reflect: r, wrapped: o }, a) {
-    s && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(e) && (this._$Ej.set(e, a ?? i ?? this[e]), o !== !0 || a !== void 0) || (this._$AL.has(e) || (this.hasUpdated || s || (i = void 0), this._$AL.set(e, i)), r === !0 && this._$Em !== e && (this._$Eq ??= /* @__PURE__ */ new Set()).add(e));
+  C(e, i, { useDefault: s, reflect: a, wrapped: r }, o) {
+    s && !(this._$Ej ??= /* @__PURE__ */ new Map()).has(e) && (this._$Ej.set(e, o ?? i ?? this[e]), r !== !0 || o !== void 0) || (this._$AL.has(e) || (this.hasUpdated || s || (i = void 0), this._$AL.set(e, i)), a === !0 && this._$Em !== e && (this._$Eq ??= /* @__PURE__ */ new Set()).add(e));
   }
   async _$EP() {
     this.isUpdatePending = !0;
@@ -203,13 +203,13 @@ let R = class extends HTMLElement {
     if (!this.isUpdatePending) return;
     if (!this.hasUpdated) {
       if (this.renderRoot ??= this.createRenderRoot(), this._$Ep) {
-        for (const [r, o] of this._$Ep) this[r] = o;
+        for (const [a, r] of this._$Ep) this[a] = r;
         this._$Ep = void 0;
       }
       const s = this.constructor.elementProperties;
-      if (s.size > 0) for (const [r, o] of s) {
-        const { wrapped: a } = o, n = this[r];
-        a !== !0 || this._$AL.has(r) || n === void 0 || this.C(r, void 0, o, n);
+      if (s.size > 0) for (const [a, r] of s) {
+        const { wrapped: o } = r, n = this[a];
+        o !== !0 || this._$AL.has(a) || n === void 0 || this.C(a, void 0, r, n);
       }
     }
     let e = !1;
@@ -246,70 +246,70 @@ let R = class extends HTMLElement {
   firstUpdated(e) {
   }
 };
-R.elementStyles = [], R.shadowRootOptions = { mode: "open" }, R[j("elementProperties")] = /* @__PURE__ */ new Map(), R[j("finalized")] = /* @__PURE__ */ new Map(), gt?.({ ReactiveElement: R }), (te.reactiveElementVersions ??= []).push("2.1.2");
-const ge = globalThis, Se = (t) => t, X = ge.trustedTypes, Ae = X ? X.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, je = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, Ue = "?" + x, mt = `<${Ue}>`, E = document, U = () => E.createComment(""), H = (t) => t === null || typeof t != "object" && typeof t != "function", me = Array.isArray, ft = (t) => me(t) || typeof t?.[Symbol.iterator] == "function", oe = `[ 	
-\f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ce = /-->/g, Ee = />/g, A = RegExp(`>|${oe}(?:([^\\s"'>=/]+)(${oe}*=${oe}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), Te = /'/g, Me = /"/g, He = /^(?:script|style|textarea|title)$/i, Ie = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), l = Ie(1), le = Ie(2), P = /* @__PURE__ */ Symbol.for("lit-noChange"), p = /* @__PURE__ */ Symbol.for("lit-nothing"), Re = /* @__PURE__ */ new WeakMap(), C = E.createTreeWalker(E, 129);
-function qe(t, e) {
-  if (!me(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Ae !== void 0 ? Ae.createHTML(e) : e;
+O.elementStyles = [], O.shadowRootOptions = { mode: "open" }, O[H("elementProperties")] = /* @__PURE__ */ new Map(), O[H("finalized")] = /* @__PURE__ */ new Map(), ft?.({ ReactiveElement: O }), (re.reactiveElementVersions ??= []).push("2.1.2");
+const Se = globalThis, ze = (t) => t, se = Se.trustedTypes, De = se ? se.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, Ze = "$lit$", w = `lit$${Math.random().toFixed(9).slice(2)}$`, Ye = "?" + w, vt = `<${Ye}>`, M = document, U = () => M.createComment(""), q = (t) => t === null || typeof t != "object" && typeof t != "function", Ae = Array.isArray, yt = (t) => Ae(t) || typeof t?.[Symbol.iterator] == "function", ve = `[ 	
+\f\r]`, j = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, je = /-->/g, Le = />/g, E = RegExp(`>|${ve}(?:([^\\s"'>=/]+)(${ve}*=${ve}*(?:[^ 	
+\f\r"'\`<>=]|("|')|))|$)`, "g"), Fe = /'/g, He = /"/g, Je = /^(?:script|style|textarea|title)$/i, Qe = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), c = Qe(1), _e = Qe(2), z = /* @__PURE__ */ Symbol.for("lit-noChange"), u = /* @__PURE__ */ Symbol.for("lit-nothing"), Ue = /* @__PURE__ */ new WeakMap(), T = M.createTreeWalker(M, 129);
+function Xe(t, e) {
+  if (!Ae(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
+  return De !== void 0 ? De.createHTML(e) : e;
 }
-const vt = (t, e) => {
+const _t = (t, e) => {
   const i = t.length - 1, s = [];
-  let r, o = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", a = z;
+  let a, r = e === 2 ? "<svg>" : e === 3 ? "<math>" : "", o = j;
   for (let n = 0; n < i; n++) {
     const d = t[n];
-    let g, f, u = -1, h = 0;
-    for (; h < d.length && (a.lastIndex = h, f = a.exec(d), f !== null); ) h = a.lastIndex, a === z ? f[1] === "!--" ? a = Ce : f[1] !== void 0 ? a = Ee : f[2] !== void 0 ? (He.test(f[2]) && (r = RegExp("</" + f[2], "g")), a = A) : f[3] !== void 0 && (a = A) : a === A ? f[0] === ">" ? (a = r ?? z, u = -1) : f[1] === void 0 ? u = -2 : (u = a.lastIndex - f[2].length, g = f[1], a = f[3] === void 0 ? A : f[3] === '"' ? Me : Te) : a === Me || a === Te ? a = A : a === Ce || a === Ee ? a = z : (a = A, r = void 0);
-    const _ = a === A && t[n + 1].startsWith("/>") ? " " : "";
-    o += a === z ? d + mt : u >= 0 ? (s.push(g), d.slice(0, u) + je + d.slice(u) + x + _) : d + x + (u === -2 ? n : _);
+    let g, f, p = -1, h = 0;
+    for (; h < d.length && (o.lastIndex = h, f = o.exec(d), f !== null); ) h = o.lastIndex, o === j ? f[1] === "!--" ? o = je : f[1] !== void 0 ? o = Le : f[2] !== void 0 ? (Je.test(f[2]) && (a = RegExp("</" + f[2], "g")), o = E) : f[3] !== void 0 && (o = E) : o === E ? f[0] === ">" ? (o = a ?? j, p = -1) : f[1] === void 0 ? p = -2 : (p = o.lastIndex - f[2].length, g = f[1], o = f[3] === void 0 ? E : f[3] === '"' ? He : Fe) : o === He || o === Fe ? o = E : o === je || o === Le ? o = j : (o = E, a = void 0);
+    const b = o === E && t[n + 1].startsWith("/>") ? " " : "";
+    r += o === j ? d + vt : p >= 0 ? (s.push(g), d.slice(0, p) + Ze + d.slice(p) + w + b) : d + w + (p === -2 ? n : b);
   }
-  return [qe(t, o + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), s];
+  return [Xe(t, r + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), s];
 };
 class I {
   constructor({ strings: e, _$litType$: i }, s) {
-    let r;
+    let a;
     this.parts = [];
-    let o = 0, a = 0;
-    const n = e.length - 1, d = this.parts, [g, f] = vt(e, i);
-    if (this.el = I.createElement(g, s), C.currentNode = this.el.content, i === 2 || i === 3) {
-      const u = this.el.content.firstChild;
-      u.replaceWith(...u.childNodes);
+    let r = 0, o = 0;
+    const n = e.length - 1, d = this.parts, [g, f] = _t(e, i);
+    if (this.el = I.createElement(g, s), T.currentNode = this.el.content, i === 2 || i === 3) {
+      const p = this.el.content.firstChild;
+      p.replaceWith(...p.childNodes);
     }
-    for (; (r = C.nextNode()) !== null && d.length < n; ) {
-      if (r.nodeType === 1) {
-        if (r.hasAttributes()) for (const u of r.getAttributeNames()) if (u.endsWith(je)) {
-          const h = f[a++], _ = r.getAttribute(u).split(x), S = /([.?@])?(.*)/.exec(h);
-          d.push({ type: 1, index: o, name: S[2], strings: _, ctor: S[1] === "." ? _t : S[1] === "?" ? bt : S[1] === "@" ? xt : ie }), r.removeAttribute(u);
-        } else u.startsWith(x) && (d.push({ type: 6, index: o }), r.removeAttribute(u));
-        if (He.test(r.tagName)) {
-          const u = r.textContent.split(x), h = u.length - 1;
+    for (; (a = T.nextNode()) !== null && d.length < n; ) {
+      if (a.nodeType === 1) {
+        if (a.hasAttributes()) for (const p of a.getAttributeNames()) if (p.endsWith(Ze)) {
+          const h = f[o++], b = a.getAttribute(p).split(w), x = /([.?@])?(.*)/.exec(h);
+          d.push({ type: 1, index: r, name: x[2], strings: b, ctor: x[1] === "." ? xt : x[1] === "?" ? $t : x[1] === "@" ? wt : oe }), a.removeAttribute(p);
+        } else p.startsWith(w) && (d.push({ type: 6, index: r }), a.removeAttribute(p));
+        if (Je.test(a.tagName)) {
+          const p = a.textContent.split(w), h = p.length - 1;
           if (h > 0) {
-            r.textContent = X ? X.emptyScript : "";
-            for (let _ = 0; _ < h; _++) r.append(u[_], U()), C.nextNode(), d.push({ type: 2, index: ++o });
-            r.append(u[h], U());
+            a.textContent = se ? se.emptyScript : "";
+            for (let b = 0; b < h; b++) a.append(p[b], U()), T.nextNode(), d.push({ type: 2, index: ++r });
+            a.append(p[h], U());
           }
         }
-      } else if (r.nodeType === 8) if (r.data === Ue) d.push({ type: 2, index: o });
+      } else if (a.nodeType === 8) if (a.data === Ye) d.push({ type: 2, index: r });
       else {
-        let u = -1;
-        for (; (u = r.data.indexOf(x, u + 1)) !== -1; ) d.push({ type: 7, index: o }), u += x.length - 1;
+        let p = -1;
+        for (; (p = a.data.indexOf(w, p + 1)) !== -1; ) d.push({ type: 7, index: r }), p += w.length - 1;
       }
-      o++;
+      r++;
     }
   }
   static createElement(e, i) {
-    const s = E.createElement("template");
+    const s = M.createElement("template");
     return s.innerHTML = e, s;
   }
 }
-function O(t, e, i = t, s) {
-  if (e === P) return e;
-  let r = s !== void 0 ? i._$Co?.[s] : i._$Cl;
-  const o = H(e) ? void 0 : e._$litDirective$;
-  return r?.constructor !== o && (r?._$AO?.(!1), o === void 0 ? r = void 0 : (r = new o(t), r._$AT(t, i, s)), s !== void 0 ? (i._$Co ??= [])[s] = r : i._$Cl = r), r !== void 0 && (e = O(t, r._$AS(t, e.values), r, s)), e;
+function D(t, e, i = t, s) {
+  if (e === z) return e;
+  let a = s !== void 0 ? i._$Co?.[s] : i._$Cl;
+  const r = q(e) ? void 0 : e._$litDirective$;
+  return a?.constructor !== r && (a?._$AO?.(!1), r === void 0 ? a = void 0 : (a = new r(t), a._$AT(t, i, s)), s !== void 0 ? (i._$Co ??= [])[s] = a : i._$Cl = a), a !== void 0 && (e = D(t, a._$AS(t, e.values), a, s)), e;
 }
-class yt {
+class bt {
   constructor(e, i) {
     this._$AV = [], this._$AN = void 0, this._$AD = e, this._$AM = i;
   }
@@ -320,29 +320,29 @@ class yt {
     return this._$AM._$AU;
   }
   u(e) {
-    const { el: { content: i }, parts: s } = this._$AD, r = (e?.creationScope ?? E).importNode(i, !0);
-    C.currentNode = r;
-    let o = C.nextNode(), a = 0, n = 0, d = s[0];
+    const { el: { content: i }, parts: s } = this._$AD, a = (e?.creationScope ?? M).importNode(i, !0);
+    T.currentNode = a;
+    let r = T.nextNode(), o = 0, n = 0, d = s[0];
     for (; d !== void 0; ) {
-      if (a === d.index) {
+      if (o === d.index) {
         let g;
-        d.type === 2 ? g = new B(o, o.nextSibling, this, e) : d.type === 1 ? g = new d.ctor(o, d.name, d.strings, this, e) : d.type === 6 && (g = new $t(o, this, e)), this._$AV.push(g), d = s[++n];
+        d.type === 2 ? g = new K(r, r.nextSibling, this, e) : d.type === 1 ? g = new d.ctor(r, d.name, d.strings, this, e) : d.type === 6 && (g = new kt(r, this, e)), this._$AV.push(g), d = s[++n];
       }
-      a !== d?.index && (o = C.nextNode(), a++);
+      o !== d?.index && (r = T.nextNode(), o++);
     }
-    return C.currentNode = E, r;
+    return T.currentNode = M, a;
   }
   p(e) {
     let i = 0;
     for (const s of this._$AV) s !== void 0 && (s.strings !== void 0 ? (s._$AI(e, s, i), i += s.strings.length - 2) : s._$AI(e[i])), i++;
   }
 }
-class B {
+class K {
   get _$AU() {
     return this._$AM?._$AU ?? this._$Cv;
   }
-  constructor(e, i, s, r) {
-    this.type = 2, this._$AH = p, this._$AN = void 0, this._$AA = e, this._$AB = i, this._$AM = s, this.options = r, this._$Cv = r?.isConnected ?? !0;
+  constructor(e, i, s, a) {
+    this.type = 2, this._$AH = u, this._$AN = void 0, this._$AA = e, this._$AB = i, this._$AM = s, this.options = a, this._$Cv = a?.isConnected ?? !0;
   }
   get parentNode() {
     let e = this._$AA.parentNode;
@@ -356,7 +356,7 @@ class B {
     return this._$AB;
   }
   _$AI(e, i = this) {
-    e = O(this, e, i), H(e) ? e === p || e == null || e === "" ? (this._$AH !== p && this._$AR(), this._$AH = p) : e !== this._$AH && e !== P && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : ft(e) ? this.k(e) : this._(e);
+    e = D(this, e, i), q(e) ? e === u || e == null || e === "" ? (this._$AH !== u && this._$AR(), this._$AH = u) : e !== this._$AH && e !== z && this._(e) : e._$litType$ !== void 0 ? this.$(e) : e.nodeType !== void 0 ? this.T(e) : yt(e) ? this.k(e) : this._(e);
   }
   O(e) {
     return this._$AA.parentNode.insertBefore(e, this._$AB);
@@ -365,92 +365,92 @@ class B {
     this._$AH !== e && (this._$AR(), this._$AH = this.O(e));
   }
   _(e) {
-    this._$AH !== p && H(this._$AH) ? this._$AA.nextSibling.data = e : this.T(E.createTextNode(e)), this._$AH = e;
+    this._$AH !== u && q(this._$AH) ? this._$AA.nextSibling.data = e : this.T(M.createTextNode(e)), this._$AH = e;
   }
   $(e) {
-    const { values: i, _$litType$: s } = e, r = typeof s == "number" ? this._$AC(e) : (s.el === void 0 && (s.el = I.createElement(qe(s.h, s.h[0]), this.options)), s);
-    if (this._$AH?._$AD === r) this._$AH.p(i);
+    const { values: i, _$litType$: s } = e, a = typeof s == "number" ? this._$AC(e) : (s.el === void 0 && (s.el = I.createElement(Xe(s.h, s.h[0]), this.options)), s);
+    if (this._$AH?._$AD === a) this._$AH.p(i);
     else {
-      const o = new yt(r, this), a = o.u(this.options);
-      o.p(i), this.T(a), this._$AH = o;
+      const r = new bt(a, this), o = r.u(this.options);
+      r.p(i), this.T(o), this._$AH = r;
     }
   }
   _$AC(e) {
-    let i = Re.get(e.strings);
-    return i === void 0 && Re.set(e.strings, i = new I(e)), i;
+    let i = Ue.get(e.strings);
+    return i === void 0 && Ue.set(e.strings, i = new I(e)), i;
   }
   k(e) {
-    me(this._$AH) || (this._$AH = [], this._$AR());
+    Ae(this._$AH) || (this._$AH = [], this._$AR());
     const i = this._$AH;
-    let s, r = 0;
-    for (const o of e) r === i.length ? i.push(s = new B(this.O(U()), this.O(U()), this, this.options)) : s = i[r], s._$AI(o), r++;
-    r < i.length && (this._$AR(s && s._$AB.nextSibling, r), i.length = r);
+    let s, a = 0;
+    for (const r of e) a === i.length ? i.push(s = new K(this.O(U()), this.O(U()), this, this.options)) : s = i[a], s._$AI(r), a++;
+    a < i.length && (this._$AR(s && s._$AB.nextSibling, a), i.length = a);
   }
   _$AR(e = this._$AA.nextSibling, i) {
     for (this._$AP?.(!1, !0, i); e !== this._$AB; ) {
-      const s = Se(e).nextSibling;
-      Se(e).remove(), e = s;
+      const s = ze(e).nextSibling;
+      ze(e).remove(), e = s;
     }
   }
   setConnected(e) {
     this._$AM === void 0 && (this._$Cv = e, this._$AP?.(e));
   }
 }
-class ie {
+class oe {
   get tagName() {
     return this.element.tagName;
   }
   get _$AU() {
     return this._$AM._$AU;
   }
-  constructor(e, i, s, r, o) {
-    this.type = 1, this._$AH = p, this._$AN = void 0, this.element = e, this.name = i, this._$AM = r, this.options = o, s.length > 2 || s[0] !== "" || s[1] !== "" ? (this._$AH = Array(s.length - 1).fill(new String()), this.strings = s) : this._$AH = p;
+  constructor(e, i, s, a, r) {
+    this.type = 1, this._$AH = u, this._$AN = void 0, this.element = e, this.name = i, this._$AM = a, this.options = r, s.length > 2 || s[0] !== "" || s[1] !== "" ? (this._$AH = Array(s.length - 1).fill(new String()), this.strings = s) : this._$AH = u;
   }
-  _$AI(e, i = this, s, r) {
-    const o = this.strings;
-    let a = !1;
-    if (o === void 0) e = O(this, e, i, 0), a = !H(e) || e !== this._$AH && e !== P, a && (this._$AH = e);
+  _$AI(e, i = this, s, a) {
+    const r = this.strings;
+    let o = !1;
+    if (r === void 0) e = D(this, e, i, 0), o = !q(e) || e !== this._$AH && e !== z, o && (this._$AH = e);
     else {
       const n = e;
       let d, g;
-      for (e = o[0], d = 0; d < o.length - 1; d++) g = O(this, n[s + d], i, d), g === P && (g = this._$AH[d]), a ||= !H(g) || g !== this._$AH[d], g === p ? e = p : e !== p && (e += (g ?? "") + o[d + 1]), this._$AH[d] = g;
+      for (e = r[0], d = 0; d < r.length - 1; d++) g = D(this, n[s + d], i, d), g === z && (g = this._$AH[d]), o ||= !q(g) || g !== this._$AH[d], g === u ? e = u : e !== u && (e += (g ?? "") + r[d + 1]), this._$AH[d] = g;
     }
-    a && !r && this.j(e);
+    o && !a && this.j(e);
   }
   j(e) {
-    e === p ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
+    e === u ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, e ?? "");
   }
 }
-class _t extends ie {
+class xt extends oe {
   constructor() {
     super(...arguments), this.type = 3;
   }
   j(e) {
-    this.element[this.name] = e === p ? void 0 : e;
+    this.element[this.name] = e === u ? void 0 : e;
   }
 }
-class bt extends ie {
+class $t extends oe {
   constructor() {
     super(...arguments), this.type = 4;
   }
   j(e) {
-    this.element.toggleAttribute(this.name, !!e && e !== p);
+    this.element.toggleAttribute(this.name, !!e && e !== u);
   }
 }
-class xt extends ie {
-  constructor(e, i, s, r, o) {
-    super(e, i, s, r, o), this.type = 5;
+class wt extends oe {
+  constructor(e, i, s, a, r) {
+    super(e, i, s, a, r), this.type = 5;
   }
   _$AI(e, i = this) {
-    if ((e = O(this, e, i, 0) ?? p) === P) return;
-    const s = this._$AH, r = e === p && s !== p || e.capture !== s.capture || e.once !== s.once || e.passive !== s.passive, o = e !== p && (s === p || r);
-    r && this.element.removeEventListener(this.name, this, s), o && this.element.addEventListener(this.name, this, e), this._$AH = e;
+    if ((e = D(this, e, i, 0) ?? u) === z) return;
+    const s = this._$AH, a = e === u && s !== u || e.capture !== s.capture || e.once !== s.once || e.passive !== s.passive, r = e !== u && (s === u || a);
+    a && this.element.removeEventListener(this.name, this, s), r && this.element.addEventListener(this.name, this, e), this._$AH = e;
   }
   handleEvent(e) {
     typeof this._$AH == "function" ? this._$AH.call(this.options?.host ?? this.element, e) : this._$AH.handleEvent(e);
   }
 }
-class $t {
+class kt {
   constructor(e, i, s) {
     this.element = e, this.type = 6, this._$AN = void 0, this._$AM = i, this.options = s;
   }
@@ -458,22 +458,22 @@ class $t {
     return this._$AM._$AU;
   }
   _$AI(e) {
-    O(this, e);
+    D(this, e);
   }
 }
-const wt = ge.litHtmlPolyfillSupport;
-wt?.(I, B), (ge.litHtmlVersions ??= []).push("3.3.3");
-const kt = (t, e, i) => {
+const St = Se.litHtmlPolyfillSupport;
+St?.(I, K), (Se.litHtmlVersions ??= []).push("3.3.3");
+const At = (t, e, i) => {
   const s = i?.renderBefore ?? e;
-  let r = s._$litPart$;
-  if (r === void 0) {
-    const o = i?.renderBefore ?? null;
-    s._$litPart$ = r = new B(e.insertBefore(U(), o), o, void 0, i ?? {});
+  let a = s._$litPart$;
+  if (a === void 0) {
+    const r = i?.renderBefore ?? null;
+    s._$litPart$ = a = new K(e.insertBefore(U(), r), r, void 0, i ?? {});
   }
-  return r._$AI(t), r;
+  return a._$AI(t), a;
 };
-const fe = globalThis;
-class $ extends R {
+const Ce = globalThis;
+class k extends O {
   constructor() {
     super(...arguments), this.renderOptions = { host: this }, this._$Do = void 0;
   }
@@ -483,7 +483,7 @@ class $ extends R {
   }
   update(e) {
     const i = this.render();
-    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = kt(i, this.renderRoot, this.renderOptions);
+    this.hasUpdated || (this.renderOptions.isConnected = this.isConnected), super.update(e), this._$Do = At(i, this.renderRoot, this.renderOptions);
   }
   connectedCallback() {
     super.connectedCallback(), this._$Do?.setConnected(!0);
@@ -492,49 +492,49 @@ class $ extends R {
     super.disconnectedCallback(), this._$Do?.setConnected(!1);
   }
   render() {
-    return P;
+    return z;
   }
 }
-$._$litElement$ = !0, $.finalized = !0, fe.litElementHydrateSupport?.({ LitElement: $ });
-const St = fe.litElementPolyfillSupport;
-St?.({ LitElement: $ });
-(fe.litElementVersions ??= []).push("4.2.2");
-const se = (t) => (e, i) => {
+k._$litElement$ = !0, k.finalized = !0, Ce.litElementHydrateSupport?.({ LitElement: k });
+const Ct = Ce.litElementPolyfillSupport;
+Ct?.({ LitElement: k });
+(Ce.litElementVersions ??= []).push("4.2.2");
+const ne = (t) => (e, i) => {
   i !== void 0 ? i.addInitializer(() => {
     customElements.define(t, e);
   }) : customElements.define(t, e);
 };
-const At = { attribute: !0, type: String, converter: Q, reflect: !1, hasChanged: ue }, Ct = (t = At, e, i) => {
-  const { kind: s, metadata: r } = i;
-  let o = globalThis.litPropertyMetadata.get(r);
-  if (o === void 0 && globalThis.litPropertyMetadata.set(r, o = /* @__PURE__ */ new Map()), s === "setter" && ((t = Object.create(t)).wrapped = !0), o.set(i.name, t), s === "accessor") {
-    const { name: a } = i;
+const Et = { attribute: !0, type: String, converter: ie, reflect: !1, hasChanged: ke }, Tt = (t = Et, e, i) => {
+  const { kind: s, metadata: a } = i;
+  let r = globalThis.litPropertyMetadata.get(a);
+  if (r === void 0 && globalThis.litPropertyMetadata.set(a, r = /* @__PURE__ */ new Map()), s === "setter" && ((t = Object.create(t)).wrapped = !0), r.set(i.name, t), s === "accessor") {
+    const { name: o } = i;
     return { set(n) {
       const d = e.get.call(this);
-      e.set.call(this, n), this.requestUpdate(a, d, t, !0, n);
+      e.set.call(this, n), this.requestUpdate(o, d, t, !0, n);
     }, init(n) {
-      return n !== void 0 && this.C(a, void 0, t, n), n;
+      return n !== void 0 && this.C(o, void 0, t, n), n;
     } };
   }
   if (s === "setter") {
-    const { name: a } = i;
+    const { name: o } = i;
     return function(n) {
-      const d = this[a];
-      e.call(this, n), this.requestUpdate(a, d, t, !0, n);
+      const d = this[o];
+      e.call(this, n), this.requestUpdate(o, d, t, !0, n);
     };
   }
   throw Error("Unsupported decorator location: " + s);
 };
-function W(t) {
-  return (e, i) => typeof i == "object" ? Ct(t, e, i) : ((s, r, o) => {
-    const a = r.hasOwnProperty(o);
-    return r.constructor.createProperty(o, s), a ? Object.getOwnPropertyDescriptor(r, o) : void 0;
+function Z(t) {
+  return (e, i) => typeof i == "object" ? Tt(t, e, i) : ((s, a, r) => {
+    const o = a.hasOwnProperty(r);
+    return a.constructor.createProperty(r, s), o ? Object.getOwnPropertyDescriptor(a, r) : void 0;
   })(t, e, i);
 }
-function w(t) {
-  return W({ ...t, state: !0, attribute: !1 });
+function S(t) {
+  return Z({ ...t, state: !0, attribute: !1 });
 }
-const Le = ee`
+const et = ae`
   :host{display:block;--icu-green:#6fe04f;--icu-orange:#ff9f2f;--icu-blue:#4c9fff;--icu-purple:#a579ff;--icu-pink:#ff6fae}
   *{box-sizing:border-box}
   ha-card{position:relative;overflow:hidden;border-radius:24px;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 96%,#0b1830),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#12305a));box-shadow:0 18px 55px rgba(0,0,0,.16)}
@@ -555,7 +555,7 @@ const Le = ee`
   @media(max-width:760px){.atlas-panel{grid-template-columns:1fr}.card-shell{padding:14px}.header{align-items:flex-start}.sync{font-size:0;padding:8px}.metrics{grid-template-columns:1fr}.metric{display:grid;grid-template-columns:1fr auto;grid-template-areas:"label gauge" "value gauge" "short gauge" "foot gauge";text-align:left;padding:12px 14px}.metric-label{grid-area:label}.metric-value{grid-area:value;font-size:1.65rem}.metric-short{grid-area:short}.metric-foot{grid-area:foot;margin-top:2px}.gauge{grid-area:gauge;width:108px;height:62px;margin:0}.quick-stats{grid-template-columns:1fr}.health-grid{grid-template-columns:1fr 1fr}.lower-grid,ha-card.compact .lower-grid{grid-template-columns:1fr}.chart-section{min-height:180px}.history-chart{height:135px}.chart-legend{justify-content:flex-start;margin:0 0 7px}.activity-details{grid-template-columns:1fr 1fr}}
   @media(max-width:560px){.about-links{grid-template-columns:1fr}}
   @media(max-width:420px){.logo{width:42px;height:42px;border-radius:13px}.header h2{font-size:1.08rem}.health-grid{grid-template-columns:1fr}.feature{padding:14px}}
-`, Fe = "ha_intervals_icu", m = {
+`, tt = "ha_intervals_icu", m = {
   fitness: "fitness",
   fatigue: "fatigue",
   form: "form",
@@ -599,7 +599,7 @@ const Le = ee`
   recordMaxPower: "record_max_power",
   recordFtp: "record_ftp",
   recordEftp: "record_eftp"
-}, Ve = {
+}, it = {
   AlpineSki: "Ski alpin",
   BackcountrySki: "Ski de randonnée",
   Badminton: "Badminton",
@@ -645,127 +645,127 @@ const Le = ee`
   Workout: "Entraînement",
   Yoga: "Yoga"
 };
-function Pe(t, e, i) {
+function qe(t, e, i) {
   return i ? t.entities?.[e]?.device_id === i : !0;
 }
-function Be(t) {
+function st(t) {
   return Object.values(t.entities ?? {});
 }
-function Et(t, e) {
+function Mt(t, e) {
   if (t.translation_key === e)
     return !0;
   const i = t.unique_id ?? "";
   return i === e || i.endsWith(`_${e}`) || i.endsWith(`-${e}`);
 }
-function Tt(t, e) {
+function Rt(t, e) {
   const i = (e ?? "s").trim().toLowerCase();
   return ["ms", "millisecond", "milliseconds"].includes(i) ? t / 1e3 : ["min", "minute", "minutes"].includes(i) ? t * 60 : ["h", "hr", "hour", "hours"].includes(i) ? t * 3600 : ["d", "day", "days"].includes(i) ? t * 86400 : t;
 }
-function N(t, e) {
+function L(t, e) {
   const i = Math.max(
     0,
-    Math.round(Tt(t, e))
-  ), s = Math.floor(i / 86400), r = Math.floor(i % 86400 / 3600), o = Math.floor(i % 3600 / 60), a = i % 60, n = [];
-  return s > 0 && n.push(`${s} j`), r > 0 && n.push(`${r} h`), o > 0 && n.push(`${o} min`), a > 0 && s === 0 && r === 0 && n.push(`${a} s`), n.length > 0 ? n.join(" ") : "0 s";
+    Math.round(Rt(t, e))
+  ), s = Math.floor(i / 86400), a = Math.floor(i % 86400 / 3600), r = Math.floor(i % 3600 / 60), o = i % 60, n = [];
+  return s > 0 && n.push(`${s} j`), a > 0 && n.push(`${a} h`), r > 0 && n.push(`${r} min`), o > 0 && s === 0 && a === 0 && n.push(`${o} s`), n.length > 0 ? n.join(" ") : "0 s";
 }
-function Mt(t) {
-  const e = Ve[t];
+function Pt(t) {
+  const e = it[t];
   if (e)
     return e;
   const i = t.replace(/[_-]+/g, " ").replace(/([a-zà-ÿ0-9])([A-Z])/g, "$1 $2").trim();
   return i ? i.charAt(0).toUpperCase() + i.slice(1).toLowerCase() : t;
 }
-function Rt(t) {
+function Nt(t) {
   const e = t.attributes.unit_of_measurement, i = t.attributes.translation_key, s = t.entity_id ?? "";
   return e === "s" || i === "planned_today_duration" || i === "last_activity_duration" || s.endsWith("_planned_today_duration") || s.endsWith("_last_activity_duration");
 }
-function Pt(t) {
+function Ot(t) {
   const e = t.attributes.translation_key, i = t.entity_id ?? "";
-  return e === "planned_today_sport" || e === "last_activity_type" || i.endsWith("_planned_today_sport") || i.endsWith("_last_activity_type") || !!Ve[t.state];
+  return e === "planned_today_sport" || e === "last_activity_type" || i.endsWith("_planned_today_sport") || i.endsWith("_last_activity_type") || !!it[t.state];
 }
-function We(t) {
+function at(t) {
   return [...new Set(
-    Be(t).filter(
-      (i) => i.platform === Fe && typeof i.device_id == "string"
+    st(t).filter(
+      (i) => i.platform === tt && typeof i.device_id == "string"
     ).map((i) => i.device_id)
-  )].map((i) => t.devices?.[i]).filter((i) => !!i).sort((i, s) => q(i).localeCompare(q(s)));
+  )].map((i) => t.devices?.[i]).filter((i) => !!i).sort((i, s) => V(i).localeCompare(V(s)));
 }
-function q(t) {
+function V(t) {
   return t?.name_by_user ?? t?.name ?? "Athlète Intervals.icu";
 }
-function ce(t, e, i, s) {
-  if (e && t.states[e] && Pe(t, e, s))
+function be(t, e, i, s) {
+  if (e && t.states[e] && qe(t, e, s))
     return e;
-  const r = Be(t).find(
-    (a) => a.platform === Fe && typeof a.entity_id == "string" && (!s || a.device_id === s) && Et(a, i)
+  const a = st(t).find(
+    (o) => o.platform === tt && typeof o.entity_id == "string" && (!s || o.device_id === s) && Mt(o, i)
   );
-  if (r?.entity_id && t.states[r.entity_id])
-    return r.entity_id;
-  const o = `_${i}`;
+  if (a?.entity_id && t.states[a.entity_id])
+    return a.entity_id;
+  const r = `_${i}`;
   return Object.keys(t.states).find(
-    (a) => a.startsWith("sensor.") && a.endsWith(o) && Pe(t, a, s)
+    (o) => o.startsWith("sensor.") && o.endsWith(r) && qe(t, o, s)
   );
 }
-function v(t, e, i, s) {
-  const r = ce(t, e, i, s);
-  return r ? t.states[r] : void 0;
+function y(t, e, i, s) {
+  const a = be(t, e, i, s);
+  return a ? t.states[a] : void 0;
 }
-function Oe(t) {
+function Ie(t) {
   if (!t || ["unknown", "unavailable", "none", ""].includes(t.state))
     return null;
   const e = Number(t.state);
   return Number.isFinite(e) ? e : null;
 }
-function y(t, e, i = "—") {
+function _(t, e, i = "—") {
   if (!e || ["unknown", "unavailable", "none", ""].includes(e.state))
     return i;
-  if (Rt(e)) {
+  if (Nt(e)) {
     const s = Number(e.state);
     if (Number.isFinite(s))
-      return N(s, e.attributes.unit_of_measurement);
+      return L(s, e.attributes.unit_of_measurement);
   }
-  if (Pt(e))
-    return Mt(e.state);
+  if (Ot(e))
+    return Pt(e.state);
   try {
     return t.formatEntityState?.(e) ?? `${e.state}${e.attributes.unit_of_measurement ? ` ${e.attributes.unit_of_measurement}` : ""}`;
   } catch {
     return e.state;
   }
 }
-function ne(t) {
+function ye(t) {
   const e = t?.attributes.history;
   return Array.isArray(e) ? e.map((i) => typeof i == "object" && i !== null && "value" in i ? Number(i.value) : Number(i)).filter(Number.isFinite) : [];
 }
-function Ot(t, e, i, s, r) {
-  return t.map((o, a) => {
-    const n = t.length === 1 ? e / 2 : a / (t.length - 1) * e, d = i - (o - s) / r * (i - 22) - 11;
+function zt(t, e, i, s, a) {
+  return t.map((r, o) => {
+    const n = t.length === 1 ? e / 2 : o / (t.length - 1) * e, d = i - (r - s) / a * (i - 22) - 11;
     return `${n.toFixed(1)},${d.toFixed(1)}`;
   }).join(" ");
 }
-function zt(t) {
+function Dt(t) {
   const e = t.filter((h) => h.values.length >= 2);
-  if (e.length === 0) return l`<div class="empty">Historique indisponible</div>`;
-  const i = 760, s = 220, r = e.flatMap((h) => h.values), o = Math.min(...r), a = Math.max(...r), n = Math.max((a - o) * 0.12, 2), d = o - n, f = a + n - d || 1, u = [0, 1, 2, 3, 4];
-  return l`
+  if (e.length === 0) return c`<div class="empty">Historique indisponible</div>`;
+  const i = 760, s = 220, a = e.flatMap((h) => h.values), r = Math.min(...a), o = Math.max(...a), n = Math.max((o - r) * 0.12, 2), d = r - n, f = o + n - d || 1, p = [0, 1, 2, 3, 4];
+  return c`
     <div class="chart-legend">
-      ${e.map((h) => l`<span><i class=${h.className}></i>${h.label}</span>`)}
+      ${e.map((h) => c`<span><i class=${h.className}></i>${h.label}</span>`)}
     </div>
     <svg class="history-chart" viewBox="0 0 ${i} ${s}" preserveAspectRatio="none" role="img" aria-label="Évolution Fitness Fatigue Forme">
-      ${u.map((h) => {
-    const _ = 10 + h / 4 * (s - 20);
-    return le`<line class="grid-line" x1="0" y1=${_} x2=${i} y2=${_}></line>`;
+      ${p.map((h) => {
+    const b = 10 + h / 4 * (s - 20);
+    return _e`<line class="grid-line" x1="0" y1=${b} x2=${i} y2=${b}></line>`;
   })}
-      ${e.map((h) => le`<polyline class="series ${h.className}" points=${Ot(h.values, i, s, d, f)}></polyline>`)}
+      ${e.map((h) => _e`<polyline class="series ${h.className}" points=${zt(h.values, i, s, d, f)}></polyline>`)}
     </svg>`;
 }
-function Nt(t, e, i, s) {
-  const o = ((t === null ? 0 : Math.min(s, Math.max(i, t))) - i) / (s - i || 1), a = Math.PI * 52, n = Math.max(0, Math.min(a, o * a));
-  return l`<svg class="gauge" viewBox="0 0 120 68" aria-hidden="true">
-    ${le`<path class="gauge-track" d="M 8 60 A 52 52 0 0 1 112 60"></path>
-    <path class="gauge-value ${e}" d="M 8 60 A 52 52 0 0 1 112 60" stroke-dasharray="${n} ${a}"></path>`}
+function jt(t, e, i, s) {
+  const r = ((t === null ? 0 : Math.min(s, Math.max(i, t))) - i) / (s - i || 1), o = Math.PI * 52, n = Math.max(0, Math.min(o, r * o));
+  return c`<svg class="gauge" viewBox="0 0 120 68" aria-hidden="true">
+    ${_e`<path class="gauge-track" d="M 8 60 A 52 52 0 0 1 112 60"></path>
+    <path class="gauge-value ${e}" d="M 8 60 A 52 52 0 0 1 112 60" stroke-dasharray="${n} ${o}"></path>`}
   </svg>`;
 }
-const Dt = {
+const Lt = {
   refresh: "Actualiser",
   atlas_readiness: "Préparation Atlas",
   atlas_coach: "Coach Atlas",
@@ -779,6 +779,18 @@ const Dt = {
   load_7d: "Charge 7 j",
   activities_7d: "Activités 7 j",
   evolution: "Évolution",
+  chart_evolution: "Évolution",
+  chart_fitness_fatigue_form: "Condition, fatigue et forme",
+  no_evolution_data: "Aucune donnée d’évolution disponible.",
+  chart_wellness: "Évolution du bien-être",
+  chart_sleep: "Sommeil",
+  chart_readiness: "Préparation",
+  chart_hrv: "Variabilité cardiaque",
+  chart_resting_hr: "Fréquence cardiaque au repos",
+  latest_value: "Dernière valeur",
+  hours_short: "h",
+  bpm_short: "bpm",
+  milliseconds_short: "ms",
   health: "Santé et composition corporelle",
   today: "Aujourd’hui",
   no_workout: "Aucun entraînement planifié",
@@ -845,7 +857,7 @@ const Dt = {
   period_90_days: "90 jours",
   period_365_days: "365 jours",
   day_short: "j"
-}, ze = {
+}, Ve = {
   refresh: "Refresh",
   atlas_readiness: "Atlas Readiness",
   atlas_coach: "Atlas Coach",
@@ -859,6 +871,18 @@ const Dt = {
   load_7d: "7-day load",
   activities_7d: "7-day activities",
   evolution: "Evolution",
+  chart_evolution: "Evolution",
+  chart_fitness_fatigue_form: "Fitness, fatigue and form",
+  no_evolution_data: "No evolution data available.",
+  chart_wellness: "Wellness evolution",
+  chart_sleep: "Sleep",
+  chart_readiness: "Readiness",
+  chart_hrv: "Heart rate variability",
+  chart_resting_hr: "Resting heart rate",
+  latest_value: "Latest value",
+  hours_short: "h",
+  bpm_short: "bpm",
+  milliseconds_short: "ms",
   health: "Health and body composition",
   today: "Today",
   no_workout: "No workout planned",
@@ -926,16 +950,16 @@ const Dt = {
   period_365_days: "365 days",
   day_short: "d"
 };
-function re(t) {
+function le(t) {
   return (t?.locale?.language ?? t?.language ?? navigator.language ?? "en").toLowerCase().startsWith("fr") ? "fr" : "en";
 }
-function c(t, e, i = {}) {
-  let s = (re(t) === "fr" ? Dt : ze)[e] ?? ze[e] ?? e;
-  for (const [r, o] of Object.entries(i))
-    s = s.replaceAll(`{${r}}`, String(o));
+function l(t, e, i = {}) {
+  let s = (le(t) === "fr" ? Lt : Ve)[e] ?? Ve[e] ?? e;
+  for (const [a, r] of Object.entries(i))
+    s = s.replaceAll(`{${a}}`, String(r));
   return s;
 }
-const jt = {
+const Ft = {
   overview: "Vue d’ensemble",
   training_load: "Charge d’entraînement",
   sleep: "Sommeil",
@@ -967,16 +991,16 @@ const jt = {
   anaerobic: "Anaérobie",
   race: "Course"
 };
-function D(t, e) {
+function F(t, e) {
   const i = String(e ?? "").trim();
-  if (!i || re(t) !== "fr")
+  if (!i || le(t) !== "fr")
     return i;
   const s = i.toLowerCase().replace(/[\s-]+/g, "_");
-  return jt[s] ?? i.replace(/_/g, " ").replace(/^./, (r) => r.toUpperCase());
+  return Ft[s] ?? i.replace(/_/g, " ").replace(/^./, (a) => a.toUpperCase());
 }
-function J(t, e) {
+function te(t, e) {
   const i = String(e ?? "").trim();
-  if (!i || re(t) !== "fr")
+  if (!i || le(t) !== "fr")
     return i;
   let s = i.match(
     /^(\d+)-day load\s+(?:is\s+)?([\d.,]+)%\s+(lower|higher) than the previous period\.?$/i
@@ -990,11 +1014,11 @@ function J(t, e) {
   if (s = i.match(
     /^(.+?) represents\s+([\d.,]+)% of training time over the last\s+(\d+) days\.?$/i
   ), s)
-    return `${L(t, s[1])} représente ${s[2]} % du temps d’entraînement sur les ${s[3]} derniers jours`;
-  const r = L(t, i);
-  return r !== i ? r : D(t, i);
+    return `${B(t, s[1])} représente ${s[2]} % du temps d’entraînement sur les ${s[3]} derniers jours`;
+  const a = B(t, i);
+  return a !== i ? a : F(t, i);
 }
-const Ut = {
+const Ht = {
   ride: "Vélo",
   virtualride: "Vélo virtuel",
   mountainbikeride: "VTT",
@@ -1030,47 +1054,47 @@ const Ut = {
   snowboard: "Snowboard",
   other: "Autre activité"
 };
-function L(t, e, i) {
+function B(t, e, i) {
   const s = String(e ?? "").trim();
   if (!s)
-    return i ?? c(t, "activity");
-  if (re(t) !== "fr")
+    return i ?? l(t, "activity");
+  if (le(t) !== "fr")
     return s.replace(/[_-]+/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2");
-  const r = s.replace(/[\s_-]+/g, "").toLowerCase();
-  return Ut[r] ?? s.replace(/[_-]+/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2");
+  const a = s.replace(/[\s_-]+/g, "").toLowerCase();
+  return Ht[a] ?? s.replace(/[_-]+/g, " ").replace(/([a-z0-9])([A-Z])/g, "$1 $2");
 }
-function Ht(t, e) {
+function Ut(t, e) {
   if (!e)
-    return { label: c(t, "sync_unknown"), level: "danger" };
+    return { label: l(t, "sync_unknown"), level: "danger" };
   const i = new Date(e).getTime();
   if (!Number.isFinite(i))
-    return { label: c(t, "sync_unknown"), level: "danger" };
+    return { label: l(t, "sync_unknown"), level: "danger" };
   const s = Math.max(0, Math.floor((Date.now() - i) / 6e4));
   if (s < 1)
-    return { label: c(t, "sync_now"), level: "good" };
+    return { label: l(t, "sync_now"), level: "good" };
   if (s < 60)
     return {
-      label: c(t, "sync_minutes", { value: s }),
+      label: l(t, "sync_minutes", { value: s }),
       level: s < 5 ? "good" : s <= 30 ? "warning" : "danger"
     };
-  const r = Math.floor(s / 60);
-  return r < 24 ? {
-    label: c(t, "sync_hours", { value: r }),
+  const a = Math.floor(s / 60);
+  return a < 24 ? {
+    label: l(t, "sync_hours", { value: a }),
     level: "danger"
   } : {
-    label: c(t, "sync_days", { value: Math.floor(r / 24) }),
+    label: l(t, "sync_days", { value: Math.floor(a / 24) }),
     level: "danger"
   };
 }
-function Ne(t, e = "Activity", i) {
-  return L(i, t, e);
+function Be(t, e = "Activity", i) {
+  return B(i, t, e);
 }
-var It = Object.defineProperty, qt = Object.getOwnPropertyDescriptor, ve = (t, e, i, s) => {
-  for (var r = s > 1 ? void 0 : s ? qt(e, i) : e, o = t.length - 1, a; o >= 0; o--)
-    (a = t[o]) && (r = (s ? a(e, i, r) : a(r)) || r);
-  return s && r && It(e, i, r), r;
+var qt = Object.defineProperty, It = Object.getOwnPropertyDescriptor, Ee = (t, e, i, s) => {
+  for (var a = s > 1 ? void 0 : s ? It(e, i) : e, r = t.length - 1, o; r >= 0; r--)
+    (o = t[r]) && (a = (s ? o(e, i, a) : o(a)) || a);
+  return s && a && qt(e, i, a), a;
 };
-const G = "https://github.com/pepka69/ha-intervals-icu", Lt = `${G}/blob/develop/README.fr.md`, Ft = `${G}/issues`, Vt = `${G}/issues/new/choose`, Bt = "https://buymeacoffee.com/pep_ka", Wt = `${G}/raw/develop/.github/assets/buy-me-a-beer-en.png`, Ge = [
+const Y = "https://github.com/pepka69/ha-intervals-icu", Vt = `${Y}/blob/develop/README.fr.md`, Bt = `${Y}/issues`, Wt = `${Y}/issues/new/choose`, Gt = "https://buymeacoffee.com/pep_ka", Kt = `${Y}/raw/develop/.github/assets/buy-me-a-beer-en.png`, rt = [
   ["fitness_entity", "Fitness", m.fitness],
   ["fatigue_entity", "Fatigue", m.fatigue],
   ["form_entity", "Forme", m.form],
@@ -1081,9 +1105,9 @@ const G = "https://github.com/pepka69/ha-intervals-icu", Lt = `${G}/blob/develop
     "Activités 7 jours",
     m.weeklyActivities
   ]
-], Gt = Ge.map(
+], Zt = rt.map(
   ([t]) => t
-), Kt = [
+), Yt = [
   ["show_atlas", "Afficher Coach Atlas et Readiness"],
   ["show_workout", "Afficher l’entraînement du jour"],
   ["show_last_activity", "Afficher la dernière activité"],
@@ -1093,7 +1117,7 @@ const G = "https://github.com/pepka69/ha-intervals-icu", Lt = `${G}/blob/develop
   ["show_sync_status", "Afficher l’état de synchronisation"],
   ["show_refresh_button", "Afficher le bouton Actualiser"],
   ["compact", "Mode compact"]
-], Zt = [
+], Jt = [
   { key: "weight", label: "Poids" },
   { key: "body_fat", label: "Graisse corporelle" },
   { key: "muscle_mass", label: "Masse musculaire" },
@@ -1112,14 +1136,14 @@ const G = "https://github.com/pepka69/ha-intervals-icu", Lt = `${G}/blob/develop
   { key: "stress", label: "Stress" },
   { key: "daily_calories", label: "Calories quotidiennes" }
 ];
-let F = class extends $ {
+let W = class extends k {
   setConfig(t) {
     this.config = { ...t };
   }
   integrationVersion() {
     if (!this.hass)
       return "unknown";
-    const t = ce(
+    const t = be(
       this.hass,
       void 0,
       "dashboard",
@@ -1145,7 +1169,7 @@ let F = class extends $ {
       ...this.config,
       device_id: t || void 0
     };
-    for (const i of Gt)
+    for (const i of Zt)
       delete e[i];
     this.emitConfig(e);
   }
@@ -1160,42 +1184,42 @@ let F = class extends $ {
     };
   }
   changeHealthMetric(t, e, i) {
-    const s = { ...this.config?.health ?? {} }, r = { ...s[t] ?? {} };
-    e === "entity" && i === "" ? delete r.entity : Object.assign(r, { [e]: i }), s[t] = r;
-    const o = {
+    const s = { ...this.config?.health ?? {} }, a = { ...s[t] ?? {} };
+    e === "entity" && i === "" ? delete a.entity : Object.assign(a, { [e]: i }), s[t] = a;
+    const r = {
       ...this.config,
       health: s
     };
-    t === "weight" && (delete o.weight_entity, delete o.show_weight), this.emitConfig(o);
+    t === "weight" && (delete r.weight_entity, delete r.show_weight), this.emitConfig(r);
   }
   render() {
     if (!this.config || !this.hass)
-      return l``;
-    const t = We(this.hass), e = this.config.device_id ?? (t.length === 1 ? t[0].id : ""), i = Object.keys(this.hass.states).filter(
-      (r) => r.startsWith("sensor.") && (!e || this.hass.entities?.[r]?.device_id === e)
-    ).sort(), s = Object.keys(this.hass.states).filter((r) => r.startsWith("sensor.")).sort();
-    return l`
+      return c``;
+    const t = at(this.hass), e = this.config.device_id ?? (t.length === 1 ? t[0].id : ""), i = Object.keys(this.hass.states).filter(
+      (a) => a.startsWith("sensor.") && (!e || this.hass.entities?.[a]?.device_id === e)
+    ).sort(), s = Object.keys(this.hass.states).filter((a) => a.startsWith("sensor.")).sort();
+    return c`
       <div class="editor">
         <label>
           Athlète / appareil
           <select
             .value=${e}
-            @change=${(r) => this.changeDevice(
-      r.target.value
+            @change=${(a) => this.changeDevice(
+      a.target.value
     )}
           >
             <option value="">Sélectionner un athlète</option>
             ${t.map(
-      (r) => l`
-                <option value=${r.id}>
-                  ${q(r)}
+      (a) => c`
+                <option value=${a.id}>
+                  ${V(a)}
                 </option>
               `
     )}
           </select>
         </label>
 
-        ${t.length === 0 ? l`
+        ${t.length === 0 ? c`
               <p>
                 Aucun appareil Intervals.icu détecté. Recharge Home
                 Assistant après avoir configuré l’intégration.
@@ -1206,9 +1230,9 @@ let F = class extends $ {
           Titre
           <input
             .value=${this.config.title ?? "Intervals.icu"}
-            @change=${(r) => this.change(
+            @change=${(a) => this.change(
       "title",
-      r.target.value
+      a.target.value
     )}
           />
         </label>
@@ -1218,28 +1242,28 @@ let F = class extends $ {
           <input
             .value=${this.config.athlete_name ?? ""}
             placeholder="Nom de l’appareil par défaut"
-            @change=${(r) => this.change(
+            @change=${(a) => this.change(
       "athlete_name",
-      r.target.value
+      a.target.value
     )}
           />
         </label>
 
-        ${Ge.map(
-      ([r, o, a]) => l`
+        ${rt.map(
+      ([a, r, o]) => c`
             <label>
-              ${o}
+              ${r}
               <select
                 .value=${String(
-        this.config[r] ?? ce(
+        this.config[a] ?? be(
           this.hass,
           void 0,
-          a,
+          o,
           e
         ) ?? ""
       )}
                 @change=${(n) => this.change(
-        r,
+        a,
         n.target.value
       )}
               >
@@ -1247,7 +1271,7 @@ let F = class extends $ {
                   Détection automatique pour cet athlète
                 </option>
                 ${i.map(
-        (n) => l`
+        (n) => c`
                     <option value=${n}>
                       ${this.hass.states[n].attributes.friendly_name ?? n}
                     </option>
@@ -1266,29 +1290,29 @@ let F = class extends $ {
             manuel, les données Intervals.icu disponibles sont utilisées.
           </p>
 
-          ${Zt.map(({ key: r, label: o }) => {
-      const a = this.healthMetricConfig(r);
-      return l`
+          ${Jt.map(({ key: a, label: r }) => {
+      const o = this.healthMetricConfig(a);
+      return c`
               <div class="health-editor-row">
                 <label class="check">
                   <input
                     type="checkbox"
-                    .checked=${a.show}
+                    .checked=${o.show}
                     @change=${(n) => this.changeHealthMetric(
-        r,
+        a,
         "show",
         n.target.checked
       )}
                   />
-                  Afficher ${o}
+                  Afficher ${r}
                 </label>
 
                 <label>
-                  Capteur — ${o}
+                  Capteur — ${r}
                   <select
-                    .value=${a.entity}
+                    .value=${o.entity}
                     @change=${(n) => this.changeHealthMetric(
-        r,
+        a,
         "entity",
         n.target.value
       )}
@@ -1297,7 +1321,7 @@ let F = class extends $ {
                       Détection automatique Intervals.icu
                     </option>
                     ${s.map(
-        (n) => l`
+        (n) => c`
                         <option value=${n}>
                           ${this.hass.states[n].attributes.friendly_name ?? n}
                         </option>
@@ -1310,18 +1334,18 @@ let F = class extends $ {
     })}
         </div>
 
-        ${Kt.map(
-      ([r, o]) => l`
+        ${Yt.map(
+      ([a, r]) => c`
             <label class="check">
               <input
                 type="checkbox"
-                .checked=${this.config[r] !== !1}
-                @change=${(a) => this.change(
-        r,
-        a.target.checked
+                .checked=${this.config[a] !== !1}
+                @change=${(o) => this.change(
+        a,
+        o.target.checked
       )}
               />
-              ${o}
+              ${r}
             </label>
           `
     )}
@@ -1345,19 +1369,19 @@ let F = class extends $ {
             </div>
 
             <div class="about-links">
-              <a href=${Lt} target="_blank" rel="noopener noreferrer">
+              <a href=${Vt} target="_blank" rel="noopener noreferrer">
                 <ha-icon icon="mdi:book-open-page-variant-outline"></ha-icon>
                 Documentation
               </a>
-              <a href=${Ft} target="_blank" rel="noopener noreferrer">
+              <a href=${Bt} target="_blank" rel="noopener noreferrer">
                 <ha-icon icon="mdi:bug-outline"></ha-icon>
                 Signaler un bug
               </a>
-              <a href=${Vt} target="_blank" rel="noopener noreferrer">
+              <a href=${Wt} target="_blank" rel="noopener noreferrer">
                 <ha-icon icon="mdi:lightbulb-on-outline"></ha-icon>
                 Proposer une fonctionnalité
               </a>
-              <a href=${G} target="_blank" rel="noopener noreferrer">
+              <a href=${Y} target="_blank" rel="noopener noreferrer">
                 <ha-icon icon="mdi:github"></ha-icon>
                 Dépôt GitHub
               </a>
@@ -1365,13 +1389,13 @@ let F = class extends $ {
 
             <a
               class="beer-link"
-              href=${Bt}
+              href=${Gt}
               target="_blank"
               rel="noopener noreferrer"
             >
               <img
                 class="beer-logo"
-                src=${Wt}
+                src=${Kt}
                 alt="Buy me a beer"
               />
               <ha-icon icon="mdi:open-in-new"></ha-icon>
@@ -1382,22 +1406,22 @@ let F = class extends $ {
     `;
   }
 };
-F.styles = Le;
-ve([
-  W({ attribute: !1 })
-], F.prototype, "hass", 2);
-ve([
-  w()
-], F.prototype, "config", 2);
-F = ve([
-  se("ha-intervals-icu-card-editor")
-], F);
-var Yt = Object.defineProperty, Jt = Object.getOwnPropertyDescriptor, K = (t, e, i, s) => {
-  for (var r = s > 1 ? void 0 : s ? Jt(e, i) : e, o = t.length - 1, a; o >= 0; o--)
-    (a = t[o]) && (r = (s ? a(e, i, r) : a(r)) || r);
-  return s && r && Yt(e, i, r), r;
+W.styles = et;
+Ee([
+  Z({ attribute: !1 })
+], W.prototype, "hass", 2);
+Ee([
+  S()
+], W.prototype, "config", 2);
+W = Ee([
+  ne("ha-intervals-icu-card-editor")
+], W);
+var Qt = Object.defineProperty, Xt = Object.getOwnPropertyDescriptor, J = (t, e, i, s) => {
+  for (var a = s > 1 ? void 0 : s ? Xt(e, i) : e, r = t.length - 1, o; r >= 0; r--)
+    (o = t[r]) && (a = (s ? o(e, i, a) : o(a)) || a);
+  return s && a && Qt(e, i, a), a;
 };
-const Qt = [
+const ei = [
   { key: "weight", label: "weight", icon: "mdi:scale-bathroom", defaultShow: !0 },
   { key: "body_fat", label: "body_fat", icon: "mdi:percent-outline", defaultShow: !1 },
   { key: "muscle_mass", label: "muscle_mass", icon: "mdi:arm-flex", defaultShow: !1 },
@@ -1416,7 +1440,7 @@ const Qt = [
   { key: "stress", label: "Stress", icon: "mdi:head-heart-outline", defaultShow: !1 },
   { key: "daily_calories", label: "daily_calories", icon: "mdi:fire", defaultShow: !1 }
 ];
-let T = class extends $ {
+let R = class extends k {
   constructor() {
     super(...arguments), this.refreshing = !1, this.closeTooltipFromDocument = (t) => {
       const e = t.composedPath();
@@ -1487,10 +1511,10 @@ let T = class extends $ {
     return e.includes("ride") || e.includes("cycl") || e.includes("vélo") ? "mdi:bike-fast" : e.includes("run") || e.includes("course") ? "mdi:run-fast" : e.includes("swim") || e.includes("natation") ? "mdi:swim" : e.includes("strength") || e.includes("musculation") || e.includes("crossfit") ? "mdi:weight-lifter" : e.includes("walk") || e.includes("marche") ? "mdi:walk" : "mdi:arm-flex";
   }
   quickStat(t, e, i) {
-    return l`<div class="quick-stat"><ha-icon icon=${t}></ha-icon><div><span>${e}</span><strong>${y(this.hass, i)}</strong></div></div>`;
+    return c`<div class="quick-stat"><ha-icon icon=${t}></ha-icon><div><span>${e}</span><strong>${_(this.hass, i)}</strong></div></div>`;
   }
   state(t, e) {
-    return this.hass ? v(
+    return this.hass ? y(
       this.hass,
       this.config?.[t],
       e,
@@ -1498,17 +1522,17 @@ let T = class extends $ {
     ) : void 0;
   }
   status(t, e) {
-    const i = Oe(e);
+    const i = Ie(e);
     return i === null ? "neutral" : t === "form" ? i < -20 ? "danger" : i < -10 ? "warning" : "good" : t === "fatigue" ? i >= 80 ? "danger" : i >= 60 ? "warning" : "good" : "good";
   }
   tooltipPosition(t) {
-    const i = t.currentTarget.getBoundingClientRect(), r = this.renderRoot.querySelector("ha-card")?.getBoundingClientRect() ?? this.getBoundingClientRect(), o = 160, a = i.left - r.left + i.width / 2;
+    const i = t.currentTarget.getBoundingClientRect(), a = this.renderRoot.querySelector("ha-card")?.getBoundingClientRect() ?? this.getBoundingClientRect(), r = 160, o = i.left - a.left + i.width / 2;
     return {
       x: Math.max(
-        o,
-        Math.min(a, r.width - o)
+        r,
+        Math.min(o, a.width - r)
       ),
-      y: i.bottom - r.top
+      y: i.bottom - a.top
     };
   }
   showMetricTooltip(t, e, i = !1) {
@@ -1516,13 +1540,13 @@ let T = class extends $ {
       this.tooltip = void 0;
       return;
     }
-    const s = this.metricTooltip(e), r = this.tooltipPosition(t);
+    const s = this.metricTooltip(e), a = this.tooltipPosition(t);
     this.tooltip = {
       key: e,
       title: s.title,
       text: s.text,
-      x: r.x,
-      y: r.y,
+      x: a.x,
+      y: a.y,
       pinned: i
     };
   }
@@ -1537,7 +1561,7 @@ let T = class extends $ {
     (t.key === "Enter" || t.key === " ") && (t.preventDefault(), this.showMetricTooltip(t, e, !0));
   }
   renderMetricTooltip() {
-    return this.tooltip ? l`
+    return this.tooltip ? c`
       <div
         class="metric-tooltip bottom"
         role="tooltip"
@@ -1546,7 +1570,7 @@ let T = class extends $ {
         <strong>${this.tooltip.title}</strong>
         <span>${this.tooltip.text}</span>
       </div>
-    ` : p;
+    ` : u;
   }
   metricTooltip(t) {
     return t === "fitness" ? {
@@ -1567,8 +1591,8 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     };
   }
   metric(t, e, i, s) {
-    const r = Oe(s), o = this.status(i, s), a = i === "form" ? -30 : 0, n = i === "form" ? 30 : 100, d = s?.attributes.change_7_days;
-    return l`
+    const a = Ie(s), r = this.status(i, s), o = i === "form" ? -30 : 0, n = i === "form" ? 30 : 100, d = s?.attributes.change_7_days;
+    return c`
       <article
         class="metric ${i}"
         tabindex="0"
@@ -1583,9 +1607,9 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
         @keydown=${(g) => this.handleMetricKeydown(g, i)}
       >
         <div class="metric-label">${t}</div>
-        <div class="metric-value">${y(this.hass, s)}</div>
+        <div class="metric-value">${_(this.hass, s)}</div>
         <div class="metric-short">${e}</div>
-        ${Nt(r, o, a, n)}
+        ${jt(a, r, o, n)}
         <div class="metric-foot">
           7 j
           ${typeof d == "number" ? `${d > 0 ? "+" : ""}${d.toFixed(1)}` : "—"}
@@ -1594,16 +1618,16 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     `;
   }
   infoRow(t, e, i) {
-    return l`<div class="info-row">
+    return c`<div class="info-row">
       <ha-icon icon=${t}></ha-icon>
       <span>${e}</span>
-      <strong>${y(this.hass, i)}</strong>
+      <strong>${_(this.hass, i)}</strong>
     </div>`;
   }
   healthState(t) {
     if (!this.hass || !this.config) return;
     const e = this.config.health?.[t]?.entity ?? (t === "weight" ? this.config.weight_entity : void 0);
-    return e && this.hass.states[e] ? this.hass.states[e] : v(
+    return e && this.hass.states[e] ? this.hass.states[e] : y(
       this.hass,
       void 0,
       m[t],
@@ -1615,97 +1639,97 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     return i !== void 0 ? i : t === "weight" && this.config?.show_weight !== void 0 ? this.config.show_weight : e;
   }
   render() {
-    if (!this.hass || !this.config) return p;
-    const t = this.hass, e = this.state("fitness_entity", m.fitness), i = this.state("fatigue_entity", m.fatigue), s = this.state("form_entity", m.form), r = this.state("ftp_entity", m.ftp), o = this.state(
+    if (!this.hass || !this.config) return u;
+    const t = this.hass, e = this.state("fitness_entity", m.fitness), i = this.state("fatigue_entity", m.fatigue), s = this.state("form_entity", m.form), a = this.state("ftp_entity", m.ftp), r = this.state(
       "weekly_load_entity",
       m.weeklyLoad
-    ), a = this.state(
+    ), o = this.state(
       "weekly_activities_entity",
       m.weeklyActivities
-    ), n = v(
+    ), n = y(
       t,
       void 0,
       m.trainingStatus,
       this.config.device_id
-    ), d = v(
+    ), d = y(
       t,
       void 0,
       m.readinessScore,
       this.config.device_id
-    ), g = v(
+    ), g = y(
       t,
       void 0,
       m.readinessLevel,
       this.config.device_id
-    ), f = v(
+    ), f = y(
       t,
       void 0,
       m.readinessRecoveryHours,
       this.config.device_id
-    ), u = v(
+    ), p = y(
       t,
       void 0,
       m.atlasCoach,
       this.config.device_id
-    ), h = this.config.device_id, _ = h ? t.devices?.[h] : void 0, S = this.config.athlete_name || q(_), Ke = v(
+    ), h = this.config.device_id, b = h ? t.devices?.[h] : void 0, x = this.config.athlete_name || V(b), v = y(
       t,
       void 0,
       m.plannedTodayName,
       h
-    ), Ze = v(
+    ), C = y(
       t,
       void 0,
       m.plannedTodaySport,
       h
-    ), Ye = v(
+    ), ce = y(
       t,
       void 0,
       m.plannedTodayDuration,
       h
-    ), Je = v(
+    ), de = y(
       t,
       void 0,
       m.plannedTodayLoad,
       h
-    ), Qe = v(
+    ), he = y(
       t,
       void 0,
       m.lastActivityName,
       h
-    ), Xe = v(
+    ), pe = y(
       t,
       void 0,
       m.lastActivityType,
       h
-    ), et = v(
+    ), N = y(
       t,
       void 0,
       m.lastActivityDate,
       h
-    ), tt = v(
+    ), ue = y(
       t,
       void 0,
       m.lastActivityDuration,
       h
-    ), it = v(
+    ), ge = y(
       t,
       void 0,
       m.lastActivityLoad,
       h
-    ), st = v(
+    ), me = y(
       t,
       void 0,
       m.lastActivityCalories,
       h
-    ), ye = y(t, Qe), ae = c(t, "activity"), Z = Ne(y(t, Xe, ae), ae, t), rt = Z !== ae && Z.trim().toLowerCase() !== ye.trim().toLowerCase(), _e = Qt.map((b) => ({
-      ...b,
-      state: this.healthState(b.key),
-      visible: this.healthVisible(b.key, b.defaultShow)
-    })).filter((b) => b.visible && b.state), be = Ht(
+    ), Q = _(t, he), fe = l(t, "activity"), X = Be(_(t, pe, fe), fe, t), ot = X !== fe && X.trim().toLowerCase() !== Q.trim().toLowerCase(), Te = ei.map(($) => ({
+      ...$,
+      state: this.healthState($.key),
+      visible: this.healthVisible($.key, $.defaultShow)
+    })).filter(($) => $.visible && $.state), Me = Ut(
       t,
       e?.last_updated ?? e?.last_changed
     );
-    return l`<ha-card class=${this.config.compact ? "compact" : ""}>
+    return c`<ha-card class=${this.config.compact ? "compact" : ""}>
       <div class="card-shell">
         <header class="header">
           <div class="identity">
@@ -1716,137 +1740,137 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
             </div>
             <div>
               <h2>${this.config.title ?? "Intervals.icu"}</h2>
-              ${S ? l`<div class="athlete">${S}</div>` : p}
+              ${x ? c`<div class="athlete">${x}</div>` : u}
             </div>
           </div>
           <div class="header-actions">
-            ${this.config.show_sync_status !== !1 ? l`<div class="sync"><span class="dot ${be.level}"></span>${be.label}</div>` : p}
-            ${this.config.show_refresh_button !== !1 ? l`<button class="refresh" title=${c(t, "refresh")} @click=${() => this.refresh()}>
+            ${this.config.show_sync_status !== !1 ? c`<div class="sync"><span class="dot ${Me.level}"></span>${Me.label}</div>` : u}
+            ${this.config.show_refresh_button !== !1 ? c`<button class="refresh" title=${l(t, "refresh")} @click=${() => this.refresh()}>
                   <ha-icon class=${this.refreshing ? "spinning" : ""} icon="mdi:refresh"></ha-icon>
-                </button>` : p}
+                </button>` : u}
           </div>
         </header>
 
-        ${this.config.show_atlas !== !1 ? l`<section class="atlas-panel">
+        ${this.config.show_atlas !== !1 ? c`<section class="atlas-panel">
               <article class="atlas-readiness">
                 <div class="section-title">
-                  <ha-icon icon="mdi:gauge"></ha-icon><span>${c(t, "atlas_readiness")}</span>
+                  <ha-icon icon="mdi:gauge"></ha-icon><span>${l(t, "atlas_readiness")}</span>
                 </div>
                 <div class="atlas-score">
-                  <strong>${y(t, d)}</strong>
-                  <span>${D(t, y(t, g, c(t, "unavailable")))}</span>
+                  <strong>${_(t, d)}</strong>
+                  <span>${F(t, _(t, g, l(t, "unavailable")))}</span>
                 </div>
                 <div class="atlas-meta">
-                  <span><ha-icon icon="mdi:timer-sand"></ha-icon>${c(t, "recovery")} ${y(t, f)}</span>
-                  <span><ha-icon icon=${n?.attributes.icon || "mdi:chart-timeline-variant-shimmer"}></ha-icon>${D(t, y(t, n, c(t, "unknown_status")))}</span>
+                  <span><ha-icon icon="mdi:timer-sand"></ha-icon>${l(t, "recovery")} ${_(t, f)}</span>
+                  <span><ha-icon icon=${n?.attributes.icon || "mdi:chart-timeline-variant-shimmer"}></ha-icon>${F(t, _(t, n, l(t, "unknown_status")))}</span>
                 </div>
               </article>
               <article class="atlas-coach">
                 <div class="section-title">
-                  <ha-icon icon="mdi:account-heart-outline"></ha-icon><span>${c(t, "atlas_coach")}</span>
+                  <ha-icon icon="mdi:account-heart-outline"></ha-icon><span>${l(t, "atlas_coach")}</span>
                 </div>
-                <h3>${D(t, y(t, u, c(t, "no_recommendation")))}</h3>
-                ${u?.attributes.recommendation ? l`<p>${J(t, u.attributes.recommendation)}</p>` : p}
+                <h3>${F(t, _(t, p, l(t, "no_recommendation")))}</h3>
+                ${p?.attributes.recommendation ? c`<p>${te(t, p.attributes.recommendation)}</p>` : u}
                 <div class="atlas-chips">
-                  ${u?.attributes.intensity ? l`<span>${D(t, u.attributes.intensity)}</span>` : p}
-                  ${u?.attributes.duration_minutes ? l`<span>${String(u.attributes.duration_minutes)} min</span>` : p}
-                  ${u?.attributes.heart_rate_zone ? l`<span>${String(u.attributes.heart_rate_zone)}</span>` : p}
+                  ${p?.attributes.intensity ? c`<span>${F(t, p.attributes.intensity)}</span>` : u}
+                  ${p?.attributes.duration_minutes ? c`<span>${String(p.attributes.duration_minutes)} min</span>` : u}
+                  ${p?.attributes.heart_rate_zone ? c`<span>${String(p.attributes.heart_rate_zone)}</span>` : u}
                 </div>
               </article>
-            </section>` : p}
+            </section>` : u}
 
         <section class="metrics">
-          ${this.metric(c(t, "fitness"), "CTL", "fitness", e)}
-          ${this.metric(c(t, "fatigue"), "ATL", "fatigue", i)}
-          ${this.metric(c(t, "form"), "TSB", "form", s)}
+          ${this.metric(l(t, "fitness"), "CTL", "fitness", e)}
+          ${this.metric(l(t, "fatigue"), "ATL", "fatigue", i)}
+          ${this.metric(l(t, "form"), "TSB", "form", s)}
         </section>
 
         <section class="quick-stats">
-          ${this.quickStat("mdi:bike-fast", "FTP", r)}
-          ${this.quickStat("mdi:chart-areaspline", c(t, "load_7d"), o)}
-          ${this.quickStat("mdi:calendar-check", c(t, "activities_7d"), a)}
+          ${this.quickStat("mdi:bike-fast", "FTP", a)}
+          ${this.quickStat("mdi:chart-areaspline", l(t, "load_7d"), r)}
+          ${this.quickStat("mdi:calendar-check", l(t, "activities_7d"), o)}
         </section>
 
-        ${this.config.show_history !== !1 ? l`<section class="section chart-section">
+        ${this.config.show_history !== !1 ? c`<section class="section chart-section">
               <div class="section-title">
                 <ha-icon icon="mdi:chart-line"></ha-icon
-                ><span>${c(t, "evolution")}</span>
+                ><span>${l(t, "evolution")}</span>
               </div>
-              ${zt([
+              ${Dt([
       {
-        label: c(t, "fitness"),
-        values: ne(e),
+        label: l(t, "fitness"),
+        values: ye(e),
         className: "fitness-line"
       },
       {
-        label: c(t, "fatigue"),
-        values: ne(i),
+        label: l(t, "fatigue"),
+        values: ye(i),
         className: "fatigue-line"
       },
       {
-        label: c(t, "form"),
-        values: ne(s),
+        label: l(t, "form"),
+        values: ye(s),
         className: "form-line"
       }
     ])}
-            </section>` : p}
+            </section>` : u}
 
-        ${this.config.show_health !== !1 && _e.length > 0 ? l`<section class="section health-section">
+        ${this.config.show_health !== !1 && Te.length > 0 ? c`<section class="section health-section">
               <div class="section-title">
                 <ha-icon icon="mdi:heart-pulse"></ha-icon>
-                <span>${c(t, "health")}</span>
+                <span>${l(t, "health")}</span>
               </div>
               <div class="health-grid">
-                ${_e.map(
-      (b) => l`
+                ${Te.map(
+      ($) => c`
                     <div class="health-item">
-                      <ha-icon icon=${b.icon}></ha-icon>
+                      <ha-icon icon=${$.icon}></ha-icon>
                       <div>
-                        <span>${c(t, b.label)}</span>
-                        <strong>${y(t, b.state)}</strong>
+                        <span>${l(t, $.label)}</span>
+                        <strong>${_(t, $.state)}</strong>
                       </div>
                     </div>
                   `
     )}
               </div>
-            </section>` : p}
+            </section>` : u}
 
         <section class="lower-grid">
-          ${this.config.show_workout !== !1 ? l`<article class="feature workout spotlight">
+          ${this.config.show_workout !== !1 ? c`<article class="feature workout spotlight">
                 <div class="section-title">
                   <ha-icon icon="mdi:calendar-today"></ha-icon
-                  ><span>${c(t, "today")}</span>
+                  ><span>${l(t, "today")}</span>
                 </div>
                 <h3>
-                  ${y(
+                  ${_(
       t,
-      Ke,
-      c(t, "no_workout")
+      v,
+      l(t, "no_workout")
     )}
                 </h3>
                 <div class="pill">
-                  ${Ne(y(t, Ze, c(t, "workout")), c(t, "workout"), t)}
+                  ${Be(_(t, C, l(t, "workout")), l(t, "workout"), t)}
                 </div>
                 <div class="feature-meta">
                   <span
                     ><ha-icon icon="mdi:clock-outline"></ha-icon
-                    >${y(t, Ye)}</span
+                    >${_(t, ce)}</span
                   ><span
-                    ><ha-icon icon="mdi:chart-bar"></ha-icon>${c(t, "load")}
-                    ${y(t, Je)}</span
+                    ><ha-icon icon="mdi:chart-bar"></ha-icon>${l(t, "load")}
+                    ${_(t, de)}</span
                   >
                 </div>
-              </article>` : p}
+              </article>` : u}
 
-          ${this.config.show_records !== !1 ? l`<article class="feature records-card">
+          ${this.config.show_records !== !1 ? c`<article class="feature records-card">
                 <div class="section-title">
                   <ha-icon icon="mdi:trophy-outline"></ha-icon
-                  ><span>${c(t, "records")}</span>
+                  ><span>${l(t, "records")}</span>
                 </div>
                 ${this.infoRow(
       "mdi:bike-fast",
       "FTP",
-      v(
+      y(
         t,
         void 0,
         m.recordFtp,
@@ -1855,8 +1879,8 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     )}
                 ${this.infoRow(
       "mdi:map-marker-distance",
-      c(t, "distance"),
-      v(
+      l(t, "distance"),
+      y(
         t,
         void 0,
         m.recordDistance,
@@ -1865,8 +1889,8 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     )}
                 ${this.infoRow(
       "mdi:image-filter-hdr",
-      c(t, "elevation"),
-      v(
+      l(t, "elevation"),
+      y(
         t,
         void 0,
         m.recordElevation,
@@ -1875,44 +1899,44 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     )}
                 ${this.infoRow(
       "mdi:flash",
-      c(t, "max_power"),
-      v(
+      l(t, "max_power"),
+      y(
         t,
         void 0,
         m.recordMaxPower,
         h
       )
     )}
-              </article>` : p}
+              </article>` : u}
 
-          ${this.config.show_last_activity !== !1 ? l`<article class="feature last-activity spotlight">
+          ${this.config.show_last_activity !== !1 ? c`<article class="feature last-activity spotlight">
                 <div class="section-title">
-                  <ha-icon icon=${this.sportIcon(Z)}></ha-icon
-                  ><span>${c(t, "last_activity")}</span>
+                  <ha-icon icon=${this.sportIcon(X)}></ha-icon
+                  ><span>${l(t, "last_activity")}</span>
                 </div>
-                <h3>${ye}</h3>
-                ${rt ? l`<div class="pill purple">${Z}</div>` : p}
+                <h3>${Q}</h3>
+                ${ot ? c`<div class="pill purple">${X}</div>` : u}
                 <div class="activity-details">
                   <span
                     ><ha-icon
                       icon="mdi:calendar-blank-outline"
                     ></ha-icon
-                    >${y(t, et)}</span
+                    >${_(t, N)}</span
                   >
                   <span
                     ><ha-icon icon="mdi:clock-outline"></ha-icon
-                    >${y(t, tt)}</span
+                    >${_(t, ue)}</span
                   >
                   <span
                     ><ha-icon icon="mdi:fire"></ha-icon
-                    >${y(t, st)}</span
+                    >${_(t, me)}</span
                   >
                   <span
-                    ><ha-icon icon="mdi:chart-bar"></ha-icon>${c(t, "load")}
-                    ${y(t, it)}</span
+                    ><ha-icon icon="mdi:chart-bar"></ha-icon>${l(t, "load")}
+                    ${_(t, ge)}</span
                   >
                 </div>
-              </article>` : p}
+              </article>` : u}
         </section>
 
         ${this.renderMetricTooltip()}
@@ -1920,9 +1944,9 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
     </ha-card>`;
   }
 };
-T.styles = [
-  Le,
-  ee`
+R.styles = [
+  et,
+  ae`
       :host {
         overflow: visible;
       }
@@ -2003,27 +2027,179 @@ T.styles = [
       }
     `
 ];
-K([
-  W({ attribute: !1 })
-], T.prototype, "hass", 2);
-K([
-  w()
-], T.prototype, "config", 2);
-K([
-  w()
-], T.prototype, "refreshing", 2);
-K([
-  w()
-], T.prototype, "tooltip", 2);
-T = K([
-  se("ha-intervals-icu-card")
-], T);
-var Xt = Object.defineProperty, ei = Object.getOwnPropertyDescriptor, k = (t, e, i, s) => {
-  for (var r = s > 1 ? void 0 : s ? ei(e, i) : e, o = t.length - 1, a; o >= 0; o--)
-    (a = t[o]) && (r = (s ? a(e, i, r) : a(r)) || r);
-  return s && r && Xt(e, i, r), r;
+J([
+  Z({ attribute: !1 })
+], R.prototype, "hass", 2);
+J([
+  S()
+], R.prototype, "config", 2);
+J([
+  S()
+], R.prototype, "refreshing", 2);
+J([
+  S()
+], R.prototype, "tooltip", 2);
+R = J([
+  ne("ha-intervals-icu-card")
+], R);
+function ti(t) {
+  return t.map((e) => ({
+    date: String(e.date ?? ""),
+    value: Number(e.value),
+    timestamp: new Date(e.date).getTime()
+  })).filter(
+    (e) => e.date !== "" && Number.isFinite(e.value) && Number.isFinite(e.timestamp)
+  ).sort((e, i) => e.timestamp - i.timestamp);
+}
+function ii(t) {
+  return t.map((e) => ({
+    key: e.key,
+    label: e.label,
+    className: e.className,
+    points: ti(e.points)
+  })).filter((e) => e.points.length > 0);
+}
+function si(t, e, i, s, a, r, o, n) {
+  const d = r - n * 2, g = o - n * 2, f = Math.max(1, i - e), p = Math.max(1, a - s);
+  return t.map((h, b) => {
+    const x = n + (h.timestamp - e) / f * d, v = n + (1 - (h.value - s) / p) * g;
+    return `${b === 0 ? "M" : "L"} ${x.toFixed(2)} ${v.toFixed(2)}`;
+  }).join(" ");
+}
+function We(t, e) {
+  const i = t.flatMap((r) => r.points).map((r) => new Date(r.date).getTime()).filter(Number.isFinite);
+  if (!i.length)
+    return t;
+  const a = Math.max(...i) - (e - 1) * 864e5;
+  return t.map((r) => ({
+    ...r,
+    points: r.points.filter((o) => {
+      const n = new Date(o.date).getTime();
+      return Number.isFinite(n) && n >= a;
+    })
+  }));
+}
+function Ge(t, e = {}) {
+  const i = e.width ?? 900, s = e.height ?? 280, a = 28, r = ii(t);
+  if (!r.length)
+    return c`
+      <div class="chart-empty">
+        ${e.emptyLabel ?? "No chart data"}
+      </div>
+    `;
+  const o = r.flatMap((v) => v.points), n = Math.min(
+    ...o.map((v) => v.timestamp)
+  ), d = Math.max(
+    ...o.map((v) => v.timestamp)
+  ), g = Math.min(
+    ...o.map((v) => v.value)
+  ), f = Math.max(
+    ...o.map((v) => v.value)
+  ), p = Math.max(
+    2,
+    Math.abs(f - g) * 0.08
+  ), h = g - p, b = f + p, x = [0, 0.25, 0.5, 0.75, 1];
+  return c`
+    <div class="native-chart">
+      <div class="chart-legend">
+        ${r.map(
+    (v) => c`
+            <span>
+              <i class=${v.className}></i>
+              ${v.label}
+            </span>
+          `
+  )}
+      </div>
+
+      <svg
+        class="statistics-history-chart"
+        viewBox="0 0 ${i} ${s}"
+        preserveAspectRatio="none"
+        role="img"
+        aria-label=${e.ariaLabel ?? "Statistics evolution"}
+      >
+        ${x.map((v) => {
+    const C = a + v * (s - a * 2);
+    return c`
+            <line
+              class="chart-grid-line"
+              x1=${a}
+              y1=${C}
+              x2=${i - a}
+              y2=${C}
+            ></line>
+          `;
+  })}
+
+        ${r.map((v) => {
+    const C = si(
+      v.points,
+      n,
+      d,
+      h,
+      b,
+      i,
+      s,
+      a
+    ), ce = i - a * 2, de = s - a * 2, he = Math.max(
+      1,
+      d - n
+    ), pe = Math.max(
+      1,
+      b - h
+    );
+    return C ? c`
+                <path
+                  class="chart-series ${v.className}"
+                  d=${C}
+                ></path>
+
+                ${v.points.map((N) => {
+      const ue = a + (N.timestamp - n) / he * ce, ge = a + (1 - (N.value - h) / pe) * de, me = e.valueDecimals ?? 1, Q = e.valueSuffix ?? "";
+      return c`
+                    <circle
+                      class="chart-point ${v.className}"
+                      cx=${ue}
+                      cy=${ge}
+                      r="4"
+                    >
+                      <title>
+                        ${v.label} ·
+                        ${new Date(N.timestamp).toLocaleDateString()}
+                        · ${N.value.toFixed(me)}${Q}
+                      </title>
+                    </circle>
+                  `;
+    })}
+              ` : u;
+  })}
+      </svg>
+
+      <div class="chart-axis">
+        <span>
+          ${new Date(n).toLocaleDateString(void 0, {
+    day: "2-digit",
+    month: "2-digit"
+  })}
+        </span>
+
+        <span>
+          ${new Date(d).toLocaleDateString(void 0, {
+    day: "2-digit",
+    month: "2-digit"
+  })}
+        </span>
+      </div>
+    </div>
+  `;
+}
+var ai = Object.defineProperty, ri = Object.getOwnPropertyDescriptor, A = (t, e, i, s) => {
+  for (var a = s > 1 ? void 0 : s ? ri(e, i) : e, r = t.length - 1, o; r >= 0; r--)
+    (o = t[r]) && (a = (s ? o(e, i, a) : o(a)) || a);
+  return s && a && ai(e, i, a), a;
 };
-let V = class extends $ {
+let G = class extends k {
   setConfig(t) {
     this.config = { ...t };
   }
@@ -2049,17 +2225,17 @@ let V = class extends $ {
   }
   render() {
     if (!this.hass || !this.config)
-      return l``;
-    const t = We(this.hass), e = this.config.device_id ?? (t.length === 1 ? t[0].id : ""), i = Object.keys(this.hass.states).filter((s) => {
+      return c``;
+    const t = at(this.hass), e = this.config.device_id ?? (t.length === 1 ? t[0].id : ""), i = Object.keys(this.hass.states).filter((s) => {
       if (!s.startsWith("sensor.") || e && this.hass.entities?.[s]?.device_id !== e)
         return !1;
-      const r = this.hass.entities?.[s], o = this.hass.states[s];
-      return r?.translation_key === "statistics_dashboard" || r?.unique_id?.endsWith("_statistics_dashboard") || s.endsWith("_statistics_dashboard") || o?.attributes.translation_key === "statistics_dashboard";
+      const a = this.hass.entities?.[s], r = this.hass.states[s];
+      return a?.translation_key === "statistics_dashboard" || a?.unique_id?.endsWith("_statistics_dashboard") || s.endsWith("_statistics_dashboard") || r?.attributes.translation_key === "statistics_dashboard";
     }).sort();
-    return l`
+    return c`
       <div class="statistics-editor">
         <label>
-          <span>${c(this.hass, "athlete_device")}</span>
+          <span>${l(this.hass, "athlete_device")}</span>
 
           <select
             .value=${e}
@@ -2067,24 +2243,24 @@ let V = class extends $ {
       s.target.value
     )}
           >
-            <option value="">${c(this.hass, "select_athlete")}</option>
+            <option value="">${l(this.hass, "select_athlete")}</option>
 
             ${t.map(
-      (s) => l`
+      (s) => c`
                 <option value=${s.id}>
-                  ${q(s)}
+                  ${V(s)}
                 </option>
               `
     )}
           </select>
         </label>
 
-        ${t.length === 0 ? l`
-              <p>${c(this.hass, "no_intervals_device")}</p>
-            ` : p}
+        ${t.length === 0 ? c`
+              <p>${l(this.hass, "no_intervals_device")}</p>
+            ` : u}
 
         <label>
-          <span>${c(this.hass, "title")}</span>
+          <span>${l(this.hass, "title")}</span>
 
           <input
             type="text"
@@ -2097,7 +2273,7 @@ let V = class extends $ {
         </label>
 
         <label>
-          <span>${c(this.hass, "default_period")}</span>
+          <span>${l(this.hass, "default_period")}</span>
 
           <select
             .value=${this.config.default_period ?? "30_days"}
@@ -2106,15 +2282,15 @@ let V = class extends $ {
       s.target.value
     )}
           >
-            <option value="7_days">${c(this.hass, "period_7_days")}</option>
-            <option value="30_days">${c(this.hass, "period_30_days")}</option>
-            <option value="90_days">${c(this.hass, "period_90_days")}</option>
-            <option value="365_days">${c(this.hass, "period_365_days")}</option>
+            <option value="7_days">${l(this.hass, "period_7_days")}</option>
+            <option value="30_days">${l(this.hass, "period_30_days")}</option>
+            <option value="90_days">${l(this.hass, "period_90_days")}</option>
+            <option value="365_days">${l(this.hass, "period_365_days")}</option>
           </select>
         </label>
 
         <label>
-          <span>${c(this.hass, "statistics_entity")}</span>
+          <span>${l(this.hass, "statistics_entity")}</span>
 
           <select
             .value=${this.config.entity ?? ""}
@@ -2124,11 +2300,11 @@ let V = class extends $ {
     )}
           >
             <option value="">
-              ${c(this.hass, "automatic_athlete_detection")}
+              ${l(this.hass, "automatic_athlete_detection")}
             </option>
 
             ${i.map(
-      (s) => l`
+      (s) => c`
                 <option value=${s}>
                   ${this.hass.states[s].attributes.friendly_name ?? s}
                 </option>
@@ -2140,7 +2316,7 @@ let V = class extends $ {
     `;
   }
 };
-V.styles = ee`
+G.styles = ae`
     :host {
       display: block;
     }
@@ -2177,16 +2353,16 @@ V.styles = ee`
       font-size: 0.88rem;
     }
   `;
-k([
-  W({ attribute: !1 })
-], V.prototype, "hass", 2);
-k([
-  w()
-], V.prototype, "config", 2);
-V = k([
-  se("ha-intervals-icu-statistics-card-editor")
-], V);
-let M = class extends $ {
+A([
+  Z({ attribute: !1 })
+], G.prototype, "hass", 2);
+A([
+  S()
+], G.prototype, "config", 2);
+G = A([
+  ne("ha-intervals-icu-statistics-card-editor")
+], G);
+let P = class extends k {
   constructor() {
     super(...arguments), this.period = "30_days", this.section = "overview";
   }
@@ -2208,7 +2384,7 @@ let M = class extends $ {
     return { columns: 12, min_columns: 6, rows: 10, min_rows: 6 };
   }
   attrs() {
-    return this.hass ? v(this.hass, this.config?.entity, "statistics_dashboard", this.config?.device_id)?.attributes ?? {} : {};
+    return this.hass ? y(this.hass, this.config?.entity, "statistics_dashboard", this.config?.device_id)?.attributes ?? {} : {};
   }
   number(t, e = 1) {
     const i = Number(t);
@@ -2216,28 +2392,28 @@ let M = class extends $ {
   }
   change(t) {
     const e = Number(t);
-    if (!Number.isFinite(e)) return l`<span class="change neutral">—</span>`;
+    if (!Number.isFinite(e)) return c`<span class="change neutral">—</span>`;
     const i = e > 3 ? "up" : e < -3 ? "down" : "neutral";
-    return l`<span class="change ${i}">${e > 0 ? "+" : ""}${e.toFixed(1)}%</span>`;
+    return c`<span class="change ${i}">${e > 0 ? "+" : ""}${e.toFixed(1)}%</span>`;
   }
-  tile(t, e, i, s = "", r) {
-    return l`<article class="tile"><ha-icon icon=${t}></ha-icon><div><span>${e}</span><strong>${this.number(i)}${s}</strong>${r !== void 0 ? this.change(r) : p}</div></article>`;
+  tile(t, e, i, s = "", a) {
+    return c`<article class="tile"><ha-icon icon=${t}></ha-icon><div><span>${e}</span><strong>${this.number(i)}${s}</strong>${a !== void 0 ? this.change(a) : u}</div></article>`;
   }
   textTile(t, e, i, s) {
-    return l`<article class="tile"><ha-icon icon=${t}></ha-icon><div><span>${e}</span><strong>${i}</strong>${s !== void 0 ? this.change(s) : p}</div></article>`;
+    return c`<article class="tile"><ha-icon icon=${t}></ha-icon><div><span>${e}</span><strong>${i}</strong>${s !== void 0 ? this.change(s) : u}</div></article>`;
   }
   label(t) {
-    return c(this.hass, t);
+    return l(this.hass, t);
   }
   name(t) {
-    return J(this.hass, t.replaceAll("_", " "));
+    return te(this.hass, t.replaceAll("_", " "));
   }
   overview(t) {
     const e = t.periods?.[this.period] ?? {}, i = e.current ?? {}, s = e.comparison ?? {};
-    return l`
+    return c`
       <div class="tiles">
         ${this.tile("mdi:calendar-check", this.label("activities"), i.activities, "", s.activities_change_percent)}
-        ${this.textTile("mdi:clock-outline", this.label("duration"), N(i.duration_hours, "h"), s.duration_hours_change_percent)}
+        ${this.textTile("mdi:clock-outline", this.label("duration"), L(i.duration_hours, "h"), s.duration_hours_change_percent)}
         ${this.tile("mdi:map-marker-distance", this.label("distance"), i.distance_km, " km", s.distance_km_change_percent)}
         ${this.tile("mdi:chart-bell-curve", this.label("load"), i.load, "", s.load_change_percent)}
         ${this.tile("mdi:image-filter-hdr", this.label("elevation"), i.elevation_m, " m", s.elevation_m_change_percent)}
@@ -2246,21 +2422,187 @@ let M = class extends $ {
         ${this.tile("mdi:chart-timeline-variant", "TRIMP", i.trimp, "", s.trimp_change_percent)}
       </div>
       <div class="insights">
-        ${(t.training_insights_by_period?.[this.period] ?? t.insights ?? t.training_insights ?? []).map((r) => l`<div class="insight ${r.type ?? "info"}"><ha-icon icon=${r.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${J(this.hass, r.title)}</strong><span>${J(this.hass, r.message)}</span></div></div>`)}
+        ${(t.training_insights_by_period?.[this.period] ?? t.insights ?? t.training_insights ?? []).map((a) => c`<div class="insight ${a.type ?? "info"}"><ha-icon icon=${a.type === "warning" ? "mdi:alert-circle-outline" : "mdi:lightbulb-on-outline"}></ha-icon><div><strong>${te(this.hass, a.title)}</strong><span>${te(this.hass, a.message)}</span></div></div>`)}
       </div>`;
+  }
+  periodDays() {
+    return this.period === "7_days" ? 7 : this.period === "30_days" ? 30 : this.period === "90_days" ? 90 : 365;
+  }
+  chartPoints(t, e = (i) => i) {
+    return Array.isArray(t) ? t.map((i) => {
+      const s = i, a = Number(s.value);
+      return {
+        date: String(s.date ?? ""),
+        value: e(a)
+      };
+    }).filter(
+      (i) => i.date !== "" && Number.isFinite(i.value)
+    ) : [];
+  }
+  latestChartValue(t) {
+    if (t.length)
+      return [...t].sort(
+        (e, i) => new Date(e.date).getTime() - new Date(i.date).getTime()
+      ).at(-1)?.value;
+  }
+  wellnessChart(t, e, i, s, a, r = 0) {
+    const o = We(
+      [
+        {
+          key: i,
+          label: t,
+          className: i,
+          points: s
+        }
+      ],
+      this.periodDays()
+    ), n = o[0]?.points ?? [], d = this.latestChartValue(n);
+    return c`
+      <article class="wellness-chart-card">
+        <header class="wellness-chart-head">
+          <div>
+            <ha-icon icon=${e}></ha-icon>
+
+            <div>
+              <strong>${t}</strong>
+              <span>${l(this.hass, `period_${this.period}`)}</span>
+            </div>
+          </div>
+
+          ${d !== void 0 ? c`
+                <div class="chart-latest-value">
+                  <span>${l(this.hass, "latest_value")}</span>
+                  <strong>
+                    ${d.toFixed(r)}${a}
+                  </strong>
+                </div>
+              ` : u}
+        </header>
+
+        ${Ge(o, {
+      height: 220,
+      emptyLabel: l(this.hass, "no_evolution_data"),
+      ariaLabel: t,
+      valueSuffix: a,
+      valueDecimals: r
+    })}
+      </article>
+    `;
+  }
+  evolution(t) {
+    const e = t.evolution ?? {}, i = [
+      {
+        key: "fitness",
+        label: l(this.hass, "fitness"),
+        className: "fitness-series",
+        points: this.chartPoints(e.fitness)
+      },
+      {
+        key: "fatigue",
+        label: l(this.hass, "fatigue"),
+        className: "fatigue-series",
+        points: this.chartPoints(e.fatigue)
+      },
+      {
+        key: "form",
+        label: l(this.hass, "form"),
+        className: "form-series",
+        points: this.chartPoints(e.form)
+      }
+    ], s = We(
+      i,
+      this.periodDays()
+    );
+    return c`
+      <article class="chart-card">
+        <div class="chart-card-title">
+          <div>
+            <ha-icon icon="mdi:chart-timeline-variant"></ha-icon>
+
+            <div>
+              <strong>
+                ${l(this.hass, "chart_fitness_fatigue_form")}
+              </strong>
+
+              <span>
+                ${l(this.hass, `period_${this.period}`)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        ${Ge(s, {
+      emptyLabel: l(this.hass, "no_evolution_data"),
+      ariaLabel: l(this.hass, "chart_fitness_fatigue_form"),
+      valueDecimals: 1
+    })}
+      </article>
+
+      <section class="wellness-evolution-section">
+        <div class="section-title">
+          <ha-icon icon="mdi:heart-pulse"></ha-icon>
+
+          <div>
+            <strong>${l(this.hass, "chart_wellness")}</strong>
+            <span>${l(this.hass, `period_${this.period}`)}</span>
+          </div>
+        </div>
+
+        <div class="wellness-chart-grid">
+          ${this.wellnessChart(
+      l(this.hass, "chart_sleep"),
+      "mdi:sleep",
+      "sleep-series",
+      this.chartPoints(
+        e.sleep,
+        (a) => a / 3600
+      ),
+      ` ${l(this.hass, "hours_short")}`,
+      1
+    )}
+
+          ${this.wellnessChart(
+      l(this.hass, "chart_readiness"),
+      "mdi:battery-heart-variant",
+      "readiness-series",
+      this.chartPoints(e.readiness),
+      "",
+      0
+    )}
+
+          ${this.wellnessChart(
+      l(this.hass, "chart_hrv"),
+      "mdi:heart-pulse",
+      "hrv-series",
+      this.chartPoints(e.hrv),
+      ` ${l(this.hass, "milliseconds_short")}`,
+      0
+    )}
+
+          ${this.wellnessChart(
+      l(this.hass, "chart_resting_hr"),
+      "mdi:heart-outline",
+      "resting-hr-series",
+      this.chartPoints(e.resting_hr),
+      ` ${l(this.hass, "bpm_short")}`,
+      0
+    )}
+        </div>
+      </section>
+    `;
   }
   sports(t) {
     const e = t.sports?.[this.period] ?? {};
-    return l`<div class="table">${Object.entries(e).map(([i, s]) => l`
-      <div class="row"><strong>${L(this.hass, i)}</strong><span>${this.number(s.activities, 0)} ${c(this.hass, "activity_short")}</span><span>${N(s.duration_hours, "h")}</span><span>${this.number(s.distance_km)} km</span><span>${c(this.hass, "load")} ${this.number(s.load)}</span></div>`)}
-      ${Object.keys(e).length ? p : l`<div class="empty">${c(this.hass, "no_sport_data")}</div>`}
+    return c`<div class="table">${Object.entries(e).map(([i, s]) => c`
+      <div class="row"><strong>${B(this.hass, i)}</strong><span>${this.number(s.activities, 0)} ${l(this.hass, "activity_short")}</span><span>${L(s.duration_hours, "h")}</span><span>${this.number(s.distance_km)} km</span><span>${l(this.hass, "load")} ${this.number(s.load)}</span></div>`)}
+      ${Object.keys(e).length ? u : c`<div class="empty">${l(this.hass, "no_sport_data")}</div>`}
     </div>`;
   }
   wellness(t) {
     const e = t.wellness ?? {}, s = [
       {
         key: "wellness_sleep",
-        label: c(this.hass, "sleep"),
+        label: l(this.hass, "sleep"),
         icon: "mdi:sleep",
         format: "duration"
       },
@@ -2278,7 +2620,7 @@ let M = class extends $ {
       },
       {
         key: "wellness_resting_hr",
-        label: c(this.hass, "resting_hr"),
+        label: l(this.hass, "resting_hr"),
         icon: "mdi:heart-pulse",
         format: "number"
       },
@@ -2295,52 +2637,52 @@ let M = class extends $ {
         format: "number"
       }
     ].filter(
-      (a) => e[a.key] !== void 0 && e[a.key] !== null
+      (o) => e[o.key] !== void 0 && e[o.key] !== null
     );
     if (!s.length)
-      return l`
+      return c`
         <div class="empty">
           ${this.hass?.locale?.language?.startsWith("fr") ? "Aucune donnée de bien-être disponible." : "No wellness data available."}
         </div>
       `;
-    const r = this.period === "7_days" ? 7 : this.period === "30_days" ? 30 : null, o = (a, n) => {
+    const a = this.period === "7_days" ? 7 : this.period === "30_days" ? 30 : null, r = (o, n) => {
       if (n === "duration") {
-        const d = Number(a);
-        return Number.isFinite(d) ? N(d, "s") : "—";
+        const d = Number(o);
+        return Number.isFinite(d) ? L(d, "s") : "—";
       }
-      return this.number(a);
+      return this.number(o);
     };
-    return l`
+    return c`
       <div class="wellness-grid">
-        ${s.map((a) => {
-      const n = r ? `${a.key}_average_${r}_days` : void 0, d = this.period === "30_days" ? `${a.key}_minimum_30_days` : void 0, g = this.period === "30_days" ? `${a.key}_maximum_30_days` : void 0, f = n ? e[n] : void 0, u = d ? e[d] : void 0, h = g ? e[g] : void 0;
-      return l`
+        ${s.map((o) => {
+      const n = a ? `${o.key}_average_${a}_days` : void 0, d = this.period === "30_days" ? `${o.key}_minimum_30_days` : void 0, g = this.period === "30_days" ? `${o.key}_maximum_30_days` : void 0, f = n ? e[n] : void 0, p = d ? e[d] : void 0, h = g ? e[g] : void 0;
+      return c`
             <article class="wellness-card">
               <div class="wellness-title">
-                <ha-icon icon=${a.icon}></ha-icon>
-                <span>${a.label}</span>
+                <ha-icon icon=${o.icon}></ha-icon>
+                <span>${o.label}</span>
               </div>
 
               <strong>
-                ${o(e[a.key], a.format)}
+                ${r(e[o.key], o.format)}
               </strong>
 
-              ${f != null ? l`
+              ${f != null ? c`
                     <small>
                       ${this.hass?.locale?.language?.startsWith("fr") ? "Moyenne" : "Average"}
-                      ${r} j :
-                      ${o(f, a.format)}
+                      ${a} j :
+                      ${r(f, o.format)}
                     </small>
-                  ` : p}
+                  ` : u}
 
-              ${u != null && h !== void 0 && h !== null ? l`
+              ${p != null && h !== void 0 && h !== null ? c`
                     <small>
                       Min :
-                      ${o(u, a.format)}
+                      ${r(p, o.format)}
                       · Max :
-                      ${o(h, a.format)}
+                      ${r(h, o.format)}
                     </small>
-                  ` : p}
+                  ` : u}
             </article>
           `;
     })}
@@ -2349,58 +2691,58 @@ let M = class extends $ {
   }
   records(t) {
     const e = t.period_records ?? {}, i = t.records_by_sport ?? {};
-    return l`
+    return c`
       <div class="record-grid">
-        ${Object.entries(e).map(([s, r]) => r ? l`<article class="record"><span>${this.name(s)}</span><strong>${r.period}</strong><small>${this.number(r.load)} ${c(this.hass, "load").toLowerCase()} · ${N(r.duration_hours, "h")}</small></article>` : p)}
+        ${Object.entries(e).map(([s, a]) => a ? c`<article class="record"><span>${this.name(s)}</span><strong>${a.period}</strong><small>${this.number(a.load)} ${l(this.hass, "load").toLowerCase()} · ${L(a.duration_hours, "h")}</small></article>` : u)}
       </div>
-      ${Object.entries(i).map(([s, r]) => l`<details><summary>${L(this.hass, s)}</summary><div class="record-list">${Object.entries(r).map(([o, a]) => l`<div><span>${this.name(o)}</span><strong>${this.number(a.value)}</strong><small>${a.activity?.name ?? ""}</small></div>`)}</div></details>`)}
+      ${Object.entries(i).map(([s, a]) => c`<details><summary>${B(this.hass, s)}</summary><div class="record-list">${Object.entries(a).map(([r, o]) => c`<div><span>${this.name(r)}</span><strong>${this.number(o.value)}</strong><small>${o.activity?.name ?? ""}</small></div>`)}</div></details>`)}
     `;
   }
   trends(t) {
     const e = t.trends ?? {};
-    return l`<div class="trend-grid">${Object.entries(e).map(([i, s]) => l`
+    return c`<div class="trend-grid">${Object.entries(e).map(([i, s]) => c`
       <article class="trend"><span>${this.name(i)}</span><strong>${this.number(s.latest)}</strong><div class="trend-changes"><small>7d ${this.number(s.change_7_days)}</small><small>30d ${this.number(s.change_30_days)}</small><small>90d ${this.number(s.change_90_days)}</small><small>365d ${this.number(s.change_365_days)}</small></div></article>`)}
     </div>`;
   }
   quality(t) {
     const e = t.data_quality ?? {}, i = e.coverage ?? {};
-    return l`<div class="quality-head"><strong>${this.number(e.completeness_percent)}%</strong><span>${c(this.hass, "completeness")} · ${this.number(e.field_count, 0)} ${c(this.hass, "api_fields")}</span></div>
-      <div class="coverage">${Object.entries(i).map(([s, r]) => l`<div><span>${this.name(s)}</span><progress max="100" value=${r.percent ?? 0}></progress><strong>${this.number(r.percent)}%</strong></div>`)}</div>`;
+    return c`<div class="quality-head"><strong>${this.number(e.completeness_percent)}%</strong><span>${l(this.hass, "completeness")} · ${this.number(e.field_count, 0)} ${l(this.hass, "api_fields")}</span></div>
+      <div class="coverage">${Object.entries(i).map(([s, a]) => c`<div><span>${this.name(s)}</span><progress max="100" value=${a.percent ?? 0}></progress><strong>${this.number(a.percent)}%</strong></div>`)}</div>`;
   }
   render() {
-    if (!this.hass || !this.config) return p;
-    const t = this.attrs(), e = this.section === "sports" ? this.sports(t) : this.section === "records" ? this.records(t) : this.section === "trends" ? this.trends(t) : this.section === "wellness" ? this.wellness(t) : this.section === "quality" ? this.quality(t) : this.overview(t);
-    return l`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${c(this.hass, "statistics_trends")}</span></div></div><nav>${["7_days", "30_days", "90_days", "365_days"].map((i) => l`<button class=${this.period === i ? "active" : ""} @click=${() => this.period = i}>${i.replace("_days", c(this.hass, "day_short"))}</button>`)}</nav></header>
-      <div class="tabs">${["overview", "sports", "records", "trends", "wellness", "quality"].map((i) => l`<button class=${this.section === i ? "active" : ""} @click=${() => this.section = i}>${i === "wellness" ? this.hass?.locale?.language?.startsWith("fr") ? "Bien-être" : "Wellness" : c(this.hass, i)}</button>`)}</div>
+    if (!this.hass || !this.config) return u;
+    const t = this.attrs(), e = this.section === "evolution" ? this.evolution(t) : this.section === "sports" ? this.sports(t) : this.section === "records" ? this.records(t) : this.section === "trends" ? this.trends(t) : this.section === "wellness" ? this.wellness(t) : this.section === "quality" ? this.quality(t) : this.overview(t);
+    return c`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${l(this.hass, "statistics_trends")}</span></div></div><nav>${["7_days", "30_days", "90_days", "365_days"].map((i) => c`<button class=${this.period === i ? "active" : ""} @click=${() => this.period = i}>${i.replace("_days", l(this.hass, "day_short"))}</button>`)}</nav></header>
+      <div class="tabs">${["overview", "evolution", "sports", "records", "trends", "wellness", "quality"].map((i) => c`<button class=${this.section === i ? "active" : ""} @click=${() => this.section = i}>${i === "wellness" ? this.hass?.locale?.language?.startsWith("fr") ? "Bien-être" : "Wellness" : l(this.hass, i)}</button>`)}</div>
       <section>${e}</section></div></ha-card>`;
   }
 };
-M.styles = ee`
-    :host{display:block}*{box-sizing:border-box}ha-card{border-radius:24px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 95%,#10233f),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#19385f))}.shell{padding:20px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}header>div{display:flex;gap:12px;align-items:center}header ha-icon{--mdc-icon-size:32px;color:var(--primary-color)}h2{margin:0;font-size:1.3rem}header span{color:var(--secondary-text-color);font-size:.82rem}nav,.tabs{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:8px 11px;background:color-mix(in srgb,var(--secondary-background-color) 80%,transparent);color:var(--primary-text-color);cursor:pointer;text-transform:capitalize}button.active{background:var(--primary-color);color:var(--text-primary-color,#fff)}.tabs{margin:18px 0 14px;border-bottom:1px solid var(--divider-color);padding-bottom:10px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tile{display:flex;gap:10px;align-items:center;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 75%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.tile>ha-icon{color:var(--primary-color)}.tile div{display:grid;gap:2px}.tile span,.tile small{font-size:.72rem;color:var(--secondary-text-color)}.tile strong{font-size:1.12rem}.change{width:max-content;padding:2px 6px;border-radius:999px}.change.up{color:#4caf50;background:rgba(76,175,80,.12)}.change.down{color:#ef5350;background:rgba(239,83,80,.12)}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.insight{display:flex;gap:9px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--secondary-background-color) 68%,transparent)}.insight.warning ha-icon{color:#ff9800}.insight div{display:grid}.insight span{font-size:.78rem;color:var(--secondary-text-color)}.table,.record-list{display:grid;gap:8px}.row{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;padding:12px;border-radius:13px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.row span{color:var(--secondary-text-color)}.record-grid,.trend-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record,.trend{display:grid;gap:5px;padding:14px;border-radius:15px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.record span,.trend span{text-transform:capitalize;color:var(--secondary-text-color);font-size:.76rem}.record small{color:var(--secondary-text-color)}details{margin-top:9px;padding:10px;border:1px solid var(--divider-color);border-radius:12px}summary{font-weight:700;cursor:pointer}.record-list{margin-top:10px}.record-list>div{display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--divider-color)}.trend-changes{display:grid;grid-template-columns:1fr 1fr;gap:4px;color:var(--secondary-text-color)}.wellness-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.wellness-card{display:grid;gap:7px;padding:15px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.wellness-title{display:flex;gap:8px;align-items:center;color:var(--secondary-text-color);font-size:.78rem}.wellness-title ha-icon{color:var(--primary-color)}.wellness-card>strong{font-size:1.25rem}.wellness-card>small{color:var(--secondary-text-color)}.quality-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}.quality-head strong{font-size:2rem;color:var(--primary-color)}.coverage{display:grid;gap:10px}.coverage>div{display:grid;grid-template-columns:160px 1fr 55px;gap:10px;align-items:center;text-transform:capitalize}progress{width:100%;accent-color:var(--primary-color)}.empty{text-align:center;padding:30px;color:var(--secondary-text-color)}
+P.styles = ae`
+    :host{display:block}*{box-sizing:border-box}ha-card{border-radius:24px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 95%,#10233f),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#19385f))}.shell{padding:20px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}header>div{display:flex;gap:12px;align-items:center}header ha-icon{--mdc-icon-size:32px;color:var(--primary-color)}h2{margin:0;font-size:1.3rem}header span{color:var(--secondary-text-color);font-size:.82rem}nav,.tabs{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:8px 11px;background:color-mix(in srgb,var(--secondary-background-color) 80%,transparent);color:var(--primary-text-color);cursor:pointer;text-transform:capitalize}button.active{background:var(--primary-color);color:var(--text-primary-color,#fff)}.tabs{margin:18px 0 14px;border-bottom:1px solid var(--divider-color);padding-bottom:10px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tile{display:flex;gap:10px;align-items:center;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 75%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.tile>ha-icon{color:var(--primary-color)}.tile div{display:grid;gap:2px}.tile span,.tile small{font-size:.72rem;color:var(--secondary-text-color)}.tile strong{font-size:1.12rem}.change{width:max-content;padding:2px 6px;border-radius:999px}.change.up{color:#4caf50;background:rgba(76,175,80,.12)}.change.down{color:#ef5350;background:rgba(239,83,80,.12)}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.insight{display:flex;gap:9px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--secondary-background-color) 68%,transparent)}.insight.warning ha-icon{color:#ff9800}.insight div{display:grid}.insight span{font-size:.78rem;color:var(--secondary-text-color)}.table,.record-list{display:grid;gap:8px}.row{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;padding:12px;border-radius:13px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.row span{color:var(--secondary-text-color)}.record-grid,.trend-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record,.trend{display:grid;gap:5px;padding:14px;border-radius:15px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.record span,.trend span{text-transform:capitalize;color:var(--secondary-text-color);font-size:.76rem}.record small{color:var(--secondary-text-color)}details{margin-top:9px;padding:10px;border:1px solid var(--divider-color);border-radius:12px}summary{font-weight:700;cursor:pointer}.record-list{margin-top:10px}.record-list>div{display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--divider-color)}.trend-changes{display:grid;grid-template-columns:1fr 1fr;gap:4px;color:var(--secondary-text-color)}.wellness-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.wellness-card{display:grid;gap:7px;padding:15px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.wellness-title{display:flex;gap:8px;align-items:center;color:var(--secondary-text-color);font-size:.78rem}.wellness-title ha-icon{color:var(--primary-color)}.wellness-card>strong{font-size:1.25rem}.wellness-card>small{color:var(--secondary-text-color)}.chart-card{display:grid;gap:14px;padding:16px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.chart-card-title>div{display:flex;gap:10px;align-items:center}.chart-card-title ha-icon{color:var(--primary-color)}.chart-card-title div div{display:grid;gap:2px}.chart-card-title span{font-size:.76rem;color:var(--secondary-text-color)}.native-chart{display:grid;gap:7px}.chart-legend{display:flex;justify-content:flex-end;gap:14px;flex-wrap:wrap;font-size:.74rem;color:var(--secondary-text-color)}.chart-legend span{display:flex;align-items:center;gap:5px}.chart-legend i{display:block;width:10px;height:10px;border-radius:50%}.statistics-history-chart{display:block;width:100%;height:280px;overflow:visible}.chart-grid-line{stroke:color-mix(in srgb,var(--divider-color) 75%,transparent);stroke-width:1}.chart-series{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.chart-point{stroke:var(--card-background-color);stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer}.fitness-series{stroke:var(--success-color,#4caf50);fill:var(--success-color,#4caf50);background:var(--success-color,#4caf50)}.fatigue-series{stroke:var(--warning-color,#ff9800);fill:var(--warning-color,#ff9800);background:var(--warning-color,#ff9800)}.form-series{stroke:var(--info-color,#2196f3);fill:var(--info-color,#2196f3);background:var(--info-color,#2196f3)}.sleep-series{stroke:#7e57c2;fill:#7e57c2;background:#7e57c2}.readiness-series{stroke:#26a69a;fill:#26a69a;background:#26a69a}.hrv-series{stroke:#42a5f5;fill:#42a5f5;background:#42a5f5}.resting-hr-series{stroke:#ef5350;fill:#ef5350;background:#ef5350}.wellness-evolution-section{display:grid;gap:14px}.section-title{display:flex;align-items:center;gap:10px}.section-title ha-icon{color:var(--primary-color)}.section-title>div{display:grid;gap:2px}.section-title span{font-size:.76rem;color:var(--secondary-text-color)}.wellness-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wellness-chart-card{display:grid;gap:12px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent);min-width:0}.wellness-chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.wellness-chart-head>div:first-child{display:flex;align-items:center;gap:9px}.wellness-chart-head ha-icon{color:var(--primary-color)}.wellness-chart-head>div:first-child>div{display:grid;gap:2px}.wellness-chart-head span{font-size:.72rem;color:var(--secondary-text-color)}.chart-latest-value{display:grid;text-align:right;gap:2px}.chart-latest-value strong{font-size:1.15rem}.wellness-chart-card .statistics-history-chart{height:220px}.chart-axis{display:flex;justify-content:space-between;color:var(--secondary-text-color);font-size:.7rem}.chart-empty{text-align:center;padding:55px 20px;color:var(--secondary-text-color)}.quality-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}.quality-head strong{font-size:2rem;color:var(--primary-color)}.coverage{display:grid;gap:10px}.coverage>div{display:grid;grid-template-columns:160px 1fr 55px;gap:10px;align-items:center;text-transform:capitalize}progress{width:100%;accent-color:var(--primary-color)}.empty{text-align:center;padding:30px;color:var(--secondary-text-color)}
     @media(max-width:850px){.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}}
-    @media(max-width:520px){.shell{padding:14px}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
+    @media(max-width:760px){.wellness-chart-grid{grid-template-columns:1fr}}@media(max-width:520px){.shell{padding:14px}.statistics-history-chart{height:220px}.wellness-chart-card .statistics-history-chart{height:190px}.wellness-chart-head{align-items:flex-start}.chart-legend{justify-content:flex-start}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
   `;
-k([
-  W({ attribute: !1 })
-], M.prototype, "hass", 2);
-k([
-  w()
-], M.prototype, "config", 2);
-k([
-  w()
-], M.prototype, "period", 2);
-k([
-  w()
-], M.prototype, "section", 2);
-M = k([
-  se("ha-intervals-icu-statistics-card")
-], M);
-const de = (navigator.language ?? "en").toLowerCase().startsWith("fr");
+A([
+  Z({ attribute: !1 })
+], P.prototype, "hass", 2);
+A([
+  S()
+], P.prototype, "config", 2);
+A([
+  S()
+], P.prototype, "period", 2);
+A([
+  S()
+], P.prototype, "section", 2);
+P = A([
+  ne("ha-intervals-icu-statistics-card")
+], P);
+const xe = (navigator.language ?? "en").toLowerCase().startsWith("fr");
 window.customCards = window.customCards ?? [];
 window.customCards.some((t) => t.type === "ha-intervals-icu-card") || window.customCards.push({
   type: "ha-intervals-icu-card",
   name: "Intervals.icu Card",
-  description: de ? "Tableau de bord Fitness, Fatigue, Forme, records et entraînements Intervals.icu." : "Intervals.icu fitness, fatigue, form, records and workouts dashboard.",
+  description: xe ? "Tableau de bord Fitness, Fatigue, Forme, records et entraînements Intervals.icu." : "Intervals.icu fitness, fatigue, form, records and workouts dashboard.",
   preview: !0,
   documentationURL: "https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/lovelace-card.md"
 });
@@ -2408,8 +2750,8 @@ window.customCards.some(
   (t) => t.type === "ha-intervals-icu-statistics-card"
 ) || window.customCards.push({
   type: "ha-intervals-icu-statistics-card",
-  name: de ? "Carte Statistiques Intervals.icu" : "Intervals.icu Statistics Card",
-  description: de ? "Statistiques avancées sur 7, 30, 90 ou 365 jours, records, tendances et analyses." : "Advanced 7, 30, 90 or 365-day statistics, records, trends and insights.",
+  name: xe ? "Carte Statistiques Intervals.icu" : "Intervals.icu Statistics Card",
+  description: xe ? "Statistiques avancées sur 7, 30, 90 ou 365 jours, records, tendances et analyses." : "Advanced 7, 30, 90 or 365-day statistics, records, trends and insights.",
   preview: !0,
   documentationURL: "https://github.com/pepka69/ha-intervals-icu/blob/develop/docs/lovelace-card.md"
 });
