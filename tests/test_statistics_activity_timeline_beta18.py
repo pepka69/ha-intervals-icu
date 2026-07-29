@@ -6,7 +6,6 @@ from custom_components.ha_intervals_icu.sensor import (
     build_statistics_dashboard_attributes,
 )
 
-
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -52,13 +51,9 @@ def test_statistics_dashboard_uses_recent_activities_fallback() -> None:
 def test_frontend_contains_activity_timeline() -> None:
     """The activity timeline and sport distribution must be bundled."""
 
-    timeline = (
-        ROOT / "frontend/src/activity-timeline.ts"
-    ).read_text(encoding="utf-8")
+    timeline = (ROOT / "frontend/src/activity-timeline.ts").read_text(encoding="utf-8")
 
-    card = (
-        ROOT / "frontend/src/statistics-card.ts"
-    ).read_text(encoding="utf-8")
+    card = (ROOT / "frontend/src/statistics-card.ts").read_text(encoding="utf-8")
 
     assert "renderActivityTimeline" in timeline
     assert "ActivityTimelineItem" in timeline
@@ -71,9 +66,7 @@ def test_frontend_contains_activity_timeline() -> None:
 def test_activity_timeline_translations_exist() -> None:
     """French and English translations must exist."""
 
-    source = (
-        ROOT / "frontend/src/i18n.ts"
-    ).read_text(encoding="utf-8")
+    source = (ROOT / "frontend/src/i18n.ts").read_text(encoding="utf-8")
 
     assert 'activity_timeline: "Chronologie des activités"' in source
     assert 'activity_timeline: "Activity timeline"' in source
