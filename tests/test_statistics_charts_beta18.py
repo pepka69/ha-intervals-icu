@@ -43,4 +43,4 @@ def test_statistics_frontend_contains_native_chart_infrastructure() -> None:
     assert "filterSeriesByDays" in chart_source
     assert "statistics-history-chart" in chart_source
     assert 'this.section === "evolution"' in card_source
-    assert '"overview","evolution","sports"' in card_source
+    assert '"overview","evolution","activities","sports"' in card_source
