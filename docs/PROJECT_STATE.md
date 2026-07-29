@@ -15,7 +15,7 @@ Dernière mise à jour : 27 juillet 2026
 
 ## Version actuelle
 
-- Version actuelle : v2.0.0-beta17
+- Version actuelle : v2.0.0-beta17a
 - Build frontend : réussi
 - Tests Python : 52 passed
 
@@ -100,7 +100,7 @@ analyse → développement → tests → build → validation → commit → pus
 
 Ne simplifie jamais le projet.
 
-## v2.0.0-beta17 — Sports translations
+## v2.0.0-beta17a — Sports translations
 
 - Ajout de la traduction `HighIntensityIntervalTraining` → `CrossFit`.
 - Ajout et harmonisation des alias de sports français.
@@ -111,4 +111,4 @@ Ne simplifie jamais le projet.
 - TypeScript validé.
 - Build Vite validé.
 - 52 tests Python réussis.
-- Étape suivante : installation de la pré-release beta17 via HACS et validation dans Home Assistant.
+- Étape suivante : installation de la pré-release beta17a via HACS et validation dans Home Assistant.

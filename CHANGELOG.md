@@ -1,6 +1,6 @@
 # Changelog
 
-## v2.0.0-beta17 — Sports translations
+## v2.0.0-beta17a — Sports translations
 
 ### Frontend
 
