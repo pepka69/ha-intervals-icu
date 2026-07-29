@@ -247,12 +247,12 @@ let R = class extends HTMLElement {
   }
 };
 R.elementStyles = [], R.shadowRootOptions = { mode: "open" }, R[j("elementProperties")] = /* @__PURE__ */ new Map(), R[j("finalized")] = /* @__PURE__ */ new Map(), gt?.({ ReactiveElement: R }), (te.reactiveElementVersions ??= []).push("2.1.2");
-const ge = globalThis, Ae = (t) => t, Q = ge.trustedTypes, Se = Q ? Q.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, je = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, Ue = "?" + x, mt = `<${Ue}>`, E = document, U = () => E.createComment(""), H = (t) => t === null || typeof t != "object" && typeof t != "function", me = Array.isArray, ft = (t) => me(t) || typeof t?.[Symbol.iterator] == "function", oe = `[ 	
-\f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ce = /-->/g, Ee = />/g, S = RegExp(`>|${oe}(?:([^\\s"'>=/]+)(${oe}*=${oe}*(?:[^ 	
+const ge = globalThis, Se = (t) => t, Q = ge.trustedTypes, Ae = Q ? Q.createPolicy("lit-html", { createHTML: (t) => t }) : void 0, je = "$lit$", x = `lit$${Math.random().toFixed(9).slice(2)}$`, Ue = "?" + x, mt = `<${Ue}>`, E = document, U = () => E.createComment(""), H = (t) => t === null || typeof t != "object" && typeof t != "function", me = Array.isArray, ft = (t) => me(t) || typeof t?.[Symbol.iterator] == "function", oe = `[ 	
+\f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, Ce = /-->/g, Ee = />/g, A = RegExp(`>|${oe}(?:([^\\s"'>=/]+)(${oe}*=${oe}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), Te = /'/g, Me = /"/g, He = /^(?:script|style|textarea|title)$/i, Ie = (t) => (e, ...i) => ({ _$litType$: t, strings: e, values: i }), l = Ie(1), le = Ie(2), P = /* @__PURE__ */ Symbol.for("lit-noChange"), p = /* @__PURE__ */ Symbol.for("lit-nothing"), Re = /* @__PURE__ */ new WeakMap(), C = E.createTreeWalker(E, 129);
 function qe(t, e) {
   if (!me(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
-  return Se !== void 0 ? Se.createHTML(e) : e;
+  return Ae !== void 0 ? Ae.createHTML(e) : e;
 }
 const vt = (t, e) => {
   const i = t.length - 1, s = [];
@@ -260,8 +260,8 @@ const vt = (t, e) => {
   for (let n = 0; n < i; n++) {
     const d = t[n];
     let g, f, u = -1, h = 0;
-    for (; h < d.length && (a.lastIndex = h, f = a.exec(d), f !== null); ) h = a.lastIndex, a === z ? f[1] === "!--" ? a = Ce : f[1] !== void 0 ? a = Ee : f[2] !== void 0 ? (He.test(f[2]) && (r = RegExp("</" + f[2], "g")), a = S) : f[3] !== void 0 && (a = S) : a === S ? f[0] === ">" ? (a = r ?? z, u = -1) : f[1] === void 0 ? u = -2 : (u = a.lastIndex - f[2].length, g = f[1], a = f[3] === void 0 ? S : f[3] === '"' ? Me : Te) : a === Me || a === Te ? a = S : a === Ce || a === Ee ? a = z : (a = S, r = void 0);
-    const _ = a === S && t[n + 1].startsWith("/>") ? " " : "";
+    for (; h < d.length && (a.lastIndex = h, f = a.exec(d), f !== null); ) h = a.lastIndex, a === z ? f[1] === "!--" ? a = Ce : f[1] !== void 0 ? a = Ee : f[2] !== void 0 ? (He.test(f[2]) && (r = RegExp("</" + f[2], "g")), a = A) : f[3] !== void 0 && (a = A) : a === A ? f[0] === ">" ? (a = r ?? z, u = -1) : f[1] === void 0 ? u = -2 : (u = a.lastIndex - f[2].length, g = f[1], a = f[3] === void 0 ? A : f[3] === '"' ? Me : Te) : a === Me || a === Te ? a = A : a === Ce || a === Ee ? a = z : (a = A, r = void 0);
+    const _ = a === A && t[n + 1].startsWith("/>") ? " " : "";
     o += a === z ? d + mt : u >= 0 ? (s.push(g), d.slice(0, u) + je + d.slice(u) + x + _) : d + x + (u === -2 ? n : _);
   }
   return [qe(t, o + (t[i] || "<?>") + (e === 2 ? "</svg>" : e === 3 ? "</math>" : "")), s];
@@ -279,8 +279,8 @@ class I {
     for (; (r = C.nextNode()) !== null && d.length < n; ) {
       if (r.nodeType === 1) {
         if (r.hasAttributes()) for (const u of r.getAttributeNames()) if (u.endsWith(je)) {
-          const h = f[a++], _ = r.getAttribute(u).split(x), A = /([.?@])?(.*)/.exec(h);
-          d.push({ type: 1, index: o, name: A[2], strings: _, ctor: A[1] === "." ? _t : A[1] === "?" ? bt : A[1] === "@" ? xt : ie }), r.removeAttribute(u);
+          const h = f[a++], _ = r.getAttribute(u).split(x), S = /([.?@])?(.*)/.exec(h);
+          d.push({ type: 1, index: o, name: S[2], strings: _, ctor: S[1] === "." ? _t : S[1] === "?" ? bt : S[1] === "@" ? xt : ie }), r.removeAttribute(u);
         } else u.startsWith(x) && (d.push({ type: 6, index: o }), r.removeAttribute(u));
         if (He.test(r.tagName)) {
           const u = r.textContent.split(x), h = u.length - 1;
@@ -388,8 +388,8 @@ class V {
   }
   _$AR(e = this._$AA.nextSibling, i) {
     for (this._$AP?.(!1, !0, i); e !== this._$AB; ) {
-      const s = Ae(e).nextSibling;
-      Ae(e).remove(), e = s;
+      const s = Se(e).nextSibling;
+      Se(e).remove(), e = s;
     }
   }
   setConnected(e) {
@@ -496,15 +496,15 @@ class $ extends R {
   }
 }
 $._$litElement$ = !0, $.finalized = !0, fe.litElementHydrateSupport?.({ LitElement: $ });
-const At = fe.litElementPolyfillSupport;
-At?.({ LitElement: $ });
+const St = fe.litElementPolyfillSupport;
+St?.({ LitElement: $ });
 (fe.litElementVersions ??= []).push("4.2.2");
 const se = (t) => (e, i) => {
   i !== void 0 ? i.addInitializer(() => {
     customElements.define(t, e);
   }) : customElements.define(t, e);
 };
-const St = { attribute: !0, type: String, converter: J, reflect: !1, hasChanged: ue }, Ct = (t = St, e, i) => {
+const At = { attribute: !0, type: String, converter: J, reflect: !1, hasChanged: ue }, Ct = (t = At, e, i) => {
   const { kind: s, metadata: r } = i;
   let o = globalThis.litPropertyMetadata.get(r);
   if (o === void 0 && globalThis.litPropertyMetadata.set(r, o = /* @__PURE__ */ new Map()), s === "setter" && ((t = Object.create(t)).wrapped = !0), o.set(i.name, t), s === "accessor") {
@@ -1002,15 +1002,21 @@ const Ut = {
   openwaterswim: "Natation en eau libre",
   poolswim: "Natation en piscine",
   weighttraining: "Musculation",
-  strengthtraining: "Renforcement musculaire",
+  strengthtraining: "Musculation",
   crossfit: "CrossFit",
+  hiit: "CrossFit",
   workout: "Entraînement",
   yoga: "Yoga",
   pilates: "Pilates",
   rowing: "Aviron",
   indoorrowing: "Rameur",
+  virtualrow: "Rameur virtuel",
+  virtualrowing: "Rameur virtuel",
   kayaking: "Kayak",
   canoeing: "Canoë",
+  stepper: "Stepper",
+  stairclimber: "Stepper",
+  stairstepper: "Stepper",
   alpineski: "Ski alpin",
   nordicski: "Ski de fond",
   snowboard: "Snowboard",
@@ -1633,7 +1639,7 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
       void 0,
       m.atlasCoach,
       this.config.device_id
-    ), h = this.config.device_id, _ = h ? t.devices?.[h] : void 0, A = this.config.athlete_name || q(_), Ke = v(
+    ), h = this.config.device_id, _ = h ? t.devices?.[h] : void 0, S = this.config.athlete_name || q(_), Ke = v(
       t,
       void 0,
       m.plannedTodayName,
@@ -1702,7 +1708,7 @@ Une valeur négative indique généralement de la fatigue. Une valeur positive i
             </div>
             <div>
               <h2>${this.config.title ?? "Intervals.icu"}</h2>
-              ${A ? l`<div class="athlete">${A}</div>` : p}
+              ${S ? l`<div class="athlete">${S}</div>` : p}
             </div>
           </div>
           <div class="header-actions">
