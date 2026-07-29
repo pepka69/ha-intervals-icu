@@ -478,6 +478,13 @@ def build_statistics_dashboard_attributes(data: dict[str, Any]) -> dict[str, Any
             "resting_hr": data.get("wellness_resting_hr_history", []),
             "readiness": data.get("wellness_readiness_history", []),
         },
+        "activity_timeline": data.get(
+            "activity_timeline",
+            data.get(
+                "recent_activities",
+                data.get("activities", []),
+            ),
+        ),
         "data_quality": build_dashboard_attributes(data).get(
             "activity_api_coverage", {}
         ),

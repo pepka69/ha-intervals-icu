@@ -13,6 +13,10 @@ import {
   type ChartPoint,
   type ChartSeries
 } from "./chart";
+import {
+  renderActivityTimeline,
+  type ActivityTimelineItem
+} from "./activity-timeline";
 import { t, translateDynamicText, translateSportName, translateValue } from "./i18n";
 
 type Period = "7_days" | "30_days" | "90_days" | "365_days";
@@ -538,6 +542,223 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     `;
   }
 
+  private timelineActivities(
+    value: unknown
+  ): ActivityTimelineItem[] {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    return value
+      .map((item, index) => {
+        const activity = item as Dict;
+
+        const date = String(
+          activity.date ??
+          activity.start_date_local ??
+          activity.start_date ??
+          activity.startDate ??
+          ""
+        );
+
+        const sport = String(
+          activity.sport ??
+          activity.type ??
+          activity.activity_type ??
+          activity.activityType ??
+          "Other"
+        );
+
+        return {
+          id: String(
+            activity.id ??
+            activity.activity_id ??
+            `${date}-${sport}-${index}`
+          ),
+          date,
+          name: String(
+            activity.name ??
+            activity.title ??
+            sport
+          ),
+          sport,
+          durationSeconds: Number(
+            activity.duration ??
+            activity.moving_time ??
+            activity.elapsed_time ??
+            activity.duration_seconds
+          ),
+          distanceMeters: Number(
+            activity.distance ??
+            activity.distance_meters
+          ),
+          load: Number(
+            activity.load ??
+            activity.training_load ??
+            activity.icu_training_load
+          )
+        };
+      })
+      .filter(
+        (activity) =>
+          activity.date !== "" &&
+          Number.isFinite(new Date(activity.date).getTime())
+      )
+      .sort(
+        (left, right) =>
+          new Date(right.date).getTime() -
+          new Date(left.date).getTime()
+      );
+  }
+
+  private filteredTimelineActivities(
+    activities: ActivityTimelineItem[]
+  ): ActivityTimelineItem[] {
+    if (!activities.length) {
+      return [];
+    }
+
+    const latestTimestamp = Math.max(
+      ...activities.map((activity) =>
+        new Date(activity.date).getTime()
+      )
+    );
+
+    const minimumTimestamp =
+      latestTimestamp -
+      (this.periodDays() - 1) * 86_400_000;
+
+    return activities.filter(
+      (activity) =>
+        new Date(activity.date).getTime() >= minimumTimestamp
+    );
+  }
+
+  private activityTimeline(data: Dict) {
+    const activities = this.filteredTimelineActivities(
+      this.timelineActivities(data.activity_timeline)
+    );
+
+    const sportCounts = new Map<string, number>();
+
+    for (const activity of activities) {
+      sportCounts.set(
+        activity.sport,
+        (sportCounts.get(activity.sport) ?? 0) + 1
+      );
+    }
+
+    const distribution = [...sportCounts.entries()]
+      .sort((left, right) => right[1] - left[1]);
+
+    const maximumCount = Math.max(
+      1,
+      ...distribution.map((item) => item[1])
+    );
+
+    return html`
+      <section class="activity-dashboard">
+        <article class="activity-timeline-card">
+          <header class="activity-panel-header">
+            <div>
+              <ha-icon icon="mdi:timeline-clock-outline"></ha-icon>
+
+              <div>
+                <strong>
+                  ${t(this.hass, "activity_timeline")}
+                </strong>
+
+                <span>
+                  ${t(
+                    this.hass,
+                    "activity_timeline_description"
+                  )}
+                </span>
+              </div>
+            </div>
+
+            <span class="activity-total">
+              ${activities.length}
+              ${t(this.hass, "activities_count")}
+            </span>
+          </header>
+
+          ${renderActivityTimeline(
+            this.hass,
+            activities,
+            {
+              emptyLabel: t(
+                this.hass,
+                "no_activity_timeline_data"
+              ),
+              durationLabel: t(this.hass, "duration"),
+              distanceLabel: t(this.hass, "distance"),
+              loadLabel: t(this.hass, "activity_load")
+            }
+          )}
+        </article>
+
+        <article class="sport-distribution-card">
+          <header class="activity-panel-header">
+            <div>
+              <ha-icon icon="mdi:chart-donut"></ha-icon>
+
+              <div>
+                <strong>
+                  ${t(this.hass, "sport_distribution")}
+                </strong>
+
+                <span>
+                  ${t(this.hass, `period_${this.period}`)}
+                </span>
+              </div>
+            </div>
+          </header>
+
+          ${distribution.length
+            ? html`
+                <div class="sport-distribution-list">
+                  ${distribution.map(
+                    ([sport, count]) => html`
+                      <div class="sport-distribution-row">
+                        <div class="sport-distribution-label">
+                          <span>
+                            ${translateSportName(
+                              this.hass,
+                              sport
+                            )}
+                          </span>
+
+                          <strong>${count}</strong>
+                        </div>
+
+                        <div class="sport-distribution-track">
+                          <div
+                            class="sport-distribution-value"
+                            style=${`width:${(
+                              (count / maximumCount) *
+                              100
+                            ).toFixed(1)}%`}
+                          ></div>
+                        </div>
+                      </div>
+                    `
+                  )}
+                </div>
+              `
+            : html`
+                <div class="activity-timeline-empty">
+                  ${t(
+                    this.hass,
+                    "no_activity_timeline_data"
+                  )}
+                </div>
+              `}
+        </article>
+      </section>
+    `;
+  }
+
   private sports(data: Dict) {
     const sports = data.sports?.[this.period] ?? {};
     return html`<div class="table">${Object.entries(sports).map(([sport, row]: [string, any]) => html`
@@ -732,7 +953,9 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
     const content =
       this.section === "evolution"
         ? this.evolution(data)
-        : this.section === "sports"
+        : this.section === "activities"
+          ? this.activityTimeline(data)
+          : this.section === "sports"
           ? this.sports(data)
           : this.section === "records"
           ? this.records(data)
@@ -744,13 +967,13 @@ export class HaIntervalsIcuStatisticsCard extends LitElement {
                 ? this.quality(data)
                 : this.overview(data);
     return html`<ha-card><div class="shell"><header><div><ha-icon icon="mdi:chart-box-outline"></ha-icon><div><h2>${this.config.title}</h2><span>${t(this.hass, "statistics_trends")}</span></div></div><nav>${(["7_days","30_days","90_days","365_days"] as Period[]).map(p => html`<button class=${this.period === p ? "active" : ""} @click=${() => this.period = p}>${p.replace("_days", t(this.hass, "day_short"))}</button>`)}</nav></header>
-      <div class="tabs">${["overview","evolution","sports","records","trends","wellness","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${tab === "wellness" ? (this.hass?.locale?.language?.startsWith("fr") ? "Bien-être" : "Wellness") : t(this.hass, tab)}</button>`)}</div>
+      <div class="tabs">${["overview","evolution","activities","sports","records","trends","wellness","quality"].map(tab => html`<button class=${this.section === tab ? "active" : ""} @click=${() => this.section = tab}>${tab === "wellness" ? (this.hass?.locale?.language?.startsWith("fr") ? "Bien-être" : "Wellness") : t(this.hass, tab)}</button>`)}</div>
       <section>${content}</section></div></ha-card>`;
   }
 
   static styles = css`
-    :host{display:block}*{box-sizing:border-box}ha-card{border-radius:24px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 95%,#10233f),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#19385f))}.shell{padding:20px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}header>div{display:flex;gap:12px;align-items:center}header ha-icon{--mdc-icon-size:32px;color:var(--primary-color)}h2{margin:0;font-size:1.3rem}header span{color:var(--secondary-text-color);font-size:.82rem}nav,.tabs{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:8px 11px;background:color-mix(in srgb,var(--secondary-background-color) 80%,transparent);color:var(--primary-text-color);cursor:pointer;text-transform:capitalize}button.active{background:var(--primary-color);color:var(--text-primary-color,#fff)}.tabs{margin:18px 0 14px;border-bottom:1px solid var(--divider-color);padding-bottom:10px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tile{display:flex;gap:10px;align-items:center;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 75%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.tile>ha-icon{color:var(--primary-color)}.tile div{display:grid;gap:2px}.tile span,.tile small{font-size:.72rem;color:var(--secondary-text-color)}.tile strong{font-size:1.12rem}.change{width:max-content;padding:2px 6px;border-radius:999px}.change.up{color:#4caf50;background:rgba(76,175,80,.12)}.change.down{color:#ef5350;background:rgba(239,83,80,.12)}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.insight{display:flex;gap:9px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--secondary-background-color) 68%,transparent)}.insight.warning ha-icon{color:#ff9800}.insight div{display:grid}.insight span{font-size:.78rem;color:var(--secondary-text-color)}.table,.record-list{display:grid;gap:8px}.row{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;padding:12px;border-radius:13px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.row span{color:var(--secondary-text-color)}.record-grid,.trend-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record,.trend{display:grid;gap:5px;padding:14px;border-radius:15px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.record span,.trend span{text-transform:capitalize;color:var(--secondary-text-color);font-size:.76rem}.record small{color:var(--secondary-text-color)}details{margin-top:9px;padding:10px;border:1px solid var(--divider-color);border-radius:12px}summary{font-weight:700;cursor:pointer}.record-list{margin-top:10px}.record-list>div{display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--divider-color)}.trend-changes{display:grid;grid-template-columns:1fr 1fr;gap:4px;color:var(--secondary-text-color)}.wellness-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.wellness-card{display:grid;gap:7px;padding:15px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.wellness-title{display:flex;gap:8px;align-items:center;color:var(--secondary-text-color);font-size:.78rem}.wellness-title ha-icon{color:var(--primary-color)}.wellness-card>strong{font-size:1.25rem}.wellness-card>small{color:var(--secondary-text-color)}.chart-card{display:grid;gap:14px;padding:16px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.chart-card-title>div{display:flex;gap:10px;align-items:center}.chart-card-title ha-icon{color:var(--primary-color)}.chart-card-title div div{display:grid;gap:2px}.chart-card-title span{font-size:.76rem;color:var(--secondary-text-color)}.native-chart{display:grid;gap:7px}.chart-legend{display:flex;justify-content:flex-end;gap:14px;flex-wrap:wrap;font-size:.74rem;color:var(--secondary-text-color)}.chart-legend span{display:flex;align-items:center;gap:5px}.chart-legend i{display:block;width:10px;height:10px;border-radius:50%}.statistics-history-chart{display:block;width:100%;height:280px;overflow:visible}.chart-grid-line{stroke:color-mix(in srgb,var(--divider-color) 75%,transparent);stroke-width:1}.chart-series{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.chart-point{stroke:var(--card-background-color);stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer}.fitness-series{stroke:var(--success-color,#4caf50);fill:var(--success-color,#4caf50);background:var(--success-color,#4caf50)}.fatigue-series{stroke:var(--warning-color,#ff9800);fill:var(--warning-color,#ff9800);background:var(--warning-color,#ff9800)}.form-series{stroke:var(--info-color,#2196f3);fill:var(--info-color,#2196f3);background:var(--info-color,#2196f3)}.sleep-series{stroke:#7e57c2;fill:#7e57c2;background:#7e57c2}.readiness-series{stroke:#26a69a;fill:#26a69a;background:#26a69a}.hrv-series{stroke:#42a5f5;fill:#42a5f5;background:#42a5f5}.resting-hr-series{stroke:#ef5350;fill:#ef5350;background:#ef5350}.wellness-evolution-section{display:grid;gap:14px}.section-title{display:flex;align-items:center;gap:10px}.section-title ha-icon{color:var(--primary-color)}.section-title>div{display:grid;gap:2px}.section-title span{font-size:.76rem;color:var(--secondary-text-color)}.wellness-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wellness-chart-card{display:grid;gap:12px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent);min-width:0}.wellness-chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.wellness-chart-head>div:first-child{display:flex;align-items:center;gap:9px}.wellness-chart-head ha-icon{color:var(--primary-color)}.wellness-chart-head>div:first-child>div{display:grid;gap:2px}.wellness-chart-head span{font-size:.72rem;color:var(--secondary-text-color)}.chart-latest-value{display:grid;text-align:right;gap:2px}.chart-latest-value strong{font-size:1.15rem}.wellness-chart-card .statistics-history-chart{height:220px}.chart-axis{display:flex;justify-content:space-between;color:var(--secondary-text-color);font-size:.7rem}.chart-empty{text-align:center;padding:55px 20px;color:var(--secondary-text-color)}.quality-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}.quality-head strong{font-size:2rem;color:var(--primary-color)}.coverage{display:grid;gap:10px}.coverage>div{display:grid;grid-template-columns:160px 1fr 55px;gap:10px;align-items:center;text-transform:capitalize}progress{width:100%;accent-color:var(--primary-color)}.empty{text-align:center;padding:30px;color:var(--secondary-text-color)}
+    :host{display:block}*{box-sizing:border-box}ha-card{border-radius:24px;overflow:hidden;background:linear-gradient(145deg,color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 95%,#10233f),color-mix(in srgb,var(--ha-card-background,var(--card-background-color)) 88%,#19385f))}.shell{padding:20px}header{display:flex;justify-content:space-between;gap:16px;align-items:center}header>div{display:flex;gap:12px;align-items:center}header ha-icon{--mdc-icon-size:32px;color:var(--primary-color)}h2{margin:0;font-size:1.3rem}header span{color:var(--secondary-text-color);font-size:.82rem}nav,.tabs{display:flex;gap:6px;flex-wrap:wrap}button{border:0;border-radius:999px;padding:8px 11px;background:color-mix(in srgb,var(--secondary-background-color) 80%,transparent);color:var(--primary-text-color);cursor:pointer;text-transform:capitalize}button.active{background:var(--primary-color);color:var(--text-primary-color,#fff)}.tabs{margin:18px 0 14px;border-bottom:1px solid var(--divider-color);padding-bottom:10px}.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tile{display:flex;gap:10px;align-items:center;padding:14px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 75%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.tile>ha-icon{color:var(--primary-color)}.tile div{display:grid;gap:2px}.tile span,.tile small{font-size:.72rem;color:var(--secondary-text-color)}.tile strong{font-size:1.12rem}.change{width:max-content;padding:2px 6px;border-radius:999px}.change.up{color:#4caf50;background:rgba(76,175,80,.12)}.change.down{color:#ef5350;background:rgba(239,83,80,.12)}.insights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}.insight{display:flex;gap:9px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--secondary-background-color) 68%,transparent)}.insight.warning ha-icon{color:#ff9800}.insight div{display:grid}.insight span{font-size:.78rem;color:var(--secondary-text-color)}.table,.record-list{display:grid;gap:8px}.row{display:grid;grid-template-columns:2fr repeat(4,1fr);gap:8px;padding:12px;border-radius:13px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.row span{color:var(--secondary-text-color)}.record-grid,.trend-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.record,.trend{display:grid;gap:5px;padding:14px;border-radius:15px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent)}.record span,.trend span{text-transform:capitalize;color:var(--secondary-text-color);font-size:.76rem}.record small{color:var(--secondary-text-color)}details{margin-top:9px;padding:10px;border:1px solid var(--divider-color);border-radius:12px}summary{font-weight:700;cursor:pointer}.record-list{margin-top:10px}.record-list>div{display:grid;grid-template-columns:2fr 1fr 2fr;gap:8px;padding:7px 0;border-bottom:1px solid var(--divider-color)}.trend-changes{display:grid;grid-template-columns:1fr 1fr;gap:4px;color:var(--secondary-text-color)}.wellness-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.wellness-card{display:grid;gap:7px;padding:15px;border-radius:16px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.wellness-title{display:flex;gap:8px;align-items:center;color:var(--secondary-text-color);font-size:.78rem}.wellness-title ha-icon{color:var(--primary-color)}.wellness-card>strong{font-size:1.25rem}.wellness-card>small{color:var(--secondary-text-color)}.chart-card{display:grid;gap:14px;padding:16px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent)}.chart-card-title>div{display:flex;gap:10px;align-items:center}.chart-card-title ha-icon{color:var(--primary-color)}.chart-card-title div div{display:grid;gap:2px}.chart-card-title span{font-size:.76rem;color:var(--secondary-text-color)}.native-chart{display:grid;gap:7px}.chart-legend{display:flex;justify-content:flex-end;gap:14px;flex-wrap:wrap;font-size:.74rem;color:var(--secondary-text-color)}.chart-legend span{display:flex;align-items:center;gap:5px}.chart-legend i{display:block;width:10px;height:10px;border-radius:50%}.statistics-history-chart{display:block;width:100%;height:280px;overflow:visible}.chart-grid-line{stroke:color-mix(in srgb,var(--divider-color) 75%,transparent);stroke-width:1}.chart-series{fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.chart-point{stroke:var(--card-background-color);stroke-width:2;vector-effect:non-scaling-stroke;cursor:pointer}.fitness-series{stroke:var(--success-color,#4caf50);fill:var(--success-color,#4caf50);background:var(--success-color,#4caf50)}.fatigue-series{stroke:var(--warning-color,#ff9800);fill:var(--warning-color,#ff9800);background:var(--warning-color,#ff9800)}.form-series{stroke:var(--info-color,#2196f3);fill:var(--info-color,#2196f3);background:var(--info-color,#2196f3)}.sleep-series{stroke:#7e57c2;fill:#7e57c2;background:#7e57c2}.readiness-series{stroke:#26a69a;fill:#26a69a;background:#26a69a}.hrv-series{stroke:#42a5f5;fill:#42a5f5;background:#42a5f5}.resting-hr-series{stroke:#ef5350;fill:#ef5350;background:#ef5350}.wellness-evolution-section{display:grid;gap:14px}.section-title{display:flex;align-items:center;gap:10px}.section-title ha-icon{color:var(--primary-color)}.section-title>div{display:grid;gap:2px}.section-title span{font-size:.76rem;color:var(--secondary-text-color)}.wellness-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.wellness-chart-card{display:grid;gap:12px;padding:14px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent);min-width:0}.wellness-chart-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.wellness-chart-head>div:first-child{display:flex;align-items:center;gap:9px}.wellness-chart-head ha-icon{color:var(--primary-color)}.wellness-chart-head>div:first-child>div{display:grid;gap:2px}.wellness-chart-head span{font-size:.72rem;color:var(--secondary-text-color)}.chart-latest-value{display:grid;text-align:right;gap:2px}.chart-latest-value strong{font-size:1.15rem}.wellness-chart-card .statistics-history-chart{height:220px}.chart-axis{display:flex;justify-content:space-between;color:var(--secondary-text-color);font-size:.7rem}.chart-empty{text-align:center;padding:55px 20px;color:var(--secondary-text-color)}.activity-dashboard{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(260px,.8fr);gap:16px;align-items:start}.activity-timeline-card,.sport-distribution-card{display:grid;gap:16px;padding:16px;border-radius:18px;background:color-mix(in srgb,var(--secondary-background-color) 72%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 70%,transparent);min-width:0}.activity-panel-header{display:flex;align-items:center;justify-content:space-between;gap:12px}.activity-panel-header>div{display:flex;align-items:center;gap:10px}.activity-panel-header ha-icon{color:var(--primary-color)}.activity-panel-header>div>div{display:grid;gap:2px}.activity-panel-header span{font-size:.74rem;color:var(--secondary-text-color)}.activity-total{white-space:nowrap;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--primary-color) 12%,transparent);color:var(--primary-text-color)!important}.activity-timeline{display:grid}.activity-timeline-item{position:relative;display:grid;grid-template-columns:42px minmax(0,1fr);gap:12px;padding:0 0 18px}.activity-timeline-item:not(:last-child)::before{content:"";position:absolute;left:20px;top:40px;bottom:0;width:2px;background:var(--divider-color)}.activity-timeline-marker{z-index:1;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:color-mix(in srgb,var(--primary-color) 15%,var(--card-background-color));color:var(--primary-color)}.activity-timeline-marker ha-icon{--mdc-icon-size:21px}.activity-timeline-content{display:grid;gap:9px;padding:10px 12px;border-radius:14px;background:color-mix(in srgb,var(--card-background-color) 68%,transparent);border:1px solid color-mix(in srgb,var(--divider-color) 65%,transparent)}.activity-timeline-content header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}.activity-timeline-content header>div{display:grid;gap:3px}.activity-timeline-content header span,.activity-timeline-content time{font-size:.72rem;color:var(--secondary-text-color)}.activity-timeline-content time{white-space:nowrap}.activity-timeline-metrics{display:flex;flex-wrap:wrap;gap:7px 13px}.activity-timeline-metrics span{display:flex;align-items:center;gap:4px;font-size:.72rem;color:var(--secondary-text-color)}.activity-timeline-metrics ha-icon{--mdc-icon-size:15px}.activity-timeline-empty{padding:40px 16px;text-align:center;color:var(--secondary-text-color)}.sport-distribution-list{display:grid;gap:14px}.sport-distribution-row{display:grid;gap:6px}.sport-distribution-label{display:flex;justify-content:space-between;gap:10px;font-size:.78rem}.sport-distribution-track{height:8px;overflow:hidden;border-radius:999px;background:color-mix(in srgb,var(--divider-color) 70%,transparent)}.sport-distribution-value{height:100%;min-width:4px;border-radius:inherit;background:var(--primary-color)}.quality-head{display:flex;gap:14px;align-items:center;margin-bottom:14px}.quality-head strong{font-size:2rem;color:var(--primary-color)}.coverage{display:grid;gap:10px}.coverage>div{display:grid;grid-template-columns:160px 1fr 55px;gap:10px;align-items:center;text-transform:capitalize}progress{width:100%;accent-color:var(--primary-color)}.empty{text-align:center;padding:30px;color:var(--secondary-text-color)}
     @media(max-width:850px){.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.row{grid-template-columns:1fr 1fr}.insights{grid-template-columns:1fr}}
-    @media(max-width:760px){.wellness-chart-grid{grid-template-columns:1fr}}@media(max-width:520px){.shell{padding:14px}.statistics-history-chart{height:220px}.wellness-chart-card .statistics-history-chart{height:190px}.wellness-chart-head{align-items:flex-start}.chart-legend{justify-content:flex-start}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
+    @media(max-width:900px){.activity-dashboard{grid-template-columns:1fr}}@media(max-width:760px){.wellness-chart-grid{grid-template-columns:1fr}}@media(max-width:520px){.shell{padding:14px}.statistics-history-chart{height:220px}.wellness-chart-card .statistics-history-chart{height:190px}.wellness-chart-head{align-items:flex-start}.chart-legend{justify-content:flex-start}header{align-items:flex-start;flex-direction:column}.tiles,.record-grid,.trend-grid,.wellness-grid{grid-template-columns:1fr}.coverage>div{grid-template-columns:110px 1fr 48px}}
   `;
 }
